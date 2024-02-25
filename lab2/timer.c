@@ -94,7 +94,7 @@ int (timer_display_conf)(uint8_t timer, uint8_t st,
       }else if (st&TIMER_RATE_GEN){
         val.count_mode = 2;
       }else {
-        val.count_mode = 1;
+        val.count_mode = st;
       }
       break;
 

@@ -37,18 +37,25 @@ int main(int argc, char *argv[]) {
  // only using timer 0 
  // do not change timer 1 configuration
 int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
-  /* To be implemented by the students */
   // timer 0, 1, 2
-  // 2nd - specified whihch fiel of the status work must be displayed
   // tsf_all - status byte, in hexadecimal
   // tsf_initial - initialization mode
   // tsf_mode - counting mode
   // tsf_base - counting base
 
-  // calls timer_get_conf() 
-  // followed by timer_display_conf()
-  printf("%s is not yet implemented!\n", __func__);
-  return 1;
+  uint8_t st; // status
+  
+  if (timer_get_conf(timer, &st) != OK) {
+    printf("Error in timer_get_conf\n");
+    return 1;
+  }  // lê a configuração do timer
+  
+  if (timer_display_conf(timer, st, field) != OK) {
+    printf("Error in timer_display_conf\n");
+    return 1;
+  }  // mostra a configuração do timer
+
+  return 0;
 }
 
 int(timer_test_time_base)(uint8_t timer, uint32_t freq) {

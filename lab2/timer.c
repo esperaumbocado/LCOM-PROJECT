@@ -34,7 +34,6 @@ void (timer_int_handler)() {
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
   // Reads the input timer configuration (status) via read-back command.
   // st	- Address of memory position to be filled with the timer config
-  printf("%s is being implemented!\n", __func__);
 
   if (st == NULL) return 1;  // Verificar se o ponteiro não é NULL
   if (timer < 0 || timer > 2) return 1;  // Verificar se o timer é válido
@@ -54,7 +53,6 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
 
 int (timer_display_conf)(uint8_t timer, uint8_t st,
                         enum timer_status_field field) {
-  printf("%s is being implemented!\n", __func__);
   union timer_status_field_val conf;
 
   switch (field) {
@@ -71,7 +69,7 @@ int (timer_display_conf)(uint8_t timer, uint8_t st,
       // confirmar
 
       conf.count_mode = (st & TIMER_SQR_WAVE) >> 1; //counting mode 0..5
-      if (conf.count_mode > 5) conf.count_mode &= 0x3; //????
+      if (conf.count_mode > 5) conf.count_mode &= 0x3; //?
 
       break;
     case tsf_base: // timer counting base

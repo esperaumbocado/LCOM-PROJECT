@@ -4,6 +4,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+// make
+// minix$ lcom_run lab2 "config 0 all -t 0"
+// timer::timer_test_read_config(0, all)
+// timer_test_read_config is not yet implemented!        
+// Test FAILED for seed fd11d0f2!
+// Timer Config: 0x79
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -28,11 +34,20 @@ int main(int argc, char *argv[]) {
 
   return 0;
 }
-
+ // only using timer 0 
+ // do not change timer 1 configuration
 int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
   /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  // timer 0, 1, 2
+  // 2nd - specified whihch fiel of the status work must be displayed
+  // tsf_all - status byte, in hexadecimal
+  // tsf_initial - initialization mode
+  // tsf_mode - counting mode
+  // tsf_base - counting base
 
+  // calls timer_get_conf() 
+  // followed by timer_display_conf()
+  printf("%s is not yet implemented!\n", __func__);
   return 1;
 }
 
@@ -45,6 +60,7 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
 
 int(timer_test_int)(uint8_t time) {
   /* To be implemented by the students */
+  //lab2, second part
   printf("%s is not yet implemented!\n", __func__);
 
   return 1;

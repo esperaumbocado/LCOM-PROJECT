@@ -5,11 +5,55 @@
 
 #include "i8254.h"
 
+// configure the specified timer (one of 0, 1 and 2) 
+// to generate a time base with a given frequency in Hz.
+// timer 0 -> maintain time of the day, default 60Hz
+// on every timer 0 interrupt, it increments a counter variable
 int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
 
-  return 1;
+  if (freq > TIMER_FREQ || freq < 19 || timer > 2) return 1; 
+  
+  // not to change the 4 LSbits (counting mode and BCD) of control word!
+  //  read the old input timer configuration 
+  uint8_t st;
+  if (timer_get_conf(timer, &st) != 0) return 1;
+
+  // change timer configuration
+  uint8_t new_st;
+  new_st = (st & 0x0F) | TIMER_LSB_MSB; 
+  // 0x0F = 00001111
+  
+  switch (timer)
+  {
+  case 0:
+    new_st |= TIMER_SEL0;
+    break;
+  case 1:
+    new_st |= TIMER_SEL1;
+    break;
+  case 2:
+    new_st |= TIMER_SEL2;
+    break;
+  default:
+    return 1;
+  }
+
+  // dizer ao i8254 que vamos configurar o timer
+  sys_outb(TIMER_CTRL, new_st);
+
+  uint16_t counter_value = TIMER_FREQ / freq;
+  //TIMER_FREQ 1193182 
+  //clock frequency for timer in PC and AT */
+
+  uint8_t lsb, msb;
+  util_get_LSB(counter_value, &lsb);
+  util_get_MSB(counter_value, &msb);
+
+  // setar o counter_value no timer
+  if (sys_outb(TIMER_0 + timer, lsb) != 0) return 1;
+  if (sys_outb(TIMER_0 + timer, msb) != 0) return 1;
+
+  return 0;
 }
 
 int (timer_subscribe_int)(uint8_t *bit_no) {
@@ -51,6 +95,22 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
   return 0;
 }
 
+/* UNION
+- permite armazenar diferentes tipos de dados no mesmo local de memória
+- pode conter vários membros (como structs), 
+mas apenas um membro pode ser acessado por vez
+- permite uma maneira eficiente de usar o mesmo espaço de memória 
+para diferentes propósitos, dependendo da necessidade do momento
+
+ENUM
+- conjunto de constantes inteiras nomeadas
+- usado para atribuir nomes a constantes inteiras, 
+tornando o código mais legível e fácil de manter. 
+- Diferente de union, um enum não é sobre armazenamento ou 
+representação de diferentes tipos de dados, 
+mas sobre a criação de um tipo de dado com 
+valores específicos predefinidos.*/
+
 int (timer_display_conf)(uint8_t timer, uint8_t st,
                         enum timer_status_field field) {
   union timer_status_field_val conf;
@@ -60,21 +120,24 @@ int (timer_display_conf)(uint8_t timer, uint8_t st,
       conf.byte = st; //status
       break;
     case tsf_initial: //timer initialization mode
-      // confirmar
-
-      conf.in_mode = (st & (TIMER_LSB | TIMER_MSB)) >> 4; //inicialization mode
+      // Bits 4 e 5 (LSB e MSB), indicam como o valor inicial do timer é carregado
+      conf.in_mode = (st & (TIMER_LSB | TIMER_MSB)) >> 4;
+      /* >> 4 desloca os Bits 4 e 5 para as posições 0 e 1,
+      deixando o valor facilmente comparado ou atribuído.*/
       break;
 
     case tsf_mode: //timer counting mode
-      // confirmar
-
+      // Bits 1-3
       conf.count_mode = (st & TIMER_SQR_WAVE) >> 1; //counting mode 0..5
-      if (conf.count_mode > 5) conf.count_mode &= 0x3; //?
+      // os modos "6" e "7" tem a mesma representação que 2 e 3
+      // com & 0x3, os modos 6 e 7 são convertidos para 2 e 3
+      if (conf.count_mode > 5) conf.count_mode &= 0x3; 
 
       break;
     case tsf_base: // timer counting base
       conf.bcd = st & TIMER_BCD; //counting base, true if BCD
       break;
+
     default:
       return 1;
   }
@@ -82,3 +145,4 @@ int (timer_display_conf)(uint8_t timer, uint8_t st,
   if (timer_print_config(timer, field, conf) != 0) return 1;
   return 0;
 }
+

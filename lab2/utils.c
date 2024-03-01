@@ -3,18 +3,29 @@
 #include <stdint.h>
 
 int(util_get_LSB)(uint16_t val, uint8_t *lsb) {
-
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  int counter=0;
+  while(val<<=1){
+    counter++;
+  }
+  if (val!=0){
+    *lsb=counter;
+    return 0;
+  }else{
+    return 1;
+  }
 }
 
 int(util_get_MSB)(uint16_t val, uint8_t *msb) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  int counter=0;
+  while(val>>=1){
+    counter++;
+  }
+  if (val!=0){
+    *msb=counter;
+    return 0;
+  }else{
+    return 1;
+  }
 }
 
 int (util_sys_inb)(int port, uint8_t *value) {

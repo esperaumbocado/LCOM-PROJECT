@@ -41,6 +41,8 @@
 #define TIMER_SQR_WAVE (BIT(2) | BIT(1)) /**< @brief Mode 3: square wave generator */
 #define TIMER_RATE_GEN BIT(2)            /**< @brief Mode 2: rate generator */
 
+
+
 /* Counting mode: bit 0 */
 
 #define TIMER_BCD 0x01 /**< @brief Count in BCD */

@@ -33,18 +33,27 @@ void (timer_int_handler)() {
 
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
     //Read-back command
-    uint8_t rb=0;
-    rb += BIT(0); // RESERVED FIELD
-    
+    uint8_t rb=0x00;
+    if (st==NULL){
+      return 1;
+    }
+    if (timer<0 | timer>2){
+      return 1;
+    }
+
+    int timer_adress;
     //Select counter
     if (timer==0){
-      rb |= TIMER_SEL0;
+      timer_adress = TIMER_0;
+      rb |= TIMER_RB_SEL(0);
     }else if (timer==1){
-      rb |= TIMER_SEL1;
+      timer_adress = TIMER_1;
+      rb |= TIMER_RB_SEL(1);
     }else if (timer==2){
-      rb |= TIMER_SEL2;
+      timer_adress = TIMER_2;
+      rb |= TIMER_RB_SEL(2);
     }
-   rb |= TIMER_RB_STATUS_; // Read programmed mode
+  
    rb |= TIMER_RB_COUNT_; // Read count value 
    rb |= TIMER_RB_CMD; //Read back command
 
@@ -52,24 +61,11 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
     return 1;
    }
    
-   switch(timer){
-    case 0:
-      if(util_sys_inb(TIMER_0,st)){
-        return 1;
-      }
-      break;
-    case 1:
-      if(util_sys_inb(TIMER_1,st)){
-        return 1;
-      }
-      break;
-    case 2:
-      if(util_sys_inb(TIMER_2,st)){
-        return 1;
-      }
-      break;
-   }
-  return 0;
+   uint r_value;
+
+
+  r_value = util_sys_inb(timer_adress,st);
+  return r_value;
 }
 
 int (timer_display_conf)(uint8_t timer, uint8_t st,
@@ -89,23 +85,11 @@ int (timer_display_conf)(uint8_t timer, uint8_t st,
       break;
 
     case tsf_mode:
-      if (st&TIMER_SQR_WAVE){
-        val.count_mode = 3;
-      }else if (st&TIMER_RATE_GEN){
-        val.count_mode = 2;
-      }else {
-        val.count_mode = st;
-      }
+      val.count_mode= ((st&(BIT(1)|BIT(2)|BIT(3)))>>1);
       break;
 
     case tsf_initial:
-      if (st&TIMER_LSB){
-        val.in_mode = LSB_only;
-      }else if (st&TIMER_MSB){
-        val.in_mode = MSB_only;
-      }else if (st&TIMER_LSB_MSB){
-        val.in_mode = MSB_after_LSB;
-      }
+      val.in_mode = ((st&TIMER_LSB_MSB)>>4);
       break;
 
     case tsf_all:

@@ -66,8 +66,8 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
 extern int counter;
 int(timer_test_int)(uint8_t time) {
 
-  uint8_t hook_id =0;
-  if (timer_subscribe_int(&hook_id) != OK) return 1;
+  uint8_t irq_set =0;
+  if (timer_subscribe_int(&irq_set) != OK) return 1;
 
   int ipc_status;
   message msg;
@@ -84,7 +84,7 @@ int(timer_test_int)(uint8_t time) {
       // ENDPOINT_P extracts the process identifier from a process's endpoint
       {
       case HARDWARE:
-        if (msg.m_notify.interrupts & BIT(0)){ // subscribed interrupt
+        if (msg.m_notify.interrupts & irq_set){ // subscribed interrupt
           timer_int_handler();
           if (counter%60 ==0){
             timer_print_elapsed_time();

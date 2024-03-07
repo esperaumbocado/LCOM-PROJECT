@@ -1,34 +1,52 @@
 #include <lcom/lcf.h>
 #include <lcom/timer.h>
+#include <math.h>
 
 #include <stdint.h>
 
 #include "i8254.h"
 
-int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
 
-  return 1;
+int hook_id = 0;
+int counter = 0;
+
+
+int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
+  uint32_t min = (uint32_t)(ceil((uint16_t)(TIMER_FREQ/USHRT_MAX)));
+  uint32_t max = TIMER_FREQ;
+  uint16_t div = TIMER_FREQ/freq;
+  printf("div:%x\n",div);
+  if (freq<min||freq>max){return 1;}
+  uint8_t msb,lsb,control;
+  util_get_MSB(div,&msb);
+  printf("msb:%x\n",msb);
+  util_get_LSB(div,&lsb);
+  printf("lsb;%x\n",lsb);
+  if(timer_get_conf(timer,&control)!=0){return 1;}
+  control = control&(BIT(0)|BIT(1)|BIT(2)|BIT(3));
+  control |= (TIMER_RB_SEL(timer) | TIMER_LSB_MSB)&(BIT(7)|BIT(6)|BIT(5)|BIT(4));
+  printf("0x%x",control);
+  if(sys_outb(TIMER_CTRL,control)!=0){return 1;}
+  if(sys_outb(TIMER_0+timer,lsb)!=0){return 1;}
+  if(sys_outb(TIMER_0+timer,msb)!=0){return 1;}
+  return 0;
 }
 
 int (timer_subscribe_int)(uint8_t *bit_no) {
     /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  if (bit_no == NULL) return 1;
+  *bit_no = BIT(hook_id);
+  if (sys_irqsetpolicy(TIMER0_IRQ,IRQ_REENABLE, &hook_id)!=0)return 1;
+  else return 0;
 }
 
 int (timer_unsubscribe_int)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
-
-  return 1;
+  if (sys_irqrmpolicy(&hook_id)!=0) return 1;
+  else return 0;
 }
 
 void (timer_int_handler)() {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
+  counter++;
 }
 
 int (timer_get_conf)(uint8_t timer, uint8_t *st) {
@@ -42,21 +60,10 @@ int (timer_get_conf)(uint8_t timer, uint8_t *st) {
     }
 
     int timer_adress;
-    //Select counter
-    if (timer==0){
-      timer_adress = TIMER_0;
-      rb |= TIMER_RB_SEL(0);
-    }else if (timer==1){
-      timer_adress = TIMER_1;
-      rb |= TIMER_RB_SEL(1);
-    }else if (timer==2){
-      timer_adress = TIMER_2;
-      rb |= TIMER_RB_SEL(2);
-    }
-  
    rb |= TIMER_RB_COUNT_; // Read count value 
    rb |= TIMER_RB_CMD; //Read back command
-
+   rb |= TIMER_RB_SEL(timer);
+   timer_adress = TIMER_0 + timer;
    if(sys_outb(TIMER_CTRL,rb)!=0){
     return 1;
    }

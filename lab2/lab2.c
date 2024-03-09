@@ -66,7 +66,7 @@ int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
 extern int counter;
 int(timer_test_int)(uint8_t time) {
 
-  uint8_t irq_set =0;
+  uint8_t irq_set =0; // nao precisava ser inicializada...
   if (timer_subscribe_int(&irq_set) != OK) return 1;
 
   int ipc_status;

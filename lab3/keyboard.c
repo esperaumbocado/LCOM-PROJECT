@@ -30,38 +30,32 @@ int (keyboard_unsubscribe_int)() {
 void (kbc_ih)(){
     //read the status register and check if there was some communications error;
     uint8_t st;
-    uint8_t tries=10;
 
-    while (tries>0){
-      if (util_sys_inb(0x64 , &st) != OK) // lê o status register
-      {
-        printf("reading status register 0x64 was not ok\n");  
-        return;
-      } 
+    if (util_sys_inb(0x64 , &st) != OK) // lê o status register
+    {
+      printf("reading status register 0x64 was not ok\n");  
+      return;
+    } 
 
-      if (st & (BIT(7))) {
-        printf("Parity Error.\n");
-        return;
-      }
-      
-      if (st & (BIT(6))) {
-        printf("Timeout Error.\n");
-        return;
-      }
-
-      if ((st & BIT(0)) != 0){ // if the output buffer is full, we can read the scancode 
-        //read the scancode byte from the output buffer;
-        // data é uma variável global
-        if (util_sys_inb(0x60 , &data) != OK){
-          printf("reading data from output buffer 0x60 was not ok");  
-          return;
-        }
-        return; // success
-      }
-      tickdelay(micros_to_ticks(DELAY_US));  
-      tries--;
+    if (st & (BIT(7))) {
+      printf("Parity Error.\n");
+      return;
     }
-      
+    
+    if (st & (BIT(6))) {
+      printf("Timeout Error.\n");
+      return;
+    }
+
+    if ((st & BIT(0)) != 0){ // if the output buffer is full, we can read the scancode 
+      //read the scancode byte from the output buffer;
+      // data é uma variável global
+      if (util_sys_inb(0x60 , &data) != OK){
+        printf("reading data from output buffer 0x60 was not ok");  
+        return;
+      }
+      return; // success
+    }      
 }
 
 int (kbc_activate_interrupts)(){

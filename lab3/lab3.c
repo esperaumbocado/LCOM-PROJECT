@@ -47,13 +47,12 @@ int(kbd_test_scan)(){
 	uint8_t irq_set;
     int ipc_status;
     message msg;
-    int r;
-
+    bool is_2bytes= false;
+    uint8_t temp;
     if (keyboard_subscribe_int(&irq_set) != OK) return 1;
-
     // data is an extern variable
     while (data != ESC){ // 0x81 : breakcode of ESC
-        if ((r=driver_receive(ANY, &msg, &ipc_status))!=0){
+        if (driver_receive(ANY, &msg, &ipc_status)!=0){
             // msg and ipc_status will be initialized by driver_receive()
             printf("driver_receive failed with: %d, r");
             continue;
@@ -68,7 +67,19 @@ int(kbd_test_scan)(){
                         kbc_ih(); // read the scancode from OUT_BUF
                         // read only one byte per interrupt
                         // print the scancodes (makecode and breakcode)    
-                        kbd_print_scancode(!(data & BREAK), data == 0xE0 ? 2 : 1, &data); 
+                        if (data == 0xE0) {
+                            is_2bytes = true;
+                            temp = data;
+                            break;
+                        } else {
+                            if (is_2bytes) {
+                                is_2bytes = false;
+                                uint8_t final[2] = {temp, data};
+                                kbd_print_scancode(!(data & BREAK), 2, final);
+                            } else {
+                                kbd_print_scancode(!(data & BREAK), 1, &data);
+                            }
+                        }
                         // make Whether this is a make or a break code
                         // size Size in bytes of the scancode
                         // bytes Array with size elements, with the scancode bytes
@@ -79,10 +90,8 @@ int(kbd_test_scan)(){
             }
         }
     }
-
     if (keyboard_unsubscribe_int() != OK) return 1;
     if (kbd_print_no_sysinb(sys_counter)!= OK) return 1; // uint32_t 
-    
     return 0;
 }
 

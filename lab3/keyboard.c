@@ -5,6 +5,7 @@
 
 int hook_id =1;
 uint8_t data;
+
 int (keyboard_subscribe_int)(uint8_t *bit_no) {
  
   if (bit_no==NULL) return 1;
@@ -58,8 +59,67 @@ void (kbc_ih)(){
     }      
 }
 
-int (kbc_activate_interrupts)(){
-  return 0;
+int (kbc_polling)(){
+    //read the status register and check if there was some communications error;
+    uint8_t st;
+    int tries=10;
+
+    while (tries>0){
+      tickdelay(micros_to_ticks(DELAY_US));
+      if (util_sys_inb(0x64 , &st) != OK) // lê o status register
+      {
+        printf("reading status register 0x64 was not ok\n");  
+        continue;
+      } 
+
+      if (st & (BIT(7))) {
+        printf("Parity Error.\n");
+        continue;
+      }
+      
+      if (st & (BIT(6))) {
+        printf("Timeout Error.\n");
+        continue;
+      }
+
+      if ((st & BIT(0)) != 0){ // if the output buffer is full, we can read the scancode 
+        //read the scancode byte from the output buffer;
+        // data é uma variável global
+        if (util_sys_inb(0x60 , &data) != OK){
+          printf("reading data from output buffer 0x60 was not ok. \n");  
+          continue;
+        }
+        return 0; // success
+      }
+      tries--;
+    }    
+    return 1; // failure   
 }
 
+int (kbc_activate_interrupts)(){
+    if (sys_outb(0x64, 0x20) != OK){ // avisar o KBC que vamos ler o command byte
+        printf("writing 0x20 to 0x64 was not ok. \n");  
+        return 1;
+    } 
+    
+    uint8_t commandWord;
+    if (util_sys_inb(0x60, &commandWord) != OK){ // ler o command byte
+        printf("reading commandWord from 0x60 was not ok. \n");  
+        return 1;
+    }
+
+    if (sys_outb(0x64, 0x60) != OK){ // avisar o KBC que vamos escrever o command byte
+        printf("writing 0x60 to 0x64 was not ok. \n");
+        return 1;
+    }
+
+    commandWord = commandWord | BIT(0);
+    if (sys_outb(0x60, commandWord) != OK){ // escrever o command byte
+        printf("writing commandWord to 0x60 was not ok. \n");
+        return 1;
+    }
+
+    printf("interrupts activated\n");
+    return 0;
+}
 

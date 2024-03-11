@@ -70,7 +70,7 @@ int(kbd_test_scan)(){
                         if (data == 0xE0) {
                             is_2bytes = true;
                             temp = data;
-                            break;
+                            break; // should it be continue? 
                         } else {
                             if (is_2bytes) {
                                 is_2bytes = false;
@@ -96,9 +96,26 @@ int(kbd_test_scan)(){
 }
 
 int(kbd_test_poll)(){
-    // 0x20 -> comando para avisar o i8042 de uma leitura de commandWord
-    // 0x60 -> comando para avisar o i8042 de uma escrita de commandWord
-    kbc_activate_interrupts();
+    bool is_2bytes= false;
+
+    while (data != ESC) {
+        if (kbc_polling() == OK){
+            if (data == 0xE0) {
+                is_2bytes = true;
+                continue;
+            } else {
+                if (is_2bytes) {
+                    is_2bytes = false;
+                    uint8_t final[2] = {0xE0, data};
+                    kbd_print_scancode(!(data & BREAK), 2, final);
+                } else {
+                    kbd_print_scancode(!(data & BREAK), 1, &data);
+                }
+            }
+        }
+    }
+    if (kbc_activate_interrupts() != OK) return 1;
+    if (kbd_print_no_sysinb(sys_counter)!= OK) return 1; // uint32_t 
     return 0;
 }
 

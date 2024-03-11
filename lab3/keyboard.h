@@ -38,4 +38,11 @@ void (kbc_ih)();
 */
 int (kbc_activate_interrupts)();
 
+/**
+ * @brief Polls the KBC
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int (kbc_polling)();
+
 #endif /* __KEYBOARD_H */

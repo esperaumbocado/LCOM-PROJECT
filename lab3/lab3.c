@@ -6,9 +6,11 @@
 
 #include "keyboard.h"
 
-extern int hook_id;
+extern int timer_hook_id;
+extern int keyboard_hook_id;
 extern uint32_t sys_counter;
 extern uint8_t data; // scancode
+extern int counter;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -70,7 +72,7 @@ int(kbd_test_scan)(){
                         if (data == 0xE0) {
                             is_2bytes = true;
                             temp = data;
-                            break; // should it be continue? 
+                            break; 
                         } else {
                             if (is_2bytes) {
                                 is_2bytes = false;
@@ -120,5 +122,68 @@ int(kbd_test_poll)(){
 }
 
 int(kbd_test_timed_scan)(uint8_t idle){
+    printf("this program will wait at most %d seconds for some scancode\n", idle);
+    // subscribe the KBC interrupts
+	uint8_t kbd_irq_set; //interrupt request line
+    uint8_t timer_irq_set;
+    int ipc_status;
+    message msg;
+    bool is_2bytes= false;
+    uint8_t temp;
+
+    if (keyboard_subscribe_int(&kbd_irq_set) != OK) return 1;
+    if (timer_subscribe_int(&timer_irq_set) != OK) return 1;
+    
+    int r;
+    while (counter < idle*60 && data != ESC) {
+        if ((r=driver_receive(ANY, &msg, &ipc_status))!=0){
+            // msg and ipc_status will be initialized by driver_receive()
+            printf("driver_receive failed with: %d, r");
+            continue;
+        }
+        if (is_ipc_notify(ipc_status)){ // received notification
+            switch (_ENDPOINT_P(msg.m_source)) 
+            // ENDPOINT_P extracts the process identifier from a process's endpoint
+            {
+                case HARDWARE:
+                    if (msg.m_notify.interrupts & kbd_irq_set){ // subscribed interrupt
+                        kbc_ih(); // read the scancode from OUT_BUF
+                        // read only one byte per interrupt
+                        // print the scancodes (makecode and breakcode)    
+                        if (data == 0xE0) {
+                            is_2bytes = true;
+                            temp = data;
+                            break;  
+                        } else {
+                            if (is_2bytes) {
+                                is_2bytes = false;
+                                uint8_t final[2] = {temp, data};
+                                kbd_print_scancode(!(data & BREAK), 2, final);
+                            } else {
+                                kbd_print_scancode(!(data & BREAK), 1, &data);
+                            }
+                        }
+                        counter = 0;
+                    }
+                    if (msg.m_notify.interrupts & timer_irq_set) {
+                        timer_int_handler();
+                        if (counter%60 ==0){
+                            timer_print_elapsed_time();g
+                            printf("secs = %d\n", counter/60);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+    }
+
+    if (keyboard_unsubscribe_int() != OK) return 1;
+    if (timer_unsubscribe_int() != OK) return 1;
+
+    if (kbd_print_no_sysinb(sys_counter)!= OK) return 1; // uint32_t 
+    printf("counter = %d\n", counter);
     return 0;
 }

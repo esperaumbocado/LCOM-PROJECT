@@ -3,15 +3,15 @@
 #include <stdint.h>
 #include "keyboard.h"
 
-int hook_id =1;
+int keyboard_hook_id =1;
 uint8_t data;
 
 int (keyboard_subscribe_int)(uint8_t *bit_no) {
  
   if (bit_no==NULL) return 1;
-  *bit_no = BIT(hook_id); 
+  *bit_no = BIT(keyboard_hook_id); 
 
-  if (sys_irqsetpolicy(KEYBOARD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &hook_id) != OK)
+  if (sys_irqsetpolicy(KEYBOARD_IRQ, IRQ_REENABLE | IRQ_EXCLUSIVE, &keyboard_hook_id) != OK)
     return 1;
   // it enables the corresponding interrupt
   // (so we dont need to call sys_irqenable())
@@ -23,7 +23,7 @@ int (keyboard_subscribe_int)(uint8_t *bit_no) {
 }
 
 int (keyboard_unsubscribe_int)() {
-  if (sys_irqrmpolicy(&hook_id)!=OK)
+  if (sys_irqrmpolicy(&keyboard_hook_id)!=OK)
     return 1; 
   return 0;
 }

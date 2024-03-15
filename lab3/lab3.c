@@ -168,7 +168,7 @@ int(kbd_test_timed_scan)(uint8_t idle){
                     if (msg.m_notify.interrupts & timer_irq_set) {
                         timer_int_handler();
                         if (counter%60 ==0){
-                            timer_print_elapsed_time();g
+                            timer_print_elapsed_time();
                             printf("secs = %d\n", counter/60);
                         }
                     }

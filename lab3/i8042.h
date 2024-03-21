@@ -1,0 +1,5 @@
+#define KBD_IRQ 1 //IRQ LINE
+
+#define KBC_STATUS_REG 0x64
+#define KBC_OUTPUT_REG 0x60
+

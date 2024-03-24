@@ -60,7 +60,7 @@ void (kbc_ih)(){
 }
 
 int (kbc_polling)(){
-    //read the status register and check if there was some communications error;
+    //read the status register and check if there was some communication error;
     uint8_t st;
     int tries=10;
 
@@ -91,7 +91,7 @@ int (kbc_polling)(){
         }
         return 0; // success
       }
-      tries--;
+      tries--; // i guess it should be in the beginning of the while loop
     }    
     return 1; // failure   
 }

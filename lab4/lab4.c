@@ -1,5 +1,5 @@
-// IMPORTANT: you must include the following line in all your C files
 #include <lcom/lcf.h>
+#include <lcom/lab4.h>
 
 #include <stdint.h>
 #include <stdio.h>
@@ -10,6 +10,8 @@
 extern int timer_hook_id;
 extern int mouse_hook_id;
 extern int counter;
+extern struct packet pp;
+extern int bytes_read;
 
 // doxygen 
 // https://web.fe.up.pt/~pfs/aulas/lcom2324/labs/lab4/src/doc/files.html
@@ -38,19 +40,17 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-
 int (mouse_test_packet)(uint32_t cnt) {
-    /* To be completed */
-    printf("%s(%u): under construction\n", __func__, cnt);
     uint8_t mouse_irq_set;
     int ipc_status;
     message msg;
-    if (mouse_subscribe_int(&mouse_irq_set) != OK) return 1;
 
     // so that the mouse sends packets 
     // reporting its displacement or changes in the state of buttons
+    // done with 0xF4 command
     if (mouse_enable_data_reporting() != OK) return 1;
-    
+    if (mouse_subscribe_int(&mouse_irq_set) != OK) return 1;
+
     int r;
     uint32_t packets_read = 0;
     while (packets_read < cnt) {
@@ -66,12 +66,13 @@ int (mouse_test_packet)(uint32_t cnt) {
                 case HARDWARE:
                     if (msg.m_notify.interrupts & mouse_irq_set){ // subscribed interrupt
                         mouse_ih(); // reads only one byte per interrupt
-                        // when a packet is received (the 3rd byte)
-                        // parse it 
-                        // initiliaze the struct packet, 
-                        // whose address is pp
-                        mouse_print_packet(&pp); //*pp
-                        packets_read++;
+                        sync();
+                        if (bytes_read ==3){
+                            parse();
+                            mouse_print_packet(&pp);
+                            packets_read++;
+                            bytes_read = 0;
+                        }              
                     }
                     break;
                 default:
@@ -81,8 +82,8 @@ int (mouse_test_packet)(uint32_t cnt) {
     }
 
     if (mouse_unsubscribe_int() != OK) return 1;
-    // - disable data reporting 
-    return 1;
+    if (mouse_disable_data_reporting() != OK) return 1;
+    return 0;
 }
 
 int (mouse_test_async)(uint8_t idle_time) {
@@ -118,7 +119,8 @@ int (mouse_test_async)(uint8_t idle_time) {
                         // parse it 
                         // initiliaze the struct packet, 
                         // whose address is pp
-                        mouse_print_packet(&pp); //*pp
+
+                        //mouse_print_packet(&pp); //*pp
                         counter = 0;
                     }
                     if (msg.m_notify.interrupts & timer_irq_set) {
@@ -149,6 +151,7 @@ int (mouse_test_async)(uint8_t idle_time) {
 int (mouse_test_gesture)(uint8_t x_len, uint8_t tolerance){
     /* To be completed */
     printf("%s: under construction\n", __func__);
+    uint8_t mouse_irq_set;
 
     if (mouse_subscribe_int(&mouse_irq_set) != OK) return 1;
     // so that the mouse sends packets 

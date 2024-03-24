@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "i8042.h"
 
 /** @defgroup mouse
  * @{
@@ -41,8 +42,30 @@ int (mouse_enable_data_reporting)(void);
  * @brief Handles mouse interrupts
  *
  * Reads the st reg and the output buffer
- * if there was some error, the byte read from the OB should be discarded
+ * if there was some error, the byte read from the OB is discarded
  * 
  */
 void (mouse_ih)(void);
+
+/**
+ * @brief Parse packet
+ * 
+*/
+void (parse)(void);
+
+/**
+ * @brief sync packet
+ * 
+*/
+void (sync)(void);
+
+/**
+ * @brief Disables stream mode mouse data reporting
+ *
+ * sends the respective command to the mouse
+ * 
+ * @return Return 0 upon success and non-zero otherwise
+ */ 
+int (mouse_disable_data_reporting)(void);
+
 #endif /* __MOUSE_H */

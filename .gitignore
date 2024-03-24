@@ -1,0 +1,15 @@
+# Arquivos de configuração do IDE
+.vscode/
+
+# Arquivos objeto e executáveis
+*.o
+/lab2/lab2
+/lab3/lab3
+/lab4/lab4
+
+# Arquivos específicos do gdb
+*.gdbinit
+
+# Arquivos de log e saída
+output.txt
+trace.txt

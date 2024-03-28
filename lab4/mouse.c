@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "mouse.h"
 
-int mouse_hook_id = 2; 
+static int mouse_hook_id = 3; 
 uint8_t byte_received;
 int counter = 0;
 struct packet pp;
@@ -41,30 +41,35 @@ int (mouse_unsubscribe_int)() {
 void (mouse_ih)(){    
     //read the status register and check if there was some communication error;
     uint8_t st;
+    int tries = 10;
+    while (tries > 0){
+      tries--;
+      tickdelay(micros_to_ticks(DELAY_US));
+      if (util_sys_inb(0x64 , &st) != OK) // lê o status register
+      {
+        printf("reading status register 0x64 was not ok\n");  
+        return;
+      } 
 
-    if (util_sys_inb(0x64 , &st) != OK) // lê o status register
-    {
-      printf("reading status register 0x64 was not ok\n");  
-      return;
-    } 
-
-    if (st & (BIT(7))) {
-      printf("Parity Error.\n");
-      return;
-    }
-    
-    if (st & (BIT(6))) {
-      printf("Timeout Error.\n");
-      return;
-    }
-
-    if (((st & BIT(0)) != 0) && (st & BIT(5))){ // if the output buffer is full, we can read it
-      if (util_sys_inb(0x60 , &byte_received) != OK){
-        printf("this byte should be discarded \n");  
+      if (st & (BIT(7))) {
+        printf("Parity Error.\n");
         return;
       }
-      // otherwise, we successfully read the byte
+      
+      if (st & (BIT(6))) {
+        printf("Timeout Error.\n");
+        return;
+      }
+
+      //if bit(0)==1, OBF is full
+      if ((st & BIT(0)) && (st & BIT(5))){ // if the output buffer is full, we can read it
+        if (util_sys_inb(0x60 , &byte_received) != OK){
+          printf("this byte should be discarded \n");  
+        }
+        // otherwise, we successfully read the byte
+      }
     }
+}
 
     // i guess i will use later for enabling reporting...?
 
@@ -103,8 +108,7 @@ void (mouse_ih)(){
     //     }
     //     return;
     // }
-}
-
+    
 void (parse)(){
   pp.bytes[0] = pp_bytes[0];
   pp.bytes[1] = pp_bytes[1];
@@ -145,26 +149,84 @@ void (sync)(){
   }
 }
 
+bool (ibf_empty)(){
+  uint8_t st;
+  int tries = 10;
+  while (tries > 0){
+    tries--;
+    // tickdelay(micros_to_ticks(DELAY_US));
+    if (util_sys_inb(0x64 , &st) != OK) // lê o status register
+    {
+      printf("reading status register 0x64 was not ok\n");  
+      continue;
+    } 
+    if (!(st & BIT(1))){
+      // printf("checking ibf %d\n", tries);
+      return true;
+    } // if bit(1)==1, IBF is not empty
+  }
+  printf("IBF is not empty. \n");
+  return false;
+}
+  
+bool (obf_full)() {
+  uint8_t st;
+  int tries = 10;
+  while (tries > 0){
+    tries--;
+    // tickdelay(micros_to_ticks(DELAY_US));
+    if (util_sys_inb(0x64 , &st) != OK) // lê o status register
+    {
+      printf("reading status register 0x64 was not ok\n");  
+      continue;
+    } 
+    if (st & BIT(0)){ // if bit(0)==1, OBF is full  
+      // printf("checking obf %d\n", tries);
+      return true;
+    }
+  }
+  
+  printf("OBF is not full. \n");
+  return false;
+}
+
 int (mouse_disable_data_reporting)(){
     // disable data reporting with 0xF5 command
-    // certainly it is wrongkkkkkkkk
+
     int tries=10;
     uint8_t response;
 
     while (tries>0){
       tries--;
       // write byte mouse command
+      if (!ibf_empty()) {
+        printf("IBF is not empty. \n");
+        continue;
+      }
+
       if (sys_outb(0x64, 0xD4) != OK){
           printf("writing 0xD4 to 0x64 was not ok. \n");  
           continue;
       }
+
+      if (!ibf_empty()) {
+        printf("IBF is not empty. \n");
+        continue;
+      }
+
       // disable data reporting command
       if (sys_outb(0x60, 0xF5) != OK){
           printf("writing 0xF5 to 0x60 was not ok. \n");  
           continue;
       }
 
-      tickdelay(micros_to_ticks(DELAY_US));
+      // tickdelay(micros_to_ticks(DELAY_US));
+
+      if (!obf_full()) {
+        printf(" we waited too long for OBF becoming full.\n");
+        continue;
+      }
+
       if (util_sys_inb(0x60, &response) != OK){
           printf("reading response from 0x60 was not ok. \n"); 
           continue; 
@@ -177,10 +239,12 @@ int (mouse_disable_data_reporting)(){
               continue;
           }
           continue;
-      } else { // ACK
-          return 0;
-      }
+      } 
+      // printf("disabling data report %d\n", tries);
+      printf("Mouse acknowledged disable data reporting command.\n");
+      return 0; // ACK
     }
+    
     printf("Mouse did not acknowledge disable data reporting command.\n");
     return 1;
 }

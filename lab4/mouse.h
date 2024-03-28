@@ -68,4 +68,22 @@ void (sync)(void);
  */ 
 int (mouse_disable_data_reporting)(void);
 
+/**
+ * @brief Checks if the output buffer is full
+ * 
+ * so we know if we can read from it
+ * 
+ * @return true if the output buffer is full, false otherwise
+*/
+bool (obf_full)();
+
+/**
+ * @brief Checks if the input buffer is empty
+ * 
+ * so we know if we can write to it
+ * 
+ * @return true if the input buffer is empty, false otherwise
+*/
+bool (ibf_empty)();
+
 #endif /* __MOUSE_H */

@@ -22,6 +22,5 @@ int (util_sys_inb)(int port, uint8_t *value) {
   uint32_t temp_value;
   if (sys_inb(port, &temp_value) != OK) return 1;  // Chamada de sistema sys_inb
   util_get_LSB(temp_value, value); // Chama a função para obter o LSB de val
-
   return 0;
 }

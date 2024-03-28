@@ -60,13 +60,11 @@ void (parse)(void);
 void (sync)(void);
 
 /**
- * @brief Disables stream mode mouse data reporting
- *
- * sends the respective command to the mouse
- * 
+ * @brief Sends a command to the mouse
+ * @param cmd command to be sent
  * @return Return 0 upon success and non-zero otherwise
  */ 
-int (mouse_disable_data_reporting)(void);
+int (mouse_command)(uint32_t cmd);
 
 /**
  * @brief Checks if the output buffer is full

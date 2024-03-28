@@ -76,8 +76,7 @@ int (mouse_test_packet)(uint32_t cnt) {
         }
     }
     if (mouse_unsubscribe_int() != OK) return 1;
-    if (mouse_disable_data_reporting() != OK) return 1;
-    // if (mouse_disable_data_reporting() != OK) return 1;
+    if (mouse_command(0xF5) != OK) return 1;
     
     return 0;
 }

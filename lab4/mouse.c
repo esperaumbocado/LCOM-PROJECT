@@ -5,10 +5,13 @@
 
 static int mouse_hook_id = 3; 
 uint8_t byte_received;
-int counter = 0;
 struct packet pp;
 int bytes_read = 0;
 uint8_t pp_bytes[3];
+enum state state = STATE_ZERO;
+uint8_t abs_x_len = 0;
+uint8_t abs_y_len = 0;
+    
     
 int (mouse_subscribe_int)(uint8_t *bit_no) {
  
@@ -17,8 +20,6 @@ int (mouse_subscribe_int)(uint8_t *bit_no) {
 
   if (sys_irqsetpolicy(12, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK)
     return 1;
-  // it enables the corresponding interrupt
-  // (so we dont need to call sys_irqenable())
   // IRQ_REENABLE (int, the policy) so that the generic
   // interrupt handler will acknowledge the interrupt,
   // output the EOI command to the PIC
@@ -39,82 +40,34 @@ int (mouse_unsubscribe_int)() {
 // 0xEB, manda um request de novos dados;
 
 void (mouse_ih)(){    
-    //read the status register and check if there was some communication error;
     uint8_t st;
-    // int tries = 10;
-    // while (tries > 0){
-    //   tries--;
-    //   tickdelay(micros_to_ticks(DELAY_US));
-      if (util_sys_inb(0x64 , &st) != OK) // lê o status register
-      {
-        printf("reading status register 0x64 was not ok\n");  
-        // continue;
-        return;
-      } 
+    if (util_sys_inb(0x64 , &st) != OK) // lê o status register
+    {
+      printf("reading status register 0x64 was not ok\n");  
+      return;
+    } 
 
-      if (st & (BIT(7))) {
-        printf("Parity Error.\n");
-        // continue;
-        return;
-      }
-      
-      if (st & (BIT(6))) {
-        printf("Timeout Error.\n");
-        // continue;
-        return;
-      }
+    if (st & (BIT(7))) {
+      printf("Parity Error.\n");
+      return;
+    }
+    
+    if (st & (BIT(6))) {
+      printf("Timeout Error.\n");
+      return;
+    }
 
-      //if bit(0)==1, OBF is full
-      if ((st & BIT(0)) && (st & BIT(5))){ // if the output buffer is full, we can read it
-        if (util_sys_inb(0x60 , &byte_received) != OK){
-          printf("this byte should be discarded \n");  
-          // continue;
-          return;
-        }
-        // otherwise, we successfully read the byte
+    //if bit(0)==1, OBF is full
+    if ((st & BIT(0)) && (st & BIT(5))){ // if the output buffer is full, we can read it
+      if (util_sys_inb(0x60 , &byte_received) != OK){
+        printf("this byte should be discarded \n");  
         return;
       }
-    // }
+      // otherwise, we successfully read the byte
+      return;
+    }
 }
 
-    // i guess i will use later for enabling reporting...?
-
-    // // request forwarding of byte (command) to the mouse
-    // if (sys_outb(0x64, 0xD4) != OK){
-    //     printf("writing 0xD4 to 0x64 was not ok. \n");  
-    //     return;
-    // }
-
- 
-    // uint8_t commandWord;
-    // if (util_sys_inb(0x60, &commandWord) != OK){ // ler o command byte
-    //     printf("reading commandWord from 0x60 was not ok. \n");  
-    //     // we should now dischard this byte 
-    //     return;
-    // }  
-
-    // // write the command byte    
-    // commandWord = commandWord | 0x00; // ?
-    // if (sys_outb(0x60, commandWord) != OK){
-    //     printf("writing commandWord to 0x60 was not ok. \n");  
-    //     return;
-    // }
-
-    // uint8_t response;
-    // // read the acknowledgement byte received from the mouse
-    // if (util_sys_inb(0x60, &response) != OK){
-    //     printf("reading response from 0x60 was not ok. \n");  
-    //     return;
-    // }
-
-    // if (response != 0xFA){
-    //     printf("response was not a success case. \n");  
-    //     if (response == 0xFE){
-    //         printf("response was 0xFE, send the entire command again! \n");  
-    //     }
-    //     return;
-    // }
-    
 void (parse)(){
   pp.bytes[0] = pp_bytes[0];
   pp.bytes[1] = pp_bytes[1];
@@ -177,18 +130,18 @@ bool (ibf_empty)(){
   
 bool (obf_full)() {
   uint8_t st;
-  if (util_sys_inb(0x64 , &st) != OK) // lê o status register
-  {
-    printf("reading status register 0x64 was not ok\n");  
-    return false;
-  } 
-    
-  if (st & BIT(0)){ // if bit(0)==1, OBF is full  
-    return true;
+  int tries =3;
+  while (tries>0){
+    tries--;
+    // tickdelay(micros_to_ticks(DELAY_US));
+    if (util_sys_inb(0x64 , &st) != OK){ // lê o status register
+      continue;
+    } 
+
+    if (st & BIT(0)) return true;
   }
-  
   printf("OBF is not full. \n");
-  return false;
+  return false;  
 }
 
 int (mouse_command)(uint32_t cmd) {
@@ -197,7 +150,6 @@ int (mouse_command)(uint32_t cmd) {
     while (tries>0){
       tries--;
       if (!ibf_empty()) {
-        printf("IBF is not empty. \n");
         continue;
       }
       if (sys_outb(0x64, 0xD4) != OK){ // write byte mouse command
@@ -205,22 +157,26 @@ int (mouse_command)(uint32_t cmd) {
           continue;
       }
       if (!ibf_empty()) {
-        printf("IBF is not empty. \n");
         continue;
       }
+      printf("writing cmd %X to 0x60\n", cmd);
       if (sys_outb(0x60, cmd) != OK){ // disable data reporting command
-          printf("writing cmd %d to 0x60 was not ok. \n", cmd);  
+          printf("writing cmd %x to 0x60 was not ok. \n", cmd);  
           continue;
       }
       // tickdelay(micros_to_ticks(DELAY_US));
       if (!obf_full()) {
         continue;
       }
+      printf("obf full\n");
       if (util_sys_inb(0x60, &response) != OK){
           printf("reading response from 0x60 was not ok. \n"); 
           continue; 
       }
-      if (response != 0xFA){ 
+      if (response == 0xFA){ 
+        printf("Mouse acknowledged command.\n");
+        return 0; 
+      } else {
           printf("response was not a success case. \n");  
           printf("response was %d\n", response);
           if (response == 0xFE){ // NACK
@@ -228,10 +184,117 @@ int (mouse_command)(uint32_t cmd) {
               continue;
           }
           continue;
-      } 
-      printf("Mouse acknowledged command.\n");
-      return 0; // ACK 0xFA
+      }
+      printf("responde was %x\n", response);
     }
     printf("Mouse did not acknowledge command.\n");
     return 1;
 }
+
+void (process_packet)(struct packet *pp, uint8_t x_len, uint8_t tolerance){
+  switch (state){
+    case STATE_ZERO:
+        if (!pp->lb && !pp->rb && !pp->mb){
+            printf("no buttons pressed\n");
+            state = STATE_INIT;
+        }
+        break;
+    case STATE_INIT:
+        abs_x_len = 0;
+        abs_y_len = 0;    
+        if (pp->lb && !pp->rb && !pp->mb){
+            printf("left button was pressed\n");
+            state = STATE_FIRST_LINE;
+        }
+        break;
+    case STATE_FIRST_LINE:
+        if ((!(pp->delta_x & BIT(15)) || (pp->delta_x & BIT(15) && abs(pp->delta_x) <= tolerance)) && pp->lb && !pp->rb && !pp->mb){ 
+            if (!(pp->delta_y & BIT(15)) || (pp->delta_y & BIT(15) && abs(pp->delta_y) <= tolerance)){
+                abs_x_len += pp->delta_x; 
+                abs_y_len += pp->delta_y;
+                printf("abs_x_len %d, abs_y_len %d\n", abs_x_len, abs_y_len);
+                if (abs_x_len >= x_len && abs_y_len > abs_x_len + 1){
+                    printf("first line was drawn\n");
+                    state = STATE_END_FIRST_LINE;
+                }
+                break;
+            } 
+        } 
+        if (!pp->lb && !pp->rb && !pp->mb){
+            printf("right button was released, going to init state\n");
+            state = STATE_INIT;
+            break;
+        }
+        printf("problems in drawing first line, going back to state_zero\n");
+        state = STATE_ZERO;
+        break;
+    case STATE_END_FIRST_LINE:
+        if (!pp->lb && !pp->rb && !pp->mb){
+            printf("left button was released\n");
+            state = STATE_VERTEX;
+            break;
+        }
+        if (pp->rb || pp->mb){
+            printf("right or middle button was pressed :(\n");
+            state = STATE_ZERO;
+            break;
+        }
+        break;
+    case STATE_VERTEX: // 4
+        abs_x_len = 0;
+        abs_y_len = 0;            
+        if (pp->rb && !pp->lb && !pp->mb){
+            printf("right button was pressed, starting 2nd line\n");
+            state = STATE_SECOND_LINE;
+            break;
+        }
+        if (pp->lb && !pp->rb && !pp->mb){
+            printf("left button was pressed, starting the 1st line again\n");
+            state = STATE_FIRST_LINE;
+            break;
+        }
+        if (abs(pp->delta_x) <= tolerance && abs(pp->delta_y) <= tolerance &&  !pp->lb && !pp->rb && !pp->mb){
+            break; // stay in vertex state
+        }
+
+        printf("problems in vertex, going back to state_zero\n");
+        state = STATE_ZERO;
+        break;
+    case STATE_SECOND_LINE: // 5
+        if ((!(pp->delta_x & BIT(15)) || (pp->delta_x & BIT(15) && abs(pp->delta_x) <= tolerance)) && pp->rb && !pp->lb && !pp->mb){ 
+            if ((pp->delta_y & BIT(15)) || (!pp->delta_y & BIT(15) && pp->delta_y <= tolerance)){
+                abs_x_len += pp->delta_x; 
+                abs_y_len += pp->delta_y;
+                if (abs_x_len >= x_len && abs_y_len > abs_x_len + 1){
+                    printf("second line was drawn\n");
+                    state = STATE_END_SECOND_LINE;
+                }
+                break;
+            } 
+        } 
+        if (!pp->lb && !pp->rb && !pp->mb){
+            printf("left button was released, going to init state\n");
+            state = STATE_INIT;
+            break;
+        }
+        printf("problems in drawing second line, going back to state_zero\n");
+        state = STATE_ZERO;
+        break;
+    case STATE_END_SECOND_LINE: //6 
+        if (!pp->lb && !pp->rb && !pp->mb){
+            printf("right button was released\n");
+            state = STATE_END;
+            break;
+        }
+        if (pp->lb || pp->mb){
+            printf("left or middle button was pressed :(\n");
+            state = STATE_ZERO;
+            break;
+        }
+        break;
+    case STATE_END:
+        printf("end of gesture\n");
+        break;
+  }
+}
+

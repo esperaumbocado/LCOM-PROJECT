@@ -84,4 +84,25 @@ bool (obf_full)();
 */
 bool (ibf_empty)();
 
+/**
+ * @brief Process state based on the packet
+ * 
+ * @param pp packet to be processed
+ * @param x_len length of the x movement
+ * @param tolerance tolerance of the movement
+ * 
+*/
+void (process_packet)(struct packet *pp, uint8_t x_len, uint8_t tolerance);
+
+enum state {
+    STATE_ZERO, // 0 
+    STATE_INIT, // 1
+    STATE_FIRST_LINE, // 2
+    STATE_END_FIRST_LINE, // 3
+    STATE_VERTEX, // 4
+    STATE_SECOND_LINE, // 5
+    STATE_END_SECOND_LINE, // 6
+    STATE_END // 7
+};
+
 #endif /* __MOUSE_H */

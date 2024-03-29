@@ -5,6 +5,9 @@
 
 #include "i8254.h"
 
+int timer_hook_id =0;
+int counter =0;
+
 // configure the specified timer (one of 0, 1 and 2) 
 // to generate a time base with a given frequency in Hz.
 // timer 0 -> maintain time of the day, default 60Hz
@@ -56,8 +59,6 @@ int (timer_set_frequency)(uint8_t timer, uint32_t freq) {
   return 0;
 }
 
-int timer_hook_id =0;
-int counter =0;
 int (timer_subscribe_int)(uint8_t *bit_no) {
  
   if (bit_no==NULL) return 1;

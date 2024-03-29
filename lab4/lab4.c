@@ -44,7 +44,9 @@ int (mouse_test_packet)(uint32_t cnt) {
     uint8_t mouse_irq_set;
     int ipc_status;
     message msg;
-    if (mouse_enable_data_reporting() != OK) return 1; // done with 0xF4 command
+    // if (mouse_enable_data_reporting() != OK) return 1; // done with 0xF4 command
+    if (mouse_command(0xF4) != OK) return 1;
+    
     if (mouse_subscribe_int(&mouse_irq_set) != OK) return 1;
     int r;
     uint32_t packets_read = 0;

@@ -44,6 +44,7 @@ for reasons of alingment:
 #pragma pack(1) -> no padding
 #pragma options align=reset -> reset to default
 */
+
 // set AH = 0x4F (distinguish vbe function from vga bios)
 // AL -> specifies the function
 // if return OK, AH = 0x00
@@ -63,24 +64,18 @@ for reasons of alingment:
 // 0x03 : minix text mode
 // use 0x00 func (int 0x10 bios) 
 // set AH = 0x00
-// set AL = 0x03 // smth else to different modes?
+// set AL = 0x03 
 
 int (video_test_init)(uint16_t mode, uint8_t delay){
+    
     if (vbe_set_mode(mode)!=0) return 1;
     sleep(delay);
+    
     // resets video controller to text mode
     // calls func AL=0x00 (set video mode) of BIOS video service int 0x10
     return vg_exit();
 }
 
-// 0x01 func -> return vbe mode info ; 
-    //get vram physical addr from video controller
-    // get vram size
-    // args: mode passed on CX, 
-        // es:di real-mode (linear physical) addr of a buffer to be filled w params of specified mode
-        // horizontal res and vert res
-        // bits per pixel
-// map graphics mode vram in the process address space
 int (video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y, uint16_t width, uint16_t height,
                            uint32_t color){
     
@@ -91,33 +86,21 @@ int (video_test_rectangle)(uint16_t mode, uint16_t x, uint16_t y, uint16_t width
 
     return vg_exit();
 }
-//--------------------------------
-int (video_test_pattern)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_t step){
-    // if no_rectangles is 3, then the pattern will be a matrix of 3 by 3 rectangles
-// * The color of each rectangle depends on its coordinates in the rectangle
-//  *  matrix (row, col).
-//  * 
-//  * If the color model is indexed then the (index of the) color of the rectangle 
-//  *  with coordinates (row, col) is given by:
-//  * index(row, col) = (first + (row * no_rectangles + col) * step) % (1 << BitsPerPixel)
-//  * 
-//   * If the color model is direct then the components of the rectangle with 
-//  *  coordinates (row, col) are given by:
-//  *   R(row, col) = (R(first) + col * step) % (1 << RedScreeMask) 
-//  * G(row, col) = (G(first) + row * step) % (1 << GreenScreeMask)
-//  *  B(row, col) = (B(first) + (col + row) * step) % (1 << BlueScreeMask)	
-//  * 
-//  * Where *MaskSize are the values of the members with that name of the VBE
-//  *  ModeInfoBlock struct.
-//  * 
-//  * Returns upon release of the ESC key
-//  * @param first Color to be used in the first rectangle (the rectangle at the
-//  * 				 top-left corner of the screen). 
-//  * @param step	 Difference between the values of the R/G component in adjacent
-//  * 				 	rectangles in the same row/column. For the B
-//  * 					component check the detailed description.
 
-    return 0;
+int (video_test_pattern)(uint16_t mode, uint8_t no_rectangles, uint32_t first, uint8_t step){
+    
+    if (map_vram(mode)!=0) return 1; 
+    if (vbe_set_mode(mode)!=0) return 1;
+
+    // draw no_rectangles 
+    // first - the color
+    // step - the difference between the values of the R/G component 
+    //          in adjacent rectangles in the same row/column
+    if (vg_draw_pattern(no_rectangles, first, step)!=0) return 1;
+
+    if (wait_ESC()!=0) return 1;
+
+    return vg_exit();
 }
 
 int (video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y){

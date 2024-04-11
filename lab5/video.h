@@ -55,4 +55,14 @@ int (vg_draw_hline)(uint16_t x, uint16_t y, uint16_t len, uint32_t color);
 int (vg_draw_rectangle)(uint16_t x, uint16_t y, uint16_t width, 
             uint16_t height, uint32_t color);
 
+/**
+ * @brief Draws a pattern of rectangles
+ * @param no_rectangles number of rectangles
+ * @param first color of the first rectangle
+ * @param step difference between the values of the R/G component
+ *         in adjacent rectangles in the same row/column
+ * @return Return 0 upon success and non-zero otherwise
+*/
+int (vg_draw_pattern)(uint8_t no_rectangles, uint32_t first, uint8_t step);
+
 #endif /* __VIDEO_H */

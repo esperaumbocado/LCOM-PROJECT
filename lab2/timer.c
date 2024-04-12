@@ -63,11 +63,6 @@ int (timer_subscribe_int)(uint8_t *bit_no) {
   if (bit_no==NULL) return 1;
   *bit_no = BIT(hook_id); //?
 
-  // o que se faz com o bit_no?
-  // hook id tem de ser entre 0 e 7? pq?
-  // depois da syscall, o bit_no vai mudar ?
-  // bit_no vai ser sempre zero?
-
   if (sys_irqsetpolicy(TIMER0_IRQ, IRQ_REENABLE, &hook_id) != OK)
     return 1;
   // it enables the corresponding interrupt
@@ -128,10 +123,11 @@ valores específicos predefinidos.*/
 
 int (timer_display_conf)(uint8_t timer, uint8_t st,
                         enum timer_status_field field) {
+                          
   union timer_status_field_val conf;
 
   switch (field) {
-    case tsf_all: //configuration/status
+    case tsf_all: // configuration/status
       conf.byte = st; //status
       break;
     case tsf_initial: //timer initialization mode

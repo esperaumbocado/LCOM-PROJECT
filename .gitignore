@@ -13,6 +13,8 @@
 
 # Arquivos core gerados por crashes
 core.*
+video.o-*
+*.o-*
 
 # Arquivos de log e saída
 output.txt

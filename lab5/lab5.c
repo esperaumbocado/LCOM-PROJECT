@@ -105,8 +105,21 @@ int (video_test_pattern)(uint16_t mode, uint8_t no_rectangles, uint32_t first, u
 
 int (video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y){
     // writing to vram in video mode 0x105
-    // read_xpm() to parse the input XPM
-    return 0;
+    if (map_vram(0x105)!=0) return 1;
+    if (vbe_set_mode(0x105)!=0) return 1;
+
+    // convert a XPM into a pixmap
+    // returns the add of alocated mem to where the img was read
+    // updates img with img info
+    xpm_image_t img;
+    uint8_t *sprite =  xpm_load(xpm, XPM_INDEXED, &img);
+    if (sprite == NULL) return 1;
+
+    if (display_img(x, y, img.width, img.height, sprite)!=0) return 1;
+    
+    if (wait_ESC()!=0) return 1;
+
+    return vg_exit();
 }
 
 int (video_test_move)(xpm_map_t xpm, uint16_t xi, uint16_t yi, uint16_t xf, uint16_t yf,

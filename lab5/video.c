@@ -177,7 +177,31 @@ int (vg_draw_pattern)(uint8_t no_rectangles, uint32_t first, uint8_t step){
             vg_draw_rectangle(j*width, i*height, width, height, color);
         }
     }
-
     return 0;
 }
 
+
+int (display_img)(uint16_t x, uint16_t y, uint16_t width, 
+            uint16_t height, uint8_t *sprite){
+
+    printf("img width: %d\n", width);
+    printf("img height: %d\n", height);
+
+    for (int i = y; i<y+height; i++){
+        printf("NEW LINE\n");
+        for (int j = x; j<x+width; j++){
+
+            uint32_t color = *sprite;
+            printf("color %x\n", color);
+            if (bits_per_pixel != 32){
+                color = color & ((1 << bits_per_pixel) - 1);
+                // printf("bits per pixel %d\n", bits_per_pixel);
+                // printf("colorA %x\n", color);
+            }
+
+            if (vg_draw_pixel(j, i, color)!=0) return 1;
+            sprite++;
+        }
+    }
+    return 0;
+}

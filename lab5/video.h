@@ -65,4 +65,15 @@ int (vg_draw_rectangle)(uint16_t x, uint16_t y, uint16_t width,
 */
 int (vg_draw_pattern)(uint8_t no_rectangles, uint32_t first, uint8_t step);
 
+/**
+ * @brief Draws an XPM on the screen at specified coordinates  
+ * @param x x coordinate of the starting point
+ * @param y y coordinate of the starting point
+ * @param width width of the image
+ * @param height height of the image
+ * @param sprite sprite to be drawn
+ * @return Return 0 upon success and non-zero otherwise
+*/
+int (display_img)(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint8_t *sprite);
+
 #endif /* __VIDEO_H */

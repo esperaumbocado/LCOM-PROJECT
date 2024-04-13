@@ -75,8 +75,7 @@ int (wait_ESC)(){
                     if (msg.m_notify.interrupts & irq_set){ 
                         printf("Interrupt received\n");
                         kbc_ih(); // read the scancode from OUT_BUF
-                        // read only one byte per interrupt
-                        // kbd_print_scancode(!(data & BREAK), 1, &data); 
+                        // read only one byte per interrupt 
                     }
                     break;
                 default:

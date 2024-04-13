@@ -8,6 +8,9 @@
 #include "video.h"
 #include "keyboard.h"
 
+extern uint8_t data;
+extern int counter;
+
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
   lcf_set_language("EN-US");
@@ -115,7 +118,7 @@ int (video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y){
     uint8_t *sprite =  xpm_load(xpm, XPM_INDEXED, &img);
     if (sprite == NULL) return 1;
 
-    if (display_img(x, y, img.width, img.height, sprite)!=0) return 1;
+    if (vg_draw_img(x, y, img.width, img.height, sprite)!=0) return 1;
     
     if (wait_ESC()!=0) return 1;
 
@@ -124,11 +127,84 @@ int (video_test_xpm)(xpm_map_t xpm, uint16_t x, uint16_t y){
 
 int (video_test_move)(xpm_map_t xpm, uint16_t xi, uint16_t yi, uint16_t xf, uint16_t yf,
                       int16_t speed, uint8_t fr_rate){
-    // video mode 0x105
-    // speed positive: displacement in pixels between consecutive frames
-    // speed negative: number of frames required for a 1 pixel displacement
-    // fr rate: frames per second
-    return 0;
+
+    if (map_vram(0x105)!=0) return 1;
+    if (vbe_set_mode(0x105)!=0) return 1;
+
+    xpm_image_t img;
+    uint8_t *sprite =  xpm_load(xpm, XPM_INDEXED, &img);
+    if (sprite == NULL) return 1;
+
+	uint8_t keyboard_irq_set;
+    uint8_t timer_irq_set;
+    int ipc_status;
+    message msg;
+
+    uint8_t interval = (1.0/fr_rate)*60;
+    printf("fr_rate was %d, so the img will be updated each %d interrupts\n", fr_rate, interval);
+    uint16_t x= xi;
+    uint16_t y= yi;
+
+    uint16_t add = speed & BIT(15) ? 1/speed : speed;
+
+    bool is_horizontal = xf > xi ? true : false;
+    printf("horizontal? %d\n", is_horizontal);
+
+    if (keyboard_subscribe_int(&keyboard_irq_set)) return 1;
+    printf("Subscribed keyboard interrupts!\n");
+    if (timer_subscribe_int(&timer_irq_set)) return 1;
+    printf("Subscribed timer interrupts!\n");
+
+    bool movement_complete = false; 
+    while (data != ESC && !movement_complete){ // 0x81 : breakcode of ESC
+        if (driver_receive(ANY, &msg, &ipc_status)!=0){
+            printf("Driver_receive failed\n");
+            continue;
+        }
+        if (is_ipc_notify(ipc_status)){ // received notification
+            switch (_ENDPOINT_P(msg.m_source)) 
+            // ENDPOINT_P extracts the process identifier from a process's endpoint
+            {
+                case HARDWARE:
+                    if (msg.m_notify.interrupts & keyboard_irq_set){ 
+                        printf("Keyboard Interrupt received\n");
+                        kbc_ih(); // read the scancode from OUT_BUF
+                        // read only one byte per interrupt
+                    }
+                    if (msg.m_notify.interrupts & timer_irq_set){ 
+                        timer_int_handler();
+                        if (counter >= interval){
+                            
+                            counter = 0;
+
+                            printf("Drawing img at %d %d\n", x, y);
+                            if ((vg_draw_img(x, y, img.width, img.height, sprite))) return 1;
+                            
+                            if (x==xf && y==yf){
+                                movement_complete = true;
+                            }
+
+                            if (is_horizontal){
+                                if (x+add>xf) x=xf;
+                                else x+=add;
+                            } else { // vertical
+                                if (y+add>yf) y=yf;
+                                else y+=add;
+                            }                            
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    if (keyboard_unsubscribe_int()) return 1;
+    if (timer_unsubscribe_int()) return 1;
+    printf("Unsubscribed both timer and kbd interrupts.\n");
+
+    return vg_exit();
 }
 
 int(video_test_controller)() {

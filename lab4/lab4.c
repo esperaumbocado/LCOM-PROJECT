@@ -142,7 +142,7 @@ int (mouse_test_async)(uint8_t idle_time) {
 
 int (mouse_test_gesture)(uint8_t x_len, uint8_t tolerance){
     uint8_t mouse_irq_set;
-    printf("will enable data reporting\n ");
+    printf("will enable data reporting\n "); 
     if (mouse_command(0xF4) != OK) return 1;
     printf("data reporting enabled! \n");
     if (mouse_subscribe_int(&mouse_irq_set) != OK) return 1;
@@ -180,7 +180,6 @@ int (mouse_test_gesture)(uint8_t x_len, uint8_t tolerance){
             }
         }
     }
-
     if (mouse_unsubscribe_int() != OK) return 1;
     if (mouse_command(0xF5) != OK) return 1;
     return 0;

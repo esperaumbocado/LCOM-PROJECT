@@ -135,28 +135,28 @@ int (video_test_move)(xpm_map_t xpm, uint16_t xi, uint16_t yi, uint16_t xf, uint
     uint8_t *sprite =  xpm_load(xpm, XPM_INDEXED, &img);
     if (sprite == NULL) return 1;
 
+    printf("Drawing img at initial pos %d %d\n", xi, yi);
+    if ((vg_draw_img(xi, yi, img.width, img.height, sprite))) return 1;
+
 	uint8_t keyboard_irq_set;
     uint8_t timer_irq_set;
     int ipc_status;
     message msg;
 
-    uint8_t interval = (1.0/fr_rate)*60;
-    printf("fr_rate was %d, so the img will be updated each %d interrupts\n", fr_rate, interval);
-    uint16_t x= xi;
-    uint16_t y= yi;
-
-    uint16_t add = speed & BIT(15) ? 1/speed : speed;
-
-    bool is_horizontal = xf > xi ? true : false;
-    printf("horizontal? %d\n", is_horizontal);
-
-    if (keyboard_subscribe_int(&keyboard_irq_set)) return 1;
-    printf("Subscribed keyboard interrupts!\n");
     if (timer_subscribe_int(&timer_irq_set)) return 1;
-    printf("Subscribed timer interrupts!\n");
+    if (keyboard_subscribe_int(&keyboard_irq_set)) return 1;
 
-    bool movement_complete = false; 
-    while (data != ESC && !movement_complete){ // 0x81 : breakcode of ESC
+    uint16_t x = xi;
+    uint16_t y = yi;
+    int frames=0;
+    bool is_horizontal = yi==yf;
+    bool is_positive_direction = xf > xi || yf > yi;
+    printf("is positive direction: %d\n", is_positive_direction);
+    uint8_t interval = 60/fr_rate;
+    printf("fr_rate was %d, so the img will be updated each %d interrupts\n", fr_rate, interval);
+    bool move_complete = false;
+
+    while (data!=ESC){ // 0x81 : breakcode of ESC
         if (driver_receive(ANY, &msg, &ipc_status)!=0){
             printf("Driver_receive failed\n");
             continue;
@@ -170,27 +170,45 @@ int (video_test_move)(xpm_map_t xpm, uint16_t xi, uint16_t yi, uint16_t xf, uint
                         printf("Keyboard Interrupt received\n");
                         kbc_ih(); // read the scancode from OUT_BUF
                         // read only one byte per interrupt
+                        if (data == ESC) break;
+                        if (data == 0xE0) break; 
                     }
                     if (msg.m_notify.interrupts & timer_irq_set){ 
                         timer_int_handler();
+                        if (move_complete) break;
                         if (counter >= interval){
-                            
+                            // TODO: modularize this in a xpm_update function
+                            printf("Counter reached %d.  ", counter);
                             counter = 0;
-
-                            printf("Drawing img at %d %d\n", x, y);
-                            if ((vg_draw_img(x, y, img.width, img.height, sprite))) return 1;
                             
-                            if (x==xf && y==yf){
-                                movement_complete = true;
-                            }
-
-                            if (is_horizontal){
-                                if (x+add>xf) x=xf;
-                                else x+=add;
-                            } else { // vertical
-                                if (y+add>yf) y=yf;
-                                else y+=add;
-                            }                            
+                            if (!(speed & BIT(15))){
+                                if (is_horizontal){
+                                    if (is_positive_direction)
+                                        x = (x + speed >= xf) ? xf : x + speed;
+                                    else 
+                                        x = (x-speed<=xf) ? x=xf : x-speed;
+                                } else { // vertical
+                                    if (is_positive_direction)
+                                        y = (y+speed>=yf) ? y=yf : y+speed;
+                                    else
+                                        y = (y-speed<=yf) ? y=yf : y-speed;
+                                }    
+                            } else { // negative
+                                frames++;
+                                printf("frames: %d\n", frames);
+                                if (frames==abs(speed)){
+                                    frames=0;
+                                    if (is_horizontal)
+                                        x = is_positive_direction ? x+1 : x-1;
+                                    else // vertical
+                                        y = is_positive_direction ? y+1 : y-1;
+                                } else break; // do not draw img
+                            } 
+                            
+                            if (vg_clear()) return 1;
+                            printf("Drawing img at %d %d\n", x, y);
+                            if ((vg_draw_img(x, y, img.width, img.height, sprite))) return 1;   
+                            if (x==xf && y==yf) move_complete = true;                  
                         }
                     }
                     break;
@@ -200,12 +218,12 @@ int (video_test_move)(xpm_map_t xpm, uint16_t xi, uint16_t yi, uint16_t xf, uint
         }
     }
 
-    if (keyboard_unsubscribe_int()) return 1;
+    if (keyboard_unsubscribe_int()) return 1;    
     if (timer_unsubscribe_int()) return 1;
-    printf("Unsubscribed both timer and kbd interrupts.\n");
 
     return vg_exit();
 }
+
 
 int(video_test_controller)() {
     // Retrieves, parses and displays VBE controller information (VBE function 0x0)

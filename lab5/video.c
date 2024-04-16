@@ -129,11 +129,11 @@ int (vg_draw_hline)(uint16_t x, uint16_t y, uint16_t len, uint32_t color){
 int (vg_draw_rectangle)(uint16_t x, uint16_t y, uint16_t width, 
             uint16_t height, uint32_t color){
     
-    printf("color %x\n", color);
+    // printf("color %x\n", color);
     if (bits_per_pixel != 32){
         color = color & ((1 << bits_per_pixel) - 1);
-        printf("bits per pixel %d\n", bits_per_pixel);
-        printf("color %x\n", color);
+        // printf("bits per pixel %d\n", bits_per_pixel);
+        // printf("color %x\n", color);
     }
 
     for (int i = y; i < y+height; i++){
@@ -206,4 +206,141 @@ int (vg_draw_img)(uint16_t x, uint16_t y, uint16_t width,
     }
     return 0;
 }
+
+
+int (vg_clear)(){
+    for (uint16_t i = 0; i < h_res; i++){
+        for (uint16_t j = 0; j < v_res; j++){
+            if (vg_draw_pixel(i, j, 0)!=0) return 1;
+        }
+    }
+    return 0;
+
+}
+
+// ----------- SPRITE ---------------
+
+// typedef struct {
+//     int x, y; // current position
+//     int width, height; // dimensions
+//     int xspeed, yspeed; // current speed
+//     char *map; // the pixmap
+// } Sprite;
+
+// //sprite.c 
+// /** Creates a new sprite from XPM "pic", with specified
+// * position (within the screen limits) and speed;
+// * Does not draw the sprite on the screen
+// * Returns NULL on invalid pixmap.
+// */
+// Sprite *create_sprite(const char *pic[], int x, int y,
+//                 int xspeed, int yspeed) {
+//     //allocate space for the "object"
+//     Sprite *sp = (Sprite *) malloc ( sizeof(Sprite));
+//     xpm_image_t img;
+//     if( sp == NULL )
+//         return NULL;
+//     // read the sprite pixmap
+//     sp->map = xpm_load(pic, XPM_INDEXED, &img);
+//     if( sp->map == NULL ) {
+//         free(sp);
+//         return  NULL;
+//     }
+//     sp->width = img.width; sp->height=img.height;
+//     //...
+//     return sp;
+// }
+
+// void destroy_sprite(Sprite *sp) {
+//     if( sp == NULL )
+//         return;
+//     if( sp ->map )
+//         free(sp->map);
+//     free(sp);
+//     sp = NULL; // XXX: pointer is passed by value
+//     // should do this @ the caller
+// }
+// // XXX: move_sprite would be a more appropriate name
+// int animate_sprite(Sprite *sp) {
+//     //...
+// }
+// /* Some useful non-visible functions */
+// static int draw_sprite(Sprite *sp, char *base) {
+//     //...
+// }
+// static int check_collision(Sprite *sp, char *base) {
+//     //...
+// }
+
+// #include <stdarg.h> 
+
+// typedef struct {
+// Sprite *sp; // standard sprite
+//     int aspeed; // no. frames per pixmap
+//     int cur_aspeed; // no. frames left to next change
+//     int num_fig; // number of pixmaps
+//     int cur_fig; // current pixmap
+//     char **map; // array of pointers to pixmaps
+// } AnimSprite;
+
+// AnimSprite *create_animSprite(uint8_t no_pic,
+//             char *pic1[], ...) {
+//     AnimSprite *asp = malloc(sizeof(AnimSprite));
+//     // create a standard sprite with first pixmap
+//     asp->sp = create_sprite(pic1,0,0,0,0);
+//     // allocate array of pointers to pixmaps
+//     asp->map = malloc((no_pic) * sizeof(char *));
+//     // initialize the first pixmap
+//     asp->map[0] = asp->sp->map;
+//     // continues in next transparency
+//     // initialize the remainder with the variable arguments
+//     // iterate over the list of arguments
+//     va_list ap;
+//     va_start(ap, pic1);
+//     for( i = 1; i <no_pic; i++ ) {
+//         char **tmp = va_arg(ap, char **);
+//         xpm_image_t img;
+//         asp->map[i] = xpm_load(tmp, XPM_INDEXED, &img);
+//         if( asp->map[i] == NULL || img.width != asp->sp->width || 
+//                 img.height != asp->sp->height) {
+//             // failure: release allocated memory
+//             for(j = 1; j<i;j ++)
+//                 free(asp->map[i]);
+//             free(asp->map);
+//             destroy_sprite(asp->sp);
+//             free(asp);
+//             va_end(ap);
+//             return NULL;
+//         }
+//     }
+//     va_end(ap);
+//     //...
+// }
+
+// int animate_animSprite(AnimSprite *sp,);
+// void destroy_animSprite(AnimSprite *sp);
+
+// va_list to traverse the list 
+// va_start to initialize the list
+// va_start 2nd arg is the last known param
+// va_arg get the next arg 
+// va_arg 2nd arg is the type of that unnamed arg 
+// va_end to finalize access
+
+/*
+int foo(int required, ...) {
+va_list ap; // "pointer" to next argument
+va_start(ap, required); // initializes ap to point to
+// first (unnamed) argument of the list ;
+// the 2nd argument of va_start is the last named argument
+int i = va_arg(ap, int); // accesses the next list argument
+// the second argument of va_arg() is the type
+// on first call, returns the value of the first
+// argument after the last fixed argument
+float i = va_arg(ap, float);
+char *s = va_arg(ap, char *);
+va_end(ap); // must be called to finalize the access
+}
+*/
+
 

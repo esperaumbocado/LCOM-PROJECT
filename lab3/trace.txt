@@ -1,0 +1,1453 @@
+@lcflib.a:2019, lcf_start
+  kbd_test_scan()
+  @lab3.c:42, keyboard_subscribe_interrupts
+    sys_irqsetpolicy(1, IRQ_REENABLE | IRQ_EXCLUSIVE, &kbd_hook_id)
+  > sys_irqsetpolicy(1, 3, addr: 0x822c8a8 [1])
+  < sys_irqsetpolicy(1, 3, addr: 0x822c8a8 [10]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9c = 0b10011100])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9c"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9c]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1f = 0b00011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9f = 0b10011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9f"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x20 = 0b00100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x20"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x20]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xa0 = 0b10100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xa0"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xa0]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1f = 0b00011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9f = 0b10011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9f"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x20 = 0b00100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x20"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x20]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xa0 = 0b10100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xa0"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xa0]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x11 = 0b00010001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x11"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x11]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x91 = 0b10010001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x91"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x91]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1f = 0b00011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9f = 0b10011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9f"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x20 = 0b00100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x20"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x20]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xa0 = 0b10100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xa0"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xa0]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x11 = 0b00010001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x11"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x11]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x91 = 0b10010001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x91"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x91]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1f = 0b00011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x20 = 0b00100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x20"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x20]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9f = 0b10011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9f"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xa0 = 0b10100000])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xa0"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xa0]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x11 = 0b00010001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x11"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x11]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x91 = 0b10010001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x91"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x91]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1f = 0b00011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2d = 0b00101101])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2d"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2d]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9f = 0b10011111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9f"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xad = 0b10101101])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xad"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xad]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2d = 0b00101101])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2d"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2d]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2c = 0b00101100])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2c"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2c]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xad = 0b10101101])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xad"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xad]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2f = 0b00101111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xac = 0b10101100])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xac"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xac]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaf = 0b10101111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaf"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaf]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2f = 0b00101111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2f"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2f]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaf = 0b10101111])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaf"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaf]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x2a = 0b00101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x2a"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x2a]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x1e = 0b00011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x1e"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x1e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x9e = 0b10011110])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x9e"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x9e]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0xaa = 0b10101010])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0xaa"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0xaa]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x01 = 0b00000001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Makecode: 0x01"
+  < kbd_print_scancode(true, 1, addr: 0x822d51c [0x01]) -> (ret: 0)
+  @lab3.c:55, kbd_test_scan
+    driver_receive(ANY, &msg, &ipc_status)
+  > driver_receive(ANY, addr: 0xeffff710, addr: 0xeffff754)
+  < driver_receive(<[HARDWARE: 0b0000000000000000000000000000000000000000000000000000000000000010]>)
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x64, addr: 0xeffff758)
+  < sys_inb(0x64, addr: 0xeffff758 [0x1d = 0b00011101])
+  @./utils.c:8, util_sys_inb
+    sys_inb(port, &value)
+  > sys_inb(0x60, addr: 0xeffff758)
+  < sys_inb(0x60, addr: 0xeffff758 [0x81 = 0b10000001])
+  @lab3.c:93, kbd_test_scan
+    kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode)
+    "Breakcode: 0x81"
+  < kbd_print_scancode(false, 1, addr: 0x822d51c [0x81]) -> (ret: 0)
+  @lab3.c:100, kbd_test_scan
+    sys_irqrmpolicy(&kbd_hook_id)
+  > sys_irqrmpolicy(addr: 0x822c8a8 [10])
+  < sys_irqrmpolicy(addr: 0x822c8a8 [10]) -> (ret: 0)
+  @lab3.c:101, kbd_test_scan
+    kbd_print_no_sysinb(counter_sysinb)
+    "sys_inb_calls: 180"

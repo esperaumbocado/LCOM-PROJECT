@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+// make
+// lcom_run
+// lcom_run lab2 "config 0 all -t 0"
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -28,33 +31,74 @@ int main(int argc, char *argv[]) {
 
   return 0;
 }
-
+ // only using timer 0 
+ // do not change timer 1 configuration
 int(timer_test_read_config)(uint8_t timer, enum timer_status_field field) {
-  uint8_t st;
-  if (timer_get_conf(timer,&st)!=0){
-    printf("Error in get_conf in lab2.c\n");
-    return 1;
-  }
+  // timer 0, 1, 2
+  // tsf_all - status byte, in hexadecimal
+  // tsf_initial - initialization mode
+  // tsf_mode - counting mode
+  // tsf_base - counting base
 
-  if (timer_display_conf(timer,st,field)!=0){
-    printf("Error in display_conf in lab2.c\n");
+  uint8_t st; // status
+  
+  if (timer_get_conf(timer, &st) != OK) {
+    printf("Error in timer_get_conf\n");
     return 1;
-  }
+  }  // lê a configuração do timer
+  
+  if (timer_display_conf(timer, st, field) != OK) {
+    printf("Error in timer_display_conf\n");
+    return 1;
+  }  // mostra a configuração do timer
 
   return 0;
 }
 
 int(timer_test_time_base)(uint8_t timer, uint32_t freq) {
-  if (timer_set_frequency(timer,freq)!=0){
-    printf("Error in timer_set_frequency inside timer_test_time_base\n");
-    return 1;
-  }
-  return 0;
+  if (freq < 19 || timer > 2) return 1; 
+  // freq cant be <19 so it doesnt overflow
+
+  if (timer_set_frequency(timer, freq) !=0) return 1; 
+  return 1;
 }
 
+extern int counter;
 int(timer_test_int)(uint8_t time) {
-  /* To be implemented by the students */
-  printf("%s is not yet implemented!\n", __func__);
 
-  return 1;
+  uint8_t irq_set =0; // nao precisava ser inicializada...
+  if (timer_subscribe_int(&irq_set) != OK) return 1;
+
+  int ipc_status;
+  message msg;
+  int r;
+
+  while (time>0){
+    if ((r=driver_receive(ANY, &msg, &ipc_status))!=0){
+      // msg and ipc_status will be initialized by driver_receive()
+      printf("driver_receive failed with: %d, r");
+      continue;
+    }
+    if (is_ipc_notify(ipc_status)){ // received notification
+      switch (_ENDPOINT_P(msg.m_source)) 
+      // ENDPOINT_P extracts the process identifier from a process's endpoint
+      {
+      case HARDWARE:
+        if (msg.m_notify.interrupts & irq_set){ // subscribed interrupt
+          timer_int_handler();
+          if (counter%60 ==0){
+            timer_print_elapsed_time();
+            time--;
+          }
+        }
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  
+  if (timer_unsubscribe_int() != OK) return 1;
+
+  return 0;
 }

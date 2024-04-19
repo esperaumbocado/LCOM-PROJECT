@@ -34,9 +34,15 @@ int(keyboard_unsubscribe_int)();
 void (kbc_ih)();
 
 /**
- * @brief Waits for the ESC key to be released
- * @return Return 0 upon success and non-zero otherwise
+ * @brief reactivates the interrupts
 */
-int (wait_ESC)();
+int (kbc_activate_interrupts)();
+
+/**
+ * @brief Polls the KBC
+ *
+ * @return Return 0 upon success and non-zero otherwise
+ */
+int (kbc_polling)();
 
 #endif /* __KEYBOARD_H */

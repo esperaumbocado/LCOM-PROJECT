@@ -1,15 +1,22 @@
-#define KBC_OUTPUT_BUFFER 0x60
-#define KBC_STATUS_REGISTER 0x64
+#ifndef _LCOM_I8042_H_
+#define _LCOM_I8042_H_
+
+#include <lcom/lcf.h>
+
+/** @defgroup I8042 I8042
+ * @{
+ *
+ * Constants for programming the I8042 KBC. Needs to be completed.
+ */
+
+#define KEYBOARD_IRQ 1 /**< @brief Keyboard 1 IRQ line */
+
+#define DELAY_US 20000
+
+#define BREAK BIT(7)
+#define ESC 0x81
 
 
-///KBC STATUS REGISTER
-#define KBC_STATUS_PARITY BIT(7)
-#define KBC_STATUS_TIMEOUT BIT(6)
-#define KBC_STATUS_AUX BIT(5)
-#define KBC_STATUS_INH BIT(4)
-#define KBC_STATUS_SYS BIT(3)
-#define KBC_STATUS_INPUT BIT(2)
-#define KBC_STATUS_OUTPUT BIT(0)
+/**@}*/
 
-#define BREAK_ESC 0x81
-
+#endif /* _LCOM_I8042_H */

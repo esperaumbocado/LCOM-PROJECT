@@ -1,32 +1,22 @@
-//KBC
-#define KBC_STATUS_REG 0x64
-#define KBC_CTRL_REG 0x64
-#define KBC_IN_BUF 0x60
-#define KBC_OUT_BUF 0x60
-#define KBC_READ_CMD 0x20
-#define KBC_WRITE_CMD 0x60
+#ifndef _LCOM_I8042_H_
+#define _LCOM_I8042_H_
 
-//KBC STATUS
-#define STATUS_PARITY_ERROR BIT(7)
-#define STATUS_TIMEOUT_ERROR BIT(6)
-#define STATUS_AUX BIT(5)
-#define STATUS_INH BIT(4)
-#define STATUS_A2 BIT(3)
-#define STATUS_SYS BIT(2)
-#define STATUS_IBF BIT(1)
-#define STATUS_OBF BIT(0)
+#include <lcom/lcf.h>
 
-//MOUSE BYTE 1
-#define BYTE1_Y_OVERFLOW BIT(7)
-#define BYTE1_X_OVERFLOW BIT(6)
-#define BYTE1_Y_MSB BIT(5)
-#define BYTE1_X_MSB BIT(4)
-#define BYTE1_INDICATIVE BIT(3)
-#define BYTE1_MIDDLEMOUSE_STATUS BIT(2)
-#define BYTE1_LEFTMOUSE_STATUS BIT(1)
-#define BYTE1_RIGHTMOUSE_STATUS BIT(0)
+/** @defgroup I8042 I8042
+ * @{
+ *
+ * Constants for programming the I8042 KBC. Needs to be completed.
+ */
 
-//COMMANDS
-#define MOUSE_ENABLE_DATA_REPORTING 0xF4
-#define MOUSE_DISABLE_DATA_REPORTING 0xF5
-#define MOUSE_ACKNOWLEDGMENT 0xD4
+#define KEYBOARD_IRQ 1 /**< @brief Keyboard 1 IRQ line */
+
+#define DELAY_US 20000
+
+#define BREAK BIT(7)
+#define ESC 0x81
+
+
+/**@}*/
+
+#endif /* _LCOM_I8042_H */

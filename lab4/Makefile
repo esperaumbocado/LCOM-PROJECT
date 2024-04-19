@@ -2,13 +2,13 @@
 PROG=lab4
 
 # source code files to be compiled
-SRCS = lab4.c utils.c KBC.c mouse.c
+SRCS = lab4.c mouse.c utils.c
 
 # additional compilation flags
 # "-Wall -Wextra -Werror -I . -std=c11 -Wno-unused-parameter" are already set
-CFLAGS += -pedantic
+CPPFLAGS += -pedantic
 
-# list of library dependencies (for Lab 2, only LCF library)
+# list of library dependencies (for Lab 3, only LCF library)
 DPADD += ${LIBLCF}
 LDADD += -llcf
 

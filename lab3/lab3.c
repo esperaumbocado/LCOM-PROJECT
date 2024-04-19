@@ -1,15 +1,16 @@
 #include <lcom/lcf.h>
-
 #include <lcom/lab3.h>
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "i8042.h"
-#include "utils.c"
 
-extern int counter_sysinb;
-int kbd_hook_id = 1;
-uint8_t scancode=0;
+#include "keyboard.h"
+
+extern int timer_hook_id;
+extern int keyboard_hook_id;
+extern uint32_t sys_counter;
+extern uint8_t data; // scancode
+extern int counter;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -17,11 +18,11 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/lab3/trace.txt");
+  lcf_trace_calls("/home/lcom/labs/lab2/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
-  lcf_log_output("/home/lcom/labs/lab3/output.txt");
+  lcf_log_output("/home/lcom/labs/lab2/output.txt");
 
   // handles control over to LCF
   // [LCF handles command line arguments and invokes the right function]
@@ -35,176 +36,154 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+// Handle interrupts from more than one I/O device
 
-int (write_KBC_command)(uint8_t port, uint8_t commandByte) {
+//Tests reading of scancodes via KBD interrupts.
+//Displays the scancodes received from the keyboard using interrupts.
+//Exits upon release of the ESC key
 
-    uint8_t status;
-    uint8_t attemps = 10;
+// first byte of 2-bytes scancodes use to be 0xE0
 
-    while (attemps) {
-
-        if (read_KBC_status(&status) != 0){
-            printf("Error: Status not available!\n");
-            return 1;
-        }
-
-        if ((status & KBC_STATUS_INPUT) == 0){
-
-            if(sys_outb(port, commandByte) != 0){
-                printf("Error: Could not write commandByte!\n");
-                return 1;
-            }
-
-            return 0;
-        }
-        tickdelay(micros_to_ticks(20000));
-        attemps--;
-    }
-    
-    return 1;
-}
-
-
-int (keyboard_subscribe_interrupts)(uint8_t *bit_no) {
-    if (bit_no == NULL) return 1;
-    *bit_no = BIT(kbd_hook_id);
-    return sys_irqsetpolicy(1, IRQ_REENABLE | IRQ_EXCLUSIVE, &kbd_hook_id);
-}
-
-int(kbd_test_scan)() {
-  bool flag = false;
-  int ipc_status;
-    uint8_t irq_set;
-    message msg;
-
-    if(keyboard_subscribe_interrupts(&irq_set) != 0) return 1;
-
-    while(scancode != BREAK_ESC){ // a condição de paragem é obter um breakcode da tecla ESC
-
-        if( driver_receive(ANY, &msg, &ipc_status) != 0 ){
-            printf("Error");
-            continue;
-        }
-
-        if(is_ipc_notify(ipc_status)) {
-            switch(_ENDPOINT_P(msg.m_source)){
-                 case HARDWARE:
-                    if (msg.m_notify.interrupts & irq_set) {
-                        flag = false;
-                        for (int i=0;i<10;i++){
-                        uint8_t status;
-                        if (util_sys_inb(KBC_STATUS_REGISTER,&status)!=0){
-                          printf("Error in util_sys_inb inside kbd_test_scan\n");
-                          return 1;
-                        }
-
-                        if (status & KBC_STATUS_OUTPUT){ //OUTPUT BUFFER FULL
-                          if (status & KBC_STATUS_PARITY){
-                            printf("Parity error\n");
-                            return 1;
-                          }
-                          if (status & KBC_STATUS_TIMEOUT){
-                            printf("Timeout error\n");
-                            return 1;
-                          }
-
-    
-                          if(util_sys_inb(KBC_OUTPUT_BUFFER,&scancode)!=0){
-                            printf("Error in util_sys_inb to OUTPUT BUFFER inside kbd_test_scan\n");
-                            return 1;
-                          }
-                          flag = true;
-                          break;
-                        }
-                        tickdelay(micros_to_ticks(20000));
-                        }
-                        if (!flag) return 1;
-                        kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode);
-                    }
-              }
-          }
-
-    }
-
-    if (sys_irqrmpolicy(&kbd_hook_id)!=0) return 1;
-    if (kbd_print_no_sysinb(counter_sysinb)!=0) return 1;
-
-  return 0;
-}
-
-int(kbd_test_poll)() {
-  
-    bool flag = false;
+int(kbd_test_scan)(){
+    // subscribe the KBC interrupts
+	uint8_t irq_set;
     int ipc_status;
-    uint8_t irq_set;
     message msg;
-
-    while(scancode != BREAK_ESC){ // a condição de paragem é obter um breakcode da tecla ESC
-
-        if( driver_receive(ANY, &msg, &ipc_status) != 0 ){
-            printf("Error");
+    bool is_2bytes= false;
+    uint8_t temp;
+    if (keyboard_subscribe_int(&irq_set) != OK) return 1;
+    // data is an extern variable
+    while (data != ESC){ // 0x81 : breakcode of ESC
+        if (driver_receive(ANY, &msg, &ipc_status)!=0){
+            // msg and ipc_status will be initialized by driver_receive()
+            printf("driver_receive failed with: %d, r");
             continue;
         }
 
-        if(is_ipc_notify(ipc_status)) {
-            switch(_ENDPOINT_P(msg.m_source)){
-                 case HARDWARE:
-                    if (msg.m_notify.interrupts & irq_set) {
-                        flag = false;
-                        for (int i=0;i<10;i++){
-                        uint8_t status;
-                        if (util_sys_inb(KBC_STATUS_REGISTER,&status)!=0){
-                          printf("Error in util_sys_inb inside kbd_test_scan\n");
-                          return 1;
+        if (is_ipc_notify(ipc_status)){ // received notification
+            switch (_ENDPOINT_P(msg.m_source)) 
+            // ENDPOINT_P extracts the process identifier from a process's endpoint
+            {
+                case HARDWARE:
+                    if (msg.m_notify.interrupts & irq_set){ // subscribed interrupt
+                        kbc_ih(); // read the scancode from OUT_BUF
+                        // read only one byte per interrupt
+                        // print the scancodes (makecode and breakcode)    
+                        if (data == 0xE0) {
+                            is_2bytes = true;
+                            temp = data;
+                            break; 
+                        } else {
+                            if (is_2bytes) {
+                                is_2bytes = false;
+                                uint8_t final[2] = {temp, data};
+                                kbd_print_scancode(!(data & BREAK), 2, final);
+                            } else {
+                                kbd_print_scancode(!(data & BREAK), 1, &data);
+                            }
                         }
-
-                        if (status & KBC_STATUS_OUTPUT){ //OUTPUT BUFFER FULL
-                          if (status & KBC_STATUS_PARITY){
-                            printf("Parity error\n");
-                            return 1;
-                          }
-                          if (status & KBC_STATUS_TIMEOUT){
-                            printf("Timeout error\n");
-                            return 1;
-                          }
-
-    
-                          if(util_sys_inb(KBC_OUTPUT_BUFFER,&scancode)!=0){
-                            printf("Error in util_sys_inb to OUTPUT BUFFER inside kbd_test_scan\n");
-                            return 1;
-                          }
-                          flag = true;
-                          break;
-                        }
-                        tickdelay(micros_to_ticks(20000));
-                        }
-                        if (!flag) return 1;
-                        kbd_print_scancode(!(scancode & BIT(7)), scancode == 0xE0 ? 2 : 1, &scancode);
+                        // make Whether this is a make or a break code
+                        // size Size in bytes of the scancode
+                        // bytes Array with size elements, with the scancode bytes
                     }
-              }
-          }
-
+                    break;
+                default:
+                    break;
+            }
+        }
     }
-
-    uint8_t status;
-
-    if (kbd_print_no_sysinb(counter_sysinb)!=0) return 1;
-
-    if(write_KBC_command(0x64,0x20)!=0)return 1;
-
-    if (util_sys_inb(KBC_STATUS_REGISTER,&status)!=0){
-      printf("Error in util_sys_inb inside kbd_test_scan\n");
-      return 1;
-    }
-
-  
-
-  return 0;
+    if (keyboard_unsubscribe_int() != OK) return 1;
+    if (kbd_print_no_sysinb(sys_counter)!= OK) return 1; // uint32_t 
+    return 0;
 }
 
-int(kbd_test_timed_scan)(uint8_t n) {
-  /* To be completed by the students */
-  printf("%s is not yet implemented!\n", __func__);
+int(kbd_test_poll)(){
+    bool is_2bytes= false;
 
-  return 1;
+    while (data != ESC) {
+        if (kbc_polling() == OK){
+            if (data == 0xE0) {
+                is_2bytes = true;
+                continue;
+            } else {
+                if (is_2bytes) {
+                    is_2bytes = false;
+                    uint8_t final[2] = {0xE0, data};
+                    kbd_print_scancode(!(data & BREAK), 2, final);
+                } else {
+                    kbd_print_scancode(!(data & BREAK), 1, &data);
+                }
+            }
+        }
+    }
+    if (kbc_activate_interrupts() != OK) return 1;
+    if (kbd_print_no_sysinb(sys_counter)!= OK) return 1; // uint32_t 
+    return 0;
+}
+
+int(kbd_test_timed_scan)(uint8_t idle){
+    printf("this program will wait at most %d seconds for some scancode\n", idle);
+    // subscribe the KBC interrupts
+	uint8_t kbd_irq_set; //interrupt request line
+    uint8_t timer_irq_set;
+    int ipc_status;
+    message msg;
+    bool is_2bytes= false;
+    uint8_t temp;
+
+    if (keyboard_subscribe_int(&kbd_irq_set) != OK) return 1;
+    if (timer_subscribe_int(&timer_irq_set) != OK) return 1;
+    
+    int r;
+    while (counter < idle*60 && data != ESC) {
+        if ((r=driver_receive(ANY, &msg, &ipc_status))!=0){
+            // msg and ipc_status will be initialized by driver_receive()
+            printf("driver_receive failed with: %d, r");
+            continue;
+        }
+        if (is_ipc_notify(ipc_status)){ // received notification
+            switch (_ENDPOINT_P(msg.m_source)) 
+            // ENDPOINT_P extracts the process identifier from a process's endpoint
+            {
+                case HARDWARE:
+                    if (msg.m_notify.interrupts & kbd_irq_set){ // subscribed interrupt
+                        kbc_ih(); // read the scancode from OUT_BUF
+                        // read only one byte per interrupt
+                        // print the scancodes (makecode and breakcode)    
+                        if (data == 0xE0) {
+                            is_2bytes = true;
+                            temp = data;
+                            break;  
+                        } else {
+                            if (is_2bytes) {
+                                is_2bytes = false;
+                                uint8_t final[2] = {temp, data};
+                                kbd_print_scancode(!(data & BREAK), 2, final);
+                            } else {
+                                kbd_print_scancode(!(data & BREAK), 1, &data);
+                            }
+                        }
+                        counter = 0;
+                    }
+                    if (msg.m_notify.interrupts & timer_irq_set) {
+                        timer_int_handler();
+                        if (counter%60 ==0){
+                            timer_print_elapsed_time();
+                            printf("secs = %d\n", counter/60);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+    }
+
+    if (keyboard_unsubscribe_int() != OK) return 1;
+    if (timer_unsubscribe_int() != OK) return 1;
+
+    if (kbd_print_no_sysinb(sys_counter)!= OK) return 1; // uint32_t 
+    printf("counter = %d\n", counter);
+    return 0;
 }

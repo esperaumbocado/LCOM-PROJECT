@@ -3,24 +3,26 @@
 #include <stdint.h>
 
 int(util_get_LSB)(uint16_t val, uint8_t *lsb) {
-  *lsb = (val & 0xFF);
+  if (lsb == NULL) return 1;  // Verificar se o ponteiro não é NULL
+  *lsb = (uint8_t)(val & 0xFF);  // seleciona o byte menos significativo
+  
   return 0;
 }
 
 int(util_get_MSB)(uint16_t val, uint8_t *msb) {
-  *msb = val >> 8;
+  if (msb == NULL) return 1;  // Verificar se o ponteiro não é NULL
+  *msb = (uint8_t)(val >> 8);  // seleciona o byte mais significativo
+
   return 0;
 }
 
 int (util_sys_inb)(int port, uint8_t *value) {
-  uint32_t call = 0;
-
-  if (sys_inb(port,&call)!=0){
-    printf("Error in sys_inb\n");
-    return 1;
-  }
-
-  *value = call & 0xFF;
+  if (value == NULL) return 1;  // Verificar se o ponteiro não é NULL
+  
+  uint32_t temp_value;
+  if (sys_inb(port, &temp_value) != OK) return 1;  // Chamada de sistema sys_inb
+  
+  util_get_LSB(temp_value, value); // Chama a função para obter o LSB de val
 
   return 0;
 }

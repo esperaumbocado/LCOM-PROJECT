@@ -1,0 +1,7 @@
+@lcflib.a:2019, lcf_start
+  timer_test_int(time)
+> timer_test_int(10)
+  @lab2.c:57, timer_test_int
+    printf("%s is not yet implemented!\n", __func__)
+    "timer_test_int is not yet implemented!"
+< timer_test_int(10) -> (ret: 1)

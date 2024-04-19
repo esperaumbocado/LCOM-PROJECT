@@ -1,0 +1,27 @@
+@lcflib.a:2019, lcf_start
+  timer_test_read_config(timer, field)
+> timer_test_read_config(0, timer_status_field::all)
+  @timer.c:42, timer_get_conf
+    sys_outb(TIMER_CTRL, RB_CMD)
+  > sys_outb(0x43, 0x32 = 0b00110010)
+  @utils.c:20, util_sys_inb
+    sys_inb(port, &val)
+  > sys_inb(0x40, addr: 0xeffff6d8)
+  < sys_inb(0x40, addr: 0xeffff6d8 [0x5b = 0b01011011])
+  @timer.c:56, timer_display_conf
+    timer_get_conf(timer, &st)
+  > timer_get_conf(0, addr: 0xeffff703)
+    @timer.c:42, timer_get_conf
+      sys_outb(TIMER_CTRL, RB_CMD)
+    > sys_outb(0x43, 0x32 = 0b00110010)
+    @utils.c:20, util_sys_inb
+      sys_inb(port, &val)
+    > sys_inb(0x40, addr: 0xeffff5dc)
+    < sys_inb(0x40, addr: 0xeffff5dc [0x66 = 0b01100110])
+  < timer_get_conf(0, addr: 0xeffff703 [0x66 = 0b01100110]) -> (ret: 0)
+  @timer.c:76, timer_display_conf
+    timer_print_config(timer, field, data)
+  > timer_print_config(0, timer_status_field::all, timer_status_field_val::byte = 0x66 = 0b01100110)
+    "timer_print_config:all timer = 0 conf = 0x66"
+  < timer_print_config(...) -> (ret: 0)
+< timer_test_read_config(0, timer_status_field::all) -> (ret: 0)

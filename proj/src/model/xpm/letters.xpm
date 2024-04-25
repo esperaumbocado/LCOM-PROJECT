@@ -1,7 +1,7 @@
 /* XPM */
 static char * KEY_A_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -33,7 +33,7 @@ static char * KEY_A_xpm[] = {
 
 static char * KEY_B_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -65,7 +65,7 @@ static char * KEY_B_xpm[] = {
 
 static char * KEY_C_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -96,7 +96,7 @@ static char * KEY_C_xpm[] = {
 
 static char * KEY_D_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -127,7 +127,7 @@ static char * KEY_D_xpm[] = {
 
 static char * KEY_E_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -159,7 +159,7 @@ static char * KEY_E_xpm[] = {
 
 static char * KEY_F_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -189,7 +189,7 @@ static char * KEY_F_xpm[] = {
 
 static char * KEY_G_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -220,7 +220,7 @@ static char * KEY_G_xpm[] = {
 
 static char * KEY_H_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -251,7 +251,7 @@ static char * KEY_H_xpm[] = {
 
 static char * KEY_I_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -283,7 +283,7 @@ static char * KEY_I_xpm[] = {
 
 static char * KEY_J_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "           .....         ",
@@ -314,7 +314,7 @@ static char * KEY_J_xpm[] = {
 
 static char * KEY_K_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -345,7 +345,7 @@ static char * KEY_K_xpm[] = {
 
 static char * KEY_L_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -376,7 +376,7 @@ static char * KEY_L_xpm[] = {
 
 static char * KEY_M_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -406,7 +406,7 @@ static char * KEY_M_xpm[] = {
 
 static char * KEY_N_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -437,7 +437,7 @@ static char * KEY_N_xpm[] = {
 
 static char * KEY_O_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -468,7 +468,7 @@ static char * KEY_O_xpm[] = {
 
 static char * KEY_P_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -499,7 +499,7 @@ static char * KEY_P_xpm[] = {
 
 static char * KEY_Q_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -532,7 +532,7 @@ static char * KEY_Q_xpm[] = {
 
 static char * KEY_R_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -563,7 +563,7 @@ static char * KEY_R_xpm[] = {
 
 static char * KEY_S_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -594,7 +594,7 @@ static char * KEY_S_xpm[] = {
 
 static char * KEY_T_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -625,7 +625,7 @@ static char * KEY_T_xpm[] = {
 
 static char * KEY_U_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -658,7 +658,7 @@ static char * KEY_U_xpm[] = {
 
 static char * KEY_V_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -690,7 +690,7 @@ static char * KEY_V_xpm[] = {
 
 static char * KEY_W_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -721,7 +721,7 @@ static char * KEY_W_xpm[] = {
 
 static char * KEY_X_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -751,7 +751,7 @@ static char * KEY_X_xpm[] = {
 
 static char * KEY_Y_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",
@@ -783,7 +783,7 @@ static char * KEY_Y_xpm[] = {
 
 static char * KEY_Z_xpm[] = {
 "25 25 2 1",
-" 	c None",
+" 	c #FFFFFE",
 ".	c #000000",
 "                         ",
 "                         ",

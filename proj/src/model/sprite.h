@@ -1,7 +1,8 @@
-#ifndef _LCOM_SPRITE_H_
-#define _LCOM_SPRITE_H_
+#ifndef _SPRITE_H_
+#define _SPRITE_H_
 
-#include "../drivers/graphics/video.c"
+#
+#include "../drivers/graphics/video.h"
 
 typedef struct {
     uint16_t height;
@@ -16,3 +17,4 @@ Sprite *create_sprite_button(uint16_t width, uint16_t height, uint32_t color);
 void destroy_sprite(Sprite *sprite);
 
 #endif
+

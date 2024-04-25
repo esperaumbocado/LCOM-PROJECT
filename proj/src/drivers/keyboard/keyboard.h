@@ -1,9 +1,10 @@
-#ifndef __KEYBOARD_H
-#define __KEYBOARD_H
+#ifndef __KEYBOARD_H_
+#define __KEYBOARD_H_
 
 #include <stdbool.h>
 #include <stdint.h>
-
+#include <minix/sysutil.h>
+#include <lcom/lcf.h>
 #include "i8042.h"
 
 /** @defgroup keyboard

@@ -1,6 +1,3 @@
-#include <lcom/lcf.h>
-
-#include <stdint.h>
 #include "keyboard.h"
 
 int keyboard_hook_id =1;

@@ -19,7 +19,7 @@
  *         bit number to be set in the mask returned upon an interrupt
  * @return Return 0 upon success and non-zero otherwise
  */
-int(keyboard_subscribe_int)(uint8_t *bit_no);
+int(keyboard_subscribe_int)();
 
 /**
  * @brief Unsubscribes interrupts

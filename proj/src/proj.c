@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "drivers/keyboard/keyboard.h"
+
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
   lcf_set_language("EN-US");
@@ -27,8 +29,39 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
+
+int setup(){
+  if(keyboard_subscribe_int()!=0) return 1;
+  return 0;
+}
+
+
 int (proj_main_loop)(int argc, char **argv) {
-  printf("Hello, World!\n");
+  setup();
+
+  int ipc_status;
+  message msg;
+  while (systemState == RUNNING) {
+    
+    if (driver_receive(ANY, &msg, &ipc_status) != 0) {
+      printf("Error");
+      continue;
+    }
+
+    if (is_ipc_notify(ipc_status)) {
+      switch(_ENDPOINT_P(msg.m_source)) {
+        case HARDWARE: 
+          if (msg.m_notify.interrupts & TIMER_MASK)    update_timer_state();
+          if (msg.m_notify.interrupts & KEYBOARD_MASK) update_keyboard_state();
+        }
+    }
+  }
+  
+  // Tear-down do Minix
+  if (teardown() != 0) return 1;
+
+  return 0;
+}
   return 0;
 }
 

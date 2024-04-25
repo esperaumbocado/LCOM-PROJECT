@@ -1,6 +1,7 @@
 #ifndef _LCOM_I8254_H_
 #define _LCOM_I8254_H_
 
+#include <minix/sysutil.h>
 #include <lcom/lcf.h>
 
 /** @defgroup i8254 i8254
@@ -13,6 +14,9 @@
 #define TIMER0_IRQ 0 /**< @brief Timer 0 IRQ line */
 
 /* I/O port addresses */
+
+#define TIMER_BIT BIT(0)
+
 
 #define TIMER_0    0x40 /**< @brief Timer 0 count register */
 #define TIMER_1    0x41 /**< @brief Timer 1 count register */

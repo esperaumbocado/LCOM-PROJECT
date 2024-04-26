@@ -13,10 +13,7 @@ uint8_t abs_x_len = 0;
 uint8_t abs_y_len = 0;
     
     
-int (mouse_subscribe_int)(uint8_t *bit_no) {
- 
-  if (bit_no==NULL) return 1;
-  *bit_no = BIT(mouse_hook_id); 
+int (mouse_subscribe_int)() {
 
   if (sys_irqsetpolicy(12, IRQ_REENABLE | IRQ_EXCLUSIVE, &mouse_hook_id) != OK)
     return 1;
@@ -118,11 +115,22 @@ bool (ibf_empty)(){
     {
       printf("reading status register 0x64 was not ok\n");  
       continue;
-    } 
-    if (!(st & BIT(1))){
+    }
+
+    if (st & (BIT(7))) {
+      printf("Parity Error.\n");
+      continue;
+    }
+    
+    if (st & (BIT(6))) {
+      printf("Timeout Error.\n");
+      continue;
+    }
+
+    if (!(st & BIT(1))){ // bit 1 não está setado, IBF está vazio
       // printf("checking ibf %d\n", tries);
       return true;
-    } // if bit(1)==1, IBF is not empty
+    } // if bit(1), IBF is not empty
   }
   printf("IBF is not empty. \n");
   return false;
@@ -134,11 +142,26 @@ bool (obf_full)() {
   while (tries>0){
     tries--;
     // tickdelay(micros_to_ticks(DELAY_US));
-    if (util_sys_inb(0x64 , &st) != OK){ // lê o status register
+    if (util_sys_inb(0x64 , &st)){ // lê o status register
       continue;
     } 
 
-    if (st & BIT(0)) return true;
+    if (st & (BIT(7))) {
+      printf("Parity Error.\n");
+      continue;
+    }
+    
+    if (st & (BIT(6))) {
+      printf("Timeout Error.\n");
+      continue;
+    }    
+
+    if (st & BIT(0)) {
+      //if (st & BIT(5)){
+        printf("OBF is full and AUX is set\n");
+        return true;
+      //}
+    }
   }
   printf("OBF is not full. \n");
   return false;  
@@ -149,10 +172,11 @@ int (mouse_command)(uint32_t cmd) {
     uint8_t response;
     while (tries>0){
       tries--;
+      
       if (!ibf_empty()) {
         continue;
       }
-      if (sys_outb(0x64, 0xD4) != OK){ // write byte mouse command
+      if (sys_outb(0x64, 0xD4)){ // write byte mouse command
           printf("writing 0xD4 to 0x64 was not ok. \n");  
           continue;
       }
@@ -160,34 +184,35 @@ int (mouse_command)(uint32_t cmd) {
         continue;
       }
       printf("writing cmd %X to 0x60\n", cmd);
-      if (sys_outb(0x60, cmd) != OK){ // disable data reporting command
+      if (sys_outb(0x60, cmd)){ // enable/disable data reporting command
           printf("writing cmd %x to 0x60 was not ok. \n", cmd);  
           continue;
       }
-      // tickdelay(micros_to_ticks(DELAY_US));
-      if (!obf_full()) {
-        continue;
-      }
-      printf("obf full\n");
-      if (util_sys_inb(0x60, &response) != OK){
+      
+      tickdelay(micros_to_ticks(DELAY_US));
+      // if (!obf_full()) {
+      //   continue;
+      // }
+      // printf("obf full\n");
+
+      if (util_sys_inb(0x60, &response)){
           printf("reading response from 0x60 was not ok. \n"); 
           continue; 
       }
       if (response == 0xFA){ 
-        printf("Mouse acknowledged command.\n");
+        printf("Mouse acknowledged command %X.\n", cmd);
         return 0; 
       } else {
           printf("response was not a success case. \n");  
           printf("response was %d\n", response);
           if (response == 0xFE){ // NACK
               printf("response was 0xFE, send the entire command again! \n");  
-              continue;
           }
-          continue;
       }
-      printf("responde was %x\n", response);
     }
-    printf("Mouse did not acknowledge command.\n");
+    printf("Mouse did not acknowledge command %X.\n", cmd);
+
+
     return 1;
 }
 
@@ -297,4 +322,3 @@ void (process_packet)(struct packet *pp, uint8_t x_len, uint8_t tolerance){
         break;
   }
 }
-

@@ -9,17 +9,15 @@
 /** @defgroup mouse
  * @{
  * Functions for using the i8042 KBC
+ * }
  */ 
-
 
 /**
  * @brief Subscribes and enables interrupts
  *
- * @param bit_no address of memory to be initialized with the
- *         bit number to be set in the mask returned upon an interrupt
  * @return Return 0 upon success and non-zero otherwise
  */
-int(mouse_subscribe_int)(uint8_t *bit_no);
+int(mouse_subscribe_int)();
 
 /**
  * @brief Unsubscribes interrupts

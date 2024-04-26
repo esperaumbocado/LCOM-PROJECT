@@ -5,8 +5,18 @@
 #include <lcom/lcf.h>
 #include "../drivers/graphics/video.h"
 #include "../drivers/keyboard/keyboard.h"
+#include "../drivers/mouse/mouse.h"
 #include "model/sprite.h"
 #include "xpm/letters.xpm"
+#include "xpm/cursor.xpm"
+
+typedef struct {
+    int x;
+    int y;
+    bool rb;
+    bool lb;
+} mouse_data;
+
 
 typedef enum{
     NONE_KEY,
@@ -54,6 +64,22 @@ void initialize_sprites();
 void destroy_sprites();
 void update_keyboard();
 void update_timer();
+
+// MOUSE STUFF
+/**
+ * @brief Initializes the mouse data
+*/
+void initialize_mouse_data();
+
+/**
+ * @brief Sync mouse bytes and calls update_mouse_date
+*/
+void update_mouse();
+
+/**
+ * @brief Updates the mouse data
+*/
+void update_mouse_data();
 
 
 #endif

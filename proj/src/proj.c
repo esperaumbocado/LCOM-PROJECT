@@ -13,7 +13,9 @@
 extern Key currentKey;
 GeneralState generalState = RUNNING;
 extern uint8_t *main_frame_buffer;
+extern uint8_t *secondary_frame_buffer;
 extern uint8_t *drawing_frame_buffer;
+extern uint32_t frame_size;
 
 
 
@@ -44,8 +46,7 @@ int main(int argc, char *argv[]) {
 
 int setup(){
   if(timer_set_frequency(0,60)!=0) return 1;
-  if (set_frame_buffer(0x115, &main_frame_buffer) != 0) return 1;
-  drawing_frame_buffer = main_frame_buffer;
+  if(setUpFrameBuffer()!=0) return 1;
   if (set_graphic_mode(0x115) != 0) return 1;
   if(keyboard_subscribe_int()!=0) return 1;
   if(timer_subscribe()!=0) return 1;
@@ -65,6 +66,7 @@ int (proj_main_loop)(int argc, char **argv) {
 
   int ipc_status;
   message msg;
+  drawBackground();
   while (currentKey != Q) {
     
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {

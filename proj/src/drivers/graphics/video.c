@@ -45,7 +45,6 @@ int (set_frame_buffer)(uint16_t mode, uint8_t** frame_buffer) {
     printf("Virtual memory allocation error\n");
     return 1;
   }
-
   return 0;
 }
 

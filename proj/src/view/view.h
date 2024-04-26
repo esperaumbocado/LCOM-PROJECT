@@ -8,7 +8,9 @@
 #include "../model/sprite.h"
 #include "../model/model.h"
 
+int setUpFrameBuffer();
 int mainDraw();
 int drawSpriteXPM(Sprite *sprite, int x, int y);
 int drawCurrentLetter();
+int drawBackground();
 #endif

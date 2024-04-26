@@ -1,8 +1,12 @@
 #include "view.h"
 
 uint8_t *main_frame_buffer;
+uint8_t *secondary_frame_buffer;
 uint8_t *drawing_frame_buffer;
+uint32_t frame_size;
 extern int currentKey;
+extern int x_offset;
+extern int y_offset;
 
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
@@ -33,6 +37,13 @@ extern Sprite *Z_SPRITE;
 
 
 
+int setUpFrameBuffer() {
+    if (set_frame_buffer(0x115, &main_frame_buffer) != 0) return 1;
+    frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
+    secondary_frame_buffer = (uint8_t *) malloc(frame_size);
+    drawing_frame_buffer = secondary_frame_buffer;
+    return 0;
+}
 
 
 int drawSpriteXPM(Sprite *sprite, int x, int y) {
@@ -59,10 +70,14 @@ int drawSpriteXPM(Sprite *sprite, int x, int y) {
 }
 
 
-int drawCurrentLetter() {
+int drawBackground() {
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, drawing_frame_buffer);
-    int x = 0;
-    int y = 0;
+    return 0;
+}
+
+int drawCurrentLetter() {
+    int x = x_offset;
+    int y = y_offset;
     switch(currentKey){
         case A:
             return drawSpriteXPM(A_SPRITE, x, y);

@@ -3,6 +3,11 @@
 extern uint8_t data;
 Key currentKey = NONE_KEY;
 GameState currentState = NONE_STATE;
+extern uint8_t *main_frame_buffer;
+extern uint8_t *secondary_frame_buffer;
+extern uint32_t frame_size;
+int x_offset=0;
+int y_offset=0;
 
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
@@ -60,14 +65,26 @@ void initialize_sprites(){
     Z_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Z_xpm);
 }
 
+int offset_handler(int x){
+    if (x==0){
+        x_offset+=20;
+    }
+    if (x_offset>800){
+        x_offset=0;
+        y_offset+=20;
+    }
+    return 1;
+}
 
 void update_timer(){
+    memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
     (timer_int_handler)();
 
 }
 
 void update_keyboard(){
     (kbc_ih)();
+    offset_handler(0);
     switch (data) {
         case KEY_A:
             currentKey = A;

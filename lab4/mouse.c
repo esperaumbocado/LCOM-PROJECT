@@ -176,6 +176,23 @@ int (mouse_command)(uint32_t cmd) {
     while (tries>0){
       tries--;
 
+      // if(issue_command(cmd)) return 1;
+
+      // uint32_t st;
+
+      // if (util_sys_inb(0x64, &st))
+      //   return 1;
+
+      // if( (st & (IBF | AUX)) == 0 ) {
+      //   if ( (st & (PAR_ERR | TO_ERR)) == 0 ){ 
+      //     if(sys_outb(IN_BUF_ARGS, cmd) != 0)
+      //       return 1;        
+      //   }
+      // }
+
+      // if(read_ret_value_mouse(ackByte)) return 1;
+//----------------------------------------------------------------------
+
       if (!ibf_empty()) {
         continue;
       }
@@ -196,8 +213,7 @@ int (mouse_command)(uint32_t cmd) {
       // if (!obf_full()) {
       //   continue;
       // }
-
-      //printf("obf full\n");
+      // printf("obf full\n");
 
       if (util_sys_inb(0x60, &response)){
           printf("reading response from 0x60 was not ok. \n"); 
@@ -214,7 +230,7 @@ int (mouse_command)(uint32_t cmd) {
           }
       }
     }
-    printf("Mouse did not acknowledge command %x.\n", cmd);
+    printf("Mouse did not acknowledge command.\n");
 
 
     return 1;

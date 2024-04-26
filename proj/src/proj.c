@@ -45,11 +45,17 @@ int main(int argc, char *argv[]) {
 
 
 int setup(){
+  // mouse stuff
+  if (mouse_command(0xF4)) return 1; // enable mouse data reporting
+  if (mouse_subscribe_int()) return 1;
+  initialize_mouse_data();
+
   if(timer_set_frequency(0,60)!=0) return 1;
   if(setUpFrameBuffer()!=0) return 1;
   if (set_graphic_mode(0x115) != 0) return 1;
   if(keyboard_subscribe_int()!=0) return 1;
   if(timer_subscribe()!=0) return 1;
+
   initialize_sprites();
   return 0;
 }
@@ -58,6 +64,12 @@ int end(){
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;
   if(vg_exit()!=0) return 1;
+
+
+  // mouse stuff 
+  if (mouse_unsubscribe_int()) return 1;
+  if (mouse_command(0xF5)) return 1; // disable data reporting
+
   return 0;
 }
 
@@ -81,7 +93,14 @@ int (proj_main_loop)(int argc, char **argv) {
             update_keyboard();
             drawCurrentLetter();
           }
-          if (msg.m_notify.interrupts & TIMER_BIT) update_timer();
+          if (msg.m_notify.interrupts & TIMER_BIT) {
+            update_timer();
+            drawCursor(); // TODO: only each 60 interrupts  
+          }
+
+          if (msg.m_notify.interrupts & MOUSE_BIT) {
+            update_mouse();
+          }
         }
     }
   }

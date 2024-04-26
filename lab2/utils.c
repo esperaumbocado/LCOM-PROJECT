@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+// LSB -> Less Significant Bits
 int(util_get_LSB)(uint16_t val, uint8_t *lsb) {
   if (lsb == NULL) return 1;  // Verificar se o ponteiro não é NULL
   *lsb = (uint8_t)(val & 0xFF);  // seleciona o byte menos significativo
@@ -9,6 +10,7 @@ int(util_get_LSB)(uint16_t val, uint8_t *lsb) {
   return 0;
 }
 
+// MSB -> Most Significant Bits
 int(util_get_MSB)(uint16_t val, uint8_t *msb) {
   if (msb == NULL) return 1;  // Verificar se o ponteiro não é NULL
   *msb = (uint8_t)(val >> 8);  // seleciona o byte mais significativo
@@ -16,6 +18,7 @@ int(util_get_MSB)(uint16_t val, uint8_t *msb) {
   return 0;
 }
 
+// Transform 32 bit output in 8 bit output. Error prevention.
 int (util_sys_inb)(int port, uint8_t *value) {
   if (value == NULL) return 1;  // Verificar se o ponteiro não é NULL
   

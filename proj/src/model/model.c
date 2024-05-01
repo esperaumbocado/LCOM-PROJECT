@@ -11,7 +11,7 @@ int y_offset=0;
 
 extern int bytes_read;
 extern struct packet pp;
-mouse_data mdata;
+extern mouse_position mouse_pos;
 
 Sprite *CURSOR_SPRITE;
 
@@ -92,26 +92,17 @@ void update_timer(){
 
 // MOUSE STUFF
 void initialize_mouse_data(){
-    mdata.x = 400;
-    mdata.y = 300;
-    mdata.lb = false;
-    mdata.rb = false;
+    mouse_pos.x = 400;
+    mouse_pos.y = 300;
 }
 
 void update_mouse(){
     mouse_ih();
+    sync();
     if (bytes_read == 3) {
         parse();
-        update_mouse_data();
         bytes_read = 0;
     }
-}
-
-void update_mouse_data(){
-    mdata.rb = pp.rb;
-    mdata.lb = pp.lb;
-    mdata.x = mdata.x + pp.delta_x;
-    mdata.y = mdata.y + pp.delta_y;
 }
 
 // -------------

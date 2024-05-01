@@ -17,6 +17,7 @@ extern uint8_t *secondary_frame_buffer;
 extern uint8_t *drawing_frame_buffer;
 extern uint32_t frame_size;
 
+extern int counter;
 
 
 int main(int argc, char *argv[]) {
@@ -95,7 +96,10 @@ int (proj_main_loop)(int argc, char **argv) {
           }
           if (msg.m_notify.interrupts & TIMER_BIT) {
             update_timer();
-            drawCursor(); // TODO: only each 60 interrupts  
+            if (counter%30 == 0){
+              drawBackground();
+              drawCursor();
+            }
           }
 
           if (msg.m_notify.interrupts & MOUSE_BIT) {

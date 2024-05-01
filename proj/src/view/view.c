@@ -8,7 +8,7 @@ extern int currentKey;
 extern int x_offset;
 extern int y_offset;
 
-extern mouse_data mdata;
+extern mouse_position mouse_pos;
 
 extern Sprite *CURSOR_SPRITE;
 
@@ -80,7 +80,16 @@ int drawBackground() {
 }
 
 int drawCursor(){
-    return drawSpriteXPM(CURSOR_SPRITE, mdata.x, mdata.y);
+    // assure cursor is within screen bounds
+    if (mouse_pos.x < 0) mouse_pos.x = 0;
+    if (mouse_pos.x > mode_info.XResolution - CURSOR_SPRITE->width) 
+        mouse_pos.x = mode_info.XResolution - CURSOR_SPRITE->width;
+
+    if (mouse_pos.y < 0) mouse_pos.y = 0;
+    if (mouse_pos.y > mode_info.YResolution - CURSOR_SPRITE->height) 
+        mouse_pos.y = mode_info.YResolution - CURSOR_SPRITE->height;
+
+    return drawSpriteXPM(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
 
 int drawCurrentLetter() {

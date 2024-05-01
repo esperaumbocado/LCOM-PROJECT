@@ -6,6 +6,11 @@
 
 #include "i8042.h"
 
+typedef struct {
+    int x;
+    int y;
+} mouse_position;
+
 /** @defgroup mouse
  * @{
  * Functions for using the i8042 KBC

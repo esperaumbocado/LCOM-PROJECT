@@ -9,6 +9,12 @@ extern uint32_t frame_size;
 int x_offset=0;
 int y_offset=0;
 
+extern int bytes_read;
+extern struct packet pp;
+mouse_data mdata;
+
+Sprite *CURSOR_SPRITE;
+
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
 Sprite *C_SPRITE;
@@ -37,6 +43,8 @@ Sprite *Y_SPRITE;
 Sprite *Z_SPRITE;
 
 void initialize_sprites(){
+    CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)CURSOR_xpm);
+
     A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
     B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
     C_SPRITE = create_sprite_xpm((xpm_map_t)KEY_C_xpm);
@@ -81,6 +89,32 @@ void update_timer(){
     (timer_int_handler)();
 
 }
+
+// MOUSE STUFF
+void initialize_mouse_data(){
+    mdata.x = 400;
+    mdata.y = 300;
+    mdata.lb = false;
+    mdata.rb = false;
+}
+
+void update_mouse(){
+    mouse_ih();
+    if (bytes_read == 3) {
+        parse();
+        update_mouse_data();
+        bytes_read = 0;
+    }
+}
+
+void update_mouse_data(){
+    mdata.rb = pp.rb;
+    mdata.lb = pp.lb;
+    mdata.x = mdata.x + pp.delta_x;
+    mdata.y = mdata.y + pp.delta_y;
+}
+
+// -------------
 
 void update_keyboard(){
     (kbc_ih)();

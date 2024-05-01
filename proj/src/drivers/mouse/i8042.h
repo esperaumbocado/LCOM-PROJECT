@@ -11,6 +11,8 @@
 
 #define KEYBOARD_IRQ 1 /**< @brief Keyboard 1 IRQ line */
 
+#define MOUSE_BIT BIT(3)
+
 #define DELAY_US 20000
 
 #define BREAK BIT(7)

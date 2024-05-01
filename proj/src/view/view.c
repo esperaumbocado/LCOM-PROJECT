@@ -8,6 +8,10 @@ extern int currentKey;
 extern int x_offset;
 extern int y_offset;
 
+extern mouse_data mdata;
+
+extern Sprite *CURSOR_SPRITE;
+
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
 extern Sprite *C_SPRITE;
@@ -73,6 +77,10 @@ int drawSpriteXPM(Sprite *sprite, int x, int y) {
 int drawBackground() {
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, drawing_frame_buffer);
     return 0;
+}
+
+int drawCursor(){
+    return drawSpriteXPM(CURSOR_SPRITE, mdata.x, mdata.y);
 }
 
 int drawCurrentLetter() {

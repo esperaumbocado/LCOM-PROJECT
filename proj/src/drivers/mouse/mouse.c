@@ -11,7 +11,8 @@ uint8_t pp_bytes[3];
 enum state state = STATE_ZERO;
 uint8_t abs_x_len = 0;
 uint8_t abs_y_len = 0;
-    
+
+mouse_position mouse_pos;
     
 int (mouse_subscribe_int)() {
 
@@ -88,6 +89,9 @@ void (parse)(){
   
   pp.x_ov = pp_bytes[0] & BIT(6);
   pp.y_ov = pp_bytes[0] & BIT(7);
+
+  mouse_pos.x = mouse_pos.x + pp.delta_x;
+  mouse_pos.y = mouse_pos.y - pp.delta_y;
 }
 
 void (sync)(){  

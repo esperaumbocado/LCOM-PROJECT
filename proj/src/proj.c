@@ -75,6 +75,7 @@ int end(){
 }
 
 int (proj_main_loop)(int argc, char **argv) {
+  
   setup();
 
   int ipc_status;
@@ -96,9 +97,9 @@ int (proj_main_loop)(int argc, char **argv) {
           }
           if (msg.m_notify.interrupts & TIMER_BIT) {
             update_timer();
-            if (counter%30 == 0){
-              drawBackground();
-              drawCursor();
+            if (counter%20 == 0){
+              draw_cursor();
+              update_cursor_last_pos();
             }
           }
 

@@ -18,6 +18,6 @@ int drawBackground();
  * @brief Draws the cursor on the screen
  * @return 0 if successful, 1 otherwise
 */
-int drawCursor();
+int draw_cursor();
 
 #endif

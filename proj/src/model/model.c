@@ -92,7 +92,9 @@ void update_timer(){
 
 // MOUSE STUFF
 void initialize_mouse_data(){
-    mouse_pos.x = 400;
+    mouse_pos.last_x = 500;
+    mouse_pos.last_y = 300;
+    mouse_pos.x = 500;
     mouse_pos.y = 300;
 }
 
@@ -103,6 +105,12 @@ void update_mouse(){
         parse();
         bytes_read = 0;
     }
+}
+
+void update_cursor_last_pos(){
+    // save position for erasing later
+    mouse_pos.last_x = mouse_pos.x;
+    mouse_pos.last_y = mouse_pos.y;
 }
 
 // -------------

@@ -39,8 +39,6 @@ extern Sprite *X_SPRITE;
 extern Sprite *Y_SPRITE;
 extern Sprite *Z_SPRITE;
 
-
-
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x115, &main_frame_buffer) != 0) return 1;
     frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
@@ -79,7 +77,11 @@ int drawBackground() {
     return 0;
 }
 
-int drawCursor(){
+int draw_cursor(){
+
+    // erase last cursor position
+    draw_rectangle(mouse_pos.last_x, mouse_pos.last_y, CURSOR_SPRITE->width, CURSOR_SPRITE->height, WHITE, drawing_frame_buffer);
+
     // assure cursor is within screen bounds
     if (mouse_pos.x < 0) mouse_pos.x = 0;
     if (mouse_pos.x > mode_info.XResolution - CURSOR_SPRITE->width) 
@@ -89,6 +91,7 @@ int drawCursor(){
     if (mouse_pos.y > mode_info.YResolution - CURSOR_SPRITE->height) 
         mouse_pos.y = mode_info.YResolution - CURSOR_SPRITE->height;
 
+    // draw cursor at new position
     return drawSpriteXPM(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
 

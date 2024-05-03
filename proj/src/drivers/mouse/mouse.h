@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "../../view/view.h"
 
 #include "i8042.h"
 
@@ -11,6 +12,8 @@ typedef struct {
     int last_y;
     int x;
     int y;
+    int last_x;
+    int last_y;
 } mouse_position;
 
 /** @defgroup mouse

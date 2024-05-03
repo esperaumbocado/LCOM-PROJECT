@@ -14,7 +14,6 @@ extern Key currentKey;
 GeneralState generalState = RUNNING;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
-extern uint8_t *drawing_frame_buffer;
 extern uint32_t frame_size;
 
 extern int counter;
@@ -53,7 +52,7 @@ int setup(){
 
   if(timer_set_frequency(0,60)!=0) return 1;
   if(setUpFrameBuffer()!=0) return 1;
-  if (set_graphic_mode(0x115) != 0) return 1;
+  if (set_graphic_mode(0x14C) != 0) return 1;
   if(keyboard_subscribe_int()!=0) return 1;
   if(timer_subscribe()!=0) return 1;
 
@@ -93,14 +92,9 @@ int (proj_main_loop)(int argc, char **argv) {
         case HARDWARE: 
           if (msg.m_notify.interrupts & KEYBOARD_BIT){
             update_keyboard();
-            drawCurrentLetter();
           }
           if (msg.m_notify.interrupts & TIMER_BIT) {
             update_timer();
-            if (counter%20 == 0){
-              draw_cursor();
-              update_cursor_last_pos();
-            }
           }
 
           if (msg.m_notify.interrupts & MOUSE_BIT) {

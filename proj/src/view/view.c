@@ -1,10 +1,10 @@
 #include "view.h"
 
-uint8_t *main_frame_buffer;
-uint8_t *secondary_frame_buffer;
-uint8_t *drawing_frame_buffer;
+extern uint8_t *main_frame_buffer;
+extern uint8_t *secondary_frame_buffer;
+extern uint8_t *secondary_frame_buffer_no_mouse;
 uint32_t frame_size;
-extern int currentKey;
+extern Key currentKey;
 extern int x_offset;
 extern int y_offset;
 
@@ -40,10 +40,10 @@ extern Sprite *Y_SPRITE;
 extern Sprite *Z_SPRITE;
 
 int setUpFrameBuffer() {
-    if (set_frame_buffer(0x115, &main_frame_buffer) != 0) return 1;
+    if (set_frame_buffer(0x14C) != 0) return 1;
     frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
     secondary_frame_buffer = (uint8_t *) malloc(frame_size);
-    drawing_frame_buffer = secondary_frame_buffer;
+    secondary_frame_buffer_no_mouse = (uint8_t *) malloc(frame_size);
     return 0;
 }
 
@@ -62,7 +62,7 @@ int drawSpriteXPM(Sprite *sprite, int x, int y) {
                 continue;
             }
 
-            if (draw_pixel(x + col, y + row, color, drawing_frame_buffer) != 0) {
+            if (draw_pixel(x + col, y + row, color, secondary_frame_buffer_no_mouse) != 0) {
                 return 1;
             }
         }
@@ -72,38 +72,63 @@ int drawSpriteXPM(Sprite *sprite, int x, int y) {
 }
 
 
-int drawBackground() {
-    draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, drawing_frame_buffer);
+int drawSpriteXPM_mouse(Sprite *sprite, int x, int y) {
+    if (sprite == NULL) return 1;
+
+    uint16_t width = sprite->width;
+    uint16_t height = sprite->height;
+
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
+            uint32_t color = sprite->colors[col + row * width];
+
+            if (color == TRANSPARENT) {
+                continue;
+            }
+
+            if (draw_pixel(x + col, y + row, color, secondary_frame_buffer) != 0) {
+                return 1;
+            }
+        }
+    }
+    
     return 0;
 }
 
-int draw_cursor(){
 
-    // erase last cursor position
-    draw_rectangle(mouse_pos.last_x, mouse_pos.last_y, CURSOR_SPRITE->width, CURSOR_SPRITE->height, WHITE, drawing_frame_buffer);
 
-    // assure cursor is within screen bounds
+int drawBackground() {
+    draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, secondary_frame_buffer_no_mouse);
+    return 0;
+}
+
+int drawCursor(){
+
     if (mouse_pos.x < 0) mouse_pos.x = 0;
-    if (mouse_pos.x > mode_info.XResolution - CURSOR_SPRITE->width) 
+    if (mouse_pos.x > mode_info.XResolution - CURSOR_SPRITE->width){
         mouse_pos.x = mode_info.XResolution - CURSOR_SPRITE->width;
+    }
 
     if (mouse_pos.y < 0) mouse_pos.y = 0;
-    if (mouse_pos.y > mode_info.YResolution - CURSOR_SPRITE->height) 
+    if (mouse_pos.y > mode_info.YResolution - CURSOR_SPRITE->height){
         mouse_pos.y = mode_info.YResolution - CURSOR_SPRITE->height;
+    }
 
-    // draw cursor at new position
-    return drawSpriteXPM(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
+    return drawSpriteXPM_mouse(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
+
 
 int drawCurrentLetter() {
     int x = x_offset;
     int y = y_offset;
     switch(currentKey){
         case A:
+            printf("A\n");
             return drawSpriteXPM(A_SPRITE, x, y);
             break;
         case B:
             return drawSpriteXPM(B_SPRITE, x, y);
+            printf("B\n");
             break;
         case C:
             return drawSpriteXPM(C_SPRITE, x, y);

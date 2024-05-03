@@ -69,6 +69,11 @@ void initialize_mouse_data();
 */
 void update_mouse();
 
+/**
+ * @brief Updates last position of the cursor
+*/
+void update_cursor_last_pos();
+
 
 #endif
 

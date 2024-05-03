@@ -53,7 +53,7 @@ int (set_frame_buffer)(uint16_t mode) {
     physic_adresses.mr_limit = physic_adresses.mr_base + frame_size;
 
     //Alocação física da memória necessária para o frame buffer
-    if(sys_privctl(SELF, SYS_PRIV_ADD_MEM, &physic_adresses)) {
+    if(sys_privctl(SELF, SYS_PRIV_ADD_MEM, &physic_adresses) != 0) {
         printf("Physical memory allocation error\n");
         return 1;
     }

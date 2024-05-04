@@ -12,8 +12,6 @@ typedef struct {
     int last_y;
     int x;
     int y;
-    int last_x;
-    int last_y;
 } mouse_position;
 
 /** @defgroup mouse

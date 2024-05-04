@@ -7,6 +7,7 @@ extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
 extern uint8_t *secondary_frame_buffer_no_mouse;
 extern uint32_t frame_size;
+extern vbe_mode_info_t mode_info;
 int x_offset=0;
 int y_offset=0;
 
@@ -79,7 +80,7 @@ int offset_handler(int x){
     if (x==0){
         x_offset+=13;
     }
-    if (x_offset>800){
+    if (x_offset + 13 >=mode_info.XResolution){
         x_offset=0;
         y_offset+=20;
     }

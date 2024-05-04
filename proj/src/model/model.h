@@ -9,10 +9,12 @@
 #include "model/sprite.h"
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
+#include "xpm/novoTeste.xpm"
 
 
 typedef enum{
     NONE_KEY,
+    ENTER,
     A,
     B,
     C,
@@ -57,6 +59,7 @@ void initialize_sprites();
 void destroy_sprites();
 void update_keyboard();
 void update_timer();
+void key_handler();
 
 // MOUSE STUFF
 /**
@@ -73,7 +76,5 @@ void update_mouse();
  * @brief Updates last position of the cursor
 */
 void update_cursor_last_pos();
-
-
 #endif
 

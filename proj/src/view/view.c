@@ -7,10 +7,13 @@ uint32_t frame_size;
 extern Key currentKey;
 extern int x_offset;
 extern int y_offset;
+extern int gameStateChange;
+extern GameState currentState;
 
 extern mouse_position mouse_pos;
 
 extern Sprite *CURSOR_SPRITE;
+extern Sprite *NOVO_TESTE_SPRITE;
 
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
@@ -96,6 +99,28 @@ int drawSpriteXPM_mouse(Sprite *sprite, int x, int y) {
 }
 
 
+int GameDrawer(){
+    switch(currentState){
+        case MENU:
+        if (gameStateChange){
+            drawBackground();
+            drawSpriteXPM(NOVO_TESTE_SPRITE, mode_info.XResolution/2 - NOVO_TESTE_SPRITE->width/2, mode_info.YResolution/2 - NOVO_TESTE_SPRITE->height/2);
+            gameStateChange = 0;
+        }
+            drawCursor();
+            break;
+        case GAME:
+            if (gameStateChange){
+                drawBackground();
+                gameStateChange = 0;
+            }
+            break;
+        case NONE_STATE:
+            break;
+    }
+
+    return 0;
+}
 
 int drawBackground() {
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, secondary_frame_buffer_no_mouse);

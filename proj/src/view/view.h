@@ -19,5 +19,6 @@ int drawBackground();
  * @return 0 if successful, 1 otherwise
 */
 int drawCursor();
+int GameDrawer();
 
 #endif

@@ -15,7 +15,6 @@ GeneralState generalState = RUNNING;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
 extern uint32_t frame_size;
-
 extern int counter;
 
 
@@ -79,7 +78,6 @@ int (proj_main_loop)(int argc, char **argv) {
 
   int ipc_status;
   message msg;
-  drawBackground();
   while (currentKey != Q) {
     
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {
@@ -91,10 +89,11 @@ int (proj_main_loop)(int argc, char **argv) {
       switch(_ENDPOINT_P(msg.m_source)) {
         case HARDWARE: 
           if (msg.m_notify.interrupts & KEYBOARD_BIT){
-            update_keyboard();
+            key_handler();
           }
           if (msg.m_notify.interrupts & TIMER_BIT) {
             update_timer();
+            GameDrawer();
           }
 
           if (msg.m_notify.interrupts & MOUSE_BIT) {

@@ -2,7 +2,7 @@
 
 extern uint8_t data;
 Key currentKey = NONE_KEY;
-GameState currentState = NONE_STATE;
+GameState currentState = MENU;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
 extern uint8_t *secondary_frame_buffer_no_mouse;
@@ -10,12 +10,15 @@ extern uint32_t frame_size;
 extern vbe_mode_info_t mode_info;
 int x_offset=0;
 int y_offset=0;
+bool gameStateChange = 1;
 
 extern int bytes_read;
 extern struct packet pp;
 extern mouse_position mouse_pos;
 
 Sprite *CURSOR_SPRITE;
+
+Sprite *NOVO_TESTE_SPRITE;
 
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
@@ -46,6 +49,7 @@ Sprite *Z_SPRITE;
 
 void initialize_sprites(){
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
+    NOVO_TESTE_SPRITE = create_sprite_xpm((xpm_map_t)novoTeste_xpm);
 
     A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
     B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
@@ -88,9 +92,8 @@ int offset_handler(int x){
 }
 
 void update_timer(){
-    memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
-    drawCursor();
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
+    memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
 
 }
@@ -119,6 +122,20 @@ void update_cursor_last_pos(){
 }
 
 // -------------
+
+
+void key_handler(){
+    if (currentState == MENU){
+        update_keyboard();
+        if (currentKey == ENTER){
+            currentState = GAME;
+            gameStateChange = 1;
+        }
+    }else if (currentState == GAME){
+        update_keyboard();
+    }
+}
+
 
 void update_keyboard(){
     (kbc_ih)();
@@ -255,7 +272,7 @@ void update_keyboard(){
             offset_handler(0);
             break;
         case KEY_ENTER:
-            printf("ENTER\n");
+            currentKey = ENTER;
             break;
         case KEY_SPACE:
             offset_handler(0);
@@ -298,6 +315,6 @@ void destroy_sprites(){
     destroy_sprite(Y_SPRITE);
     destroy_sprite(Z_SPRITE);
     destroy_sprite(CURSOR_SPRITE);
-
+    destroy_sprite(NOVO_TESTE_SPRITE);
 }
 

@@ -153,7 +153,7 @@ int draw_text(const char* text, int start_x, int start_y) {
         
         if (draw_letter(*text, x, y)) return 1;
         // TODO: parameterize the size of the letters
-        x += 30; // move x to the next letter
+        x += 21; // move x to the next letter
         text++;
     }
     return 0;

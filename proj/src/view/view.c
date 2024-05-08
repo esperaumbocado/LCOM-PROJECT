@@ -111,9 +111,10 @@ int GameDrawer(){
         case GAME:
             if (gameStateChange){
                 drawBackground();
-                draw_text(text, 0, 0);
+                drawText(text);
                 gameStateChange = 0;
             }
+            drawCursor();
             break;
         case NONE_STATE:
             break;
@@ -142,206 +143,107 @@ int drawCursor(){
     return drawSpriteXPM_mouse(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
 
-int draw_text(const char* text, int start_x, int start_y) {
-    int x = start_x;
-    int y = start_y;
-    while (*text) {
-        if (x > mode_info.XResolution - 30) {
-            x = 0;
-            y += 30; // move y to the next line
-        }
-        
-        if (draw_letter(*text, x, y)) return 1;
-        // TODO: parameterize the size of the letters
-        x += 21; // move x to the next letter
+int drawText(const char* text) {
+    while (*text) {    
+        Key key = char_to_key(*text);
+        if (drawLetter(key)) return 1;
+        offset_handler(0);
         text++;
     }
+
+    // Begin writing in a new line
+    x_offset=0;
+    y_offset+=20;
+
     return 0;
 }
 
-// TODO: integrate this function with the next function
-int draw_letter(char text, int x, int y) {
-    printf("Drawing letter %c\n", text);
-    Key key = char_to_key(text);
+int drawLetter(Key key) {
     switch(key){
         case A:
-            return drawSpriteXPM(A_SPRITE, x, y);
+            return drawSpriteXPM(A_SPRITE, x_offset, y_offset);
             break;
         case B:
-            return drawSpriteXPM(B_SPRITE, x, y);
+            return drawSpriteXPM(B_SPRITE, x_offset, y_offset);
             break;
         case C:
-            return drawSpriteXPM(C_SPRITE, x, y);
+            return drawSpriteXPM(C_SPRITE, x_offset, y_offset);
             break;
         case D:
-            return drawSpriteXPM(D_SPRITE, x, y);
+            return drawSpriteXPM(D_SPRITE, x_offset, y_offset);
             break;
         case E:
-            return drawSpriteXPM(E_SPRITE, x, y);
+            return drawSpriteXPM(E_SPRITE, x_offset, y_offset);
             break;
         case F:
-            return drawSpriteXPM(F_SPRITE, x, y);
+            return drawSpriteXPM(F_SPRITE, x_offset, y_offset);
             break;
         case G:
-            return drawSpriteXPM(G_SPRITE, x, y);
+            return drawSpriteXPM(G_SPRITE, x_offset, y_offset);
             break;
         case H:
-            return drawSpriteXPM(H_SPRITE, x, y);
+            return drawSpriteXPM(H_SPRITE, x_offset, y_offset);
             break;
         case I:
-            return drawSpriteXPM(I_SPRITE, x, y);
+            return drawSpriteXPM(I_SPRITE, x_offset, y_offset);
             break;
         case J:
-            return drawSpriteXPM(J_SPRITE, x, y);
+            return drawSpriteXPM(J_SPRITE, x_offset, y_offset);
             break;
         case K:
-            return drawSpriteXPM(K_SPRITE, x, y);
+            return drawSpriteXPM(K_SPRITE, x_offset, y_offset);
             break;
         case L:
-            return drawSpriteXPM(L_SPRITE, x, y);
+            return drawSpriteXPM(L_SPRITE, x_offset, y_offset);
             break;
         case M:
-            return drawSpriteXPM(M_SPRITE, x, y);
+            return drawSpriteXPM(M_SPRITE, x_offset, y_offset);
             break;
         case N:
-            return drawSpriteXPM(N_SPRITE, x, y);
+            return drawSpriteXPM(N_SPRITE, x_offset, y_offset);
             break;
         case O:
-            return drawSpriteXPM(O_SPRITE, x, y);
+            return drawSpriteXPM(O_SPRITE, x_offset, y_offset);
             break;
         case P:
-            return drawSpriteXPM(P_SPRITE, x, y);
+            return drawSpriteXPM(P_SPRITE, x_offset, y_offset);
             break;
         case Q:
-            return drawSpriteXPM(Q_SPRITE, x, y);
+            return drawSpriteXPM(Q_SPRITE, x_offset, y_offset);
             break;
         case R:
-            return drawSpriteXPM(R_SPRITE, x, y);
+            return drawSpriteXPM(R_SPRITE, x_offset, y_offset);
             break;
         case S:
-            return drawSpriteXPM(S_SPRITE, x, y);
+            return drawSpriteXPM(S_SPRITE, x_offset, y_offset);
             break;
         case T:
-            return drawSpriteXPM(T_SPRITE, x, y);
+            return drawSpriteXPM(T_SPRITE, x_offset, y_offset);
             break;
         case U:
-            return drawSpriteXPM(U_SPRITE, x, y);
+            return drawSpriteXPM(U_SPRITE, x_offset, y_offset);
             break;
         case V:
-            return drawSpriteXPM(V_SPRITE, x, y);
+            return drawSpriteXPM(V_SPRITE, x_offset, y_offset);
             break;
         case W:
-            return drawSpriteXPM(W_SPRITE, x, y);
+            return drawSpriteXPM(W_SPRITE, x_offset, y_offset);
             break;
         case X:
-            return drawSpriteXPM(X_SPRITE, x, y);
+            return drawSpriteXPM(X_SPRITE, x_offset, y_offset);
             break;
         case Y:
-            return drawSpriteXPM(Y_SPRITE, x, y);
+            return drawSpriteXPM(Y_SPRITE, x_offset, y_offset);
             break;
         case Z:
-            return drawSpriteXPM(Z_SPRITE, x, y);
+            return drawSpriteXPM(Z_SPRITE, x_offset, y_offset);
             break;
         default:
             break;
-
-
     }
 
     return 0;
 }
 
-int drawCurrentLetter() {
-    int x = x_offset;
-    int y = y_offset;
-    switch(currentKey){
-        case A:
-            printf("A\n");
-            return drawSpriteXPM(A_SPRITE, x, y);
-            break;
-        case B:
-            return drawSpriteXPM(B_SPRITE, x, y);
-            printf("B\n");
-            break;
-        case C:
-            return drawSpriteXPM(C_SPRITE, x, y);
-            break;
-        case D:
-            return drawSpriteXPM(D_SPRITE, x, y);
-            break;
-        case E:
-            return drawSpriteXPM(E_SPRITE, x, y);
-            break;
-        case F:
-            return drawSpriteXPM(F_SPRITE, x, y);
-            break;
-        case G:
-            return drawSpriteXPM(G_SPRITE, x, y);
-            break;
-        case H:
-            return drawSpriteXPM(H_SPRITE, x, y);
-            break;
-        case I:
-            return drawSpriteXPM(I_SPRITE, x, y);
-            break;
-        case J:
-            return drawSpriteXPM(J_SPRITE, x, y);
-            break;
-        case K:
-            return drawSpriteXPM(K_SPRITE, x, y);
-            break;
-        case L:
-            return drawSpriteXPM(L_SPRITE, x, y);
-            break;
-        case M:
-            return drawSpriteXPM(M_SPRITE, x, y);
-            break;
-        case N:
-            return drawSpriteXPM(N_SPRITE, x, y);
-            break;
-        case O:
-            return drawSpriteXPM(O_SPRITE, x, y);
-            break;
-        case P:
-            return drawSpriteXPM(P_SPRITE, x, y);
-            break;
-        case Q:
-            return drawSpriteXPM(Q_SPRITE, x, y);
-            break;
-        case R:
-            return drawSpriteXPM(R_SPRITE, x, y);
-            break;
-        case S:
-            return drawSpriteXPM(S_SPRITE, x, y);
-            break;
-        case T:
-            return drawSpriteXPM(T_SPRITE, x, y);
-            break;
-        case U:
-            return drawSpriteXPM(U_SPRITE, x, y);
-            break;
-        case V:
-            return drawSpriteXPM(V_SPRITE, x, y);
-            break;
-        case W:
-            return drawSpriteXPM(W_SPRITE, x, y);
-            break;
-        case X:
-            return drawSpriteXPM(X_SPRITE, x, y);
-            break;
-        case Y:
-            return drawSpriteXPM(Y_SPRITE, x, y);
-            break;
-        case Z:
-            return drawSpriteXPM(Z_SPRITE, x, y);
-            break;
-        default:
-            break;
-
-
-    }
-
-    return 0;
-}
 
 

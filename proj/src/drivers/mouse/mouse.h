@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "../../view/view.h"
 
 #include "i8042.h"
 

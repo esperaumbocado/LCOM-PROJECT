@@ -12,7 +12,6 @@
 int setUpFrameBuffer();
 int mainDraw();
 int drawSpriteXPM(Sprite *sprite, int x, int y);
-int drawCurrentLetter();
 int drawBackground();
 
 /**
@@ -25,19 +24,15 @@ int GameDrawer();
 /**
  * @brief Draws a text on the screen
  * @param text the text to be drawn
- * @param start_x the x coordinate of the starting point
- * @param start_y the y coordinate of the starting point
  * @return 0 if successful, 1 otherwise
 */
-int draw_text(const char* text, int start_x, int start_y);
+int drawText(const char* text);
 
 /**
  * @brief Draws a letter on the screen
- * @param text the letter to be drawn
- * @param x the x coordinate of the starting point
- * @param y the y coordinate of the starting point
+ * @param key the key to be drawn
  * @return 0 if successful, 1 otherwise
 */
-int draw_letter(char text, int x, int y);
+int drawLetter(Key key);
 
 #endif

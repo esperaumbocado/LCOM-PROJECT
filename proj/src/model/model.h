@@ -61,6 +61,13 @@ void update_keyboard();
 void update_timer();
 void key_handler();
 
+/**
+ * @brief Handles the offset for drawing
+ * @param x the offset to be handled
+ * @return the new offset
+*/
+int offset_handler(int x);
+
 // MOUSE STUFF
 /**
  * @brief Initializes the mouse data

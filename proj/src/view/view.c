@@ -98,7 +98,6 @@ int drawSpriteXPM_mouse(Sprite *sprite, int x, int y) {
     return 0;
 }
 
-
 int GameDrawer(){
     switch(currentState){
         case MENU:
@@ -112,6 +111,7 @@ int GameDrawer(){
         case GAME:
             if (gameStateChange){
                 drawBackground();
+                draw_text(text, 0, 0);
                 gameStateChange = 0;
             }
             break;
@@ -150,8 +150,8 @@ int draw_text(const char* text, int start_x, int start_y) {
             x = 0;
             y += 30; // move y to the next line
         }
-        Key key = char_to_key(*text);
-        if (draw_letter(key, x, y)) return 1;
+        
+        if (draw_letter(*text, x, y)) return 1;
         // TODO: parameterize the size of the letters
         x += 30; // move x to the next letter
         text++;
@@ -160,7 +160,9 @@ int draw_text(const char* text, int start_x, int start_y) {
 }
 
 // TODO: integrate this function with the next function
-int draw_letter(Key key, int x, int y) {
+int draw_letter(char text, int x, int y) {
+    printf("Drawing letter %c\n", text);
+    Key key = char_to_key(text);
     switch(key){
         case A:
             return drawSpriteXPM(A_SPRITE, x, y);

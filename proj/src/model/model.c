@@ -125,7 +125,7 @@ void update_cursor_last_pos(){
 
 Key char_to_key(char c) {
     if (c >= 'A' && c <= 'Z') {
-        return (Key)(c - 'A' + 1); 
+        return (Key)(c - 'A' + 2); 
     }
     return NONE_KEY;
 }

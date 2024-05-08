@@ -115,6 +115,14 @@ void update_cursor_last_pos(){
 
 // -------------
 
+Key char_to_key(char c) {
+    if (c >= 'A' && c <= 'Z') {
+        return (Key)(c - 'A' + 1); 
+    }
+    return NONE_KEY;
+}
+
+
 void update_keyboard(){
     (kbc_ih)();
     offset_handler(0);

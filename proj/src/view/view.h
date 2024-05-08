@@ -20,4 +20,22 @@ int drawBackground();
 */
 int draw_cursor();
 
+/**
+ * @brief Draws a text on the screen
+ * @param text the text to be drawn
+ * @param start_x the x coordinate of the starting point
+ * @param start_y the y coordinate of the starting point
+ * @return 0 if successful, 1 otherwise
+*/
+int draw_text(const char* text, int start_x, int start_y);
+
+/**
+ * @brief Draws a letter on the screen
+ * @param key the key to be drawn
+ * @param x the x coordinate of the starting point
+ * @param y the y coordinate of the starting point
+ * @return 0 if successful, 1 otherwise
+*/
+int draw_letter(Key key, int x, int y);
+
 #endif

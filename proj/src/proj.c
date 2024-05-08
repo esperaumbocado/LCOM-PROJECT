@@ -8,6 +8,7 @@
 #include "drivers/mouse/mouse.h"
 #include "model/model.h"
 #include "model/sprite.h"
+#include "model/text.h"
 #include "view/view.h"
 
 extern Key currentKey;
@@ -75,12 +76,15 @@ int end(){
 }
 
 int (proj_main_loop)(int argc, char **argv) {
-  
+
   setup();
 
   int ipc_status;
   message msg;
+
   drawBackground();
+  draw_text(text, 0, 0);
+
   while (currentKey != Q) {
     
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {

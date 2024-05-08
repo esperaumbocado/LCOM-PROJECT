@@ -74,6 +74,10 @@ void update_mouse();
 */
 void update_cursor_last_pos();
 
+/**
+ * @brief Gets a key based on a char
+*/
+Key char_to_key(char c);
 
 #endif
 

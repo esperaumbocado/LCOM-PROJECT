@@ -95,6 +95,113 @@ int draw_cursor(){
     return drawSpriteXPM(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
 
+int draw_text(const char* text, int start_x, int start_y) {
+    int x = start_x;
+    int y = start_y;
+    while (*text) {
+        if (x > mode_info.XResolution - 30) {
+            x = 0;
+            y += 30; // move y to the next line
+        }
+        Key key = char_to_key(*text);
+        if (draw_letter(key, x, y)) return 1;
+        // TODO: parameterize the size of the letters
+        x += 30; // move x to the next letter
+        text++;
+    }
+    return 0;
+}
+
+// TODO: integrate this function with the next function
+int draw_letter(Key key, int x, int y) {
+    switch(key){
+        case A:
+            return drawSpriteXPM(A_SPRITE, x, y);
+            break;
+        case B:
+            return drawSpriteXPM(B_SPRITE, x, y);
+            break;
+        case C:
+            return drawSpriteXPM(C_SPRITE, x, y);
+            break;
+        case D:
+            return drawSpriteXPM(D_SPRITE, x, y);
+            break;
+        case E:
+            return drawSpriteXPM(E_SPRITE, x, y);
+            break;
+        case F:
+            return drawSpriteXPM(F_SPRITE, x, y);
+            break;
+        case G:
+            return drawSpriteXPM(G_SPRITE, x, y);
+            break;
+        case H:
+            return drawSpriteXPM(H_SPRITE, x, y);
+            break;
+        case I:
+            return drawSpriteXPM(I_SPRITE, x, y);
+            break;
+        case J:
+            return drawSpriteXPM(J_SPRITE, x, y);
+            break;
+        case K:
+            return drawSpriteXPM(K_SPRITE, x, y);
+            break;
+        case L:
+            return drawSpriteXPM(L_SPRITE, x, y);
+            break;
+        case M:
+            return drawSpriteXPM(M_SPRITE, x, y);
+            break;
+        case N:
+            return drawSpriteXPM(N_SPRITE, x, y);
+            break;
+        case O:
+            return drawSpriteXPM(O_SPRITE, x, y);
+            break;
+        case P:
+            return drawSpriteXPM(P_SPRITE, x, y);
+            break;
+        case Q:
+            return drawSpriteXPM(Q_SPRITE, x, y);
+            break;
+        case R:
+            return drawSpriteXPM(R_SPRITE, x, y);
+            break;
+        case S:
+            return drawSpriteXPM(S_SPRITE, x, y);
+            break;
+        case T:
+            return drawSpriteXPM(T_SPRITE, x, y);
+            break;
+        case U:
+            return drawSpriteXPM(U_SPRITE, x, y);
+            break;
+        case V:
+            return drawSpriteXPM(V_SPRITE, x, y);
+            break;
+        case W:
+            return drawSpriteXPM(W_SPRITE, x, y);
+            break;
+        case X:
+            return drawSpriteXPM(X_SPRITE, x, y);
+            break;
+        case Y:
+            return drawSpriteXPM(Y_SPRITE, x, y);
+            break;
+        case Z:
+            return drawSpriteXPM(Z_SPRITE, x, y);
+            break;
+        default:
+            break;
+
+
+    }
+
+    return 0;
+}
+
 int drawCurrentLetter() {
     int x = x_offset;
     int y = y_offset;
@@ -185,11 +292,5 @@ int drawCurrentLetter() {
 
     return 0;
 }
-
-
-
-
-
-
 
 

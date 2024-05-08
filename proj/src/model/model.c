@@ -2,18 +2,23 @@
 
 extern uint8_t data;
 Key currentKey = NONE_KEY;
-GameState currentState = NONE_STATE;
+GameState currentState = MENU;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
+extern uint8_t *secondary_frame_buffer_no_mouse;
 extern uint32_t frame_size;
+extern vbe_mode_info_t mode_info;
 int x_offset=0;
 int y_offset=0;
+bool gameStateChange = 1;
 
 extern int bytes_read;
 extern struct packet pp;
 extern mouse_position mouse_pos;
 
 Sprite *CURSOR_SPRITE;
+
+Sprite *NOVO_TESTE_SPRITE;
 
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
@@ -43,7 +48,8 @@ Sprite *Y_SPRITE;
 Sprite *Z_SPRITE;
 
 void initialize_sprites(){
-    CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)CURSOR_xpm);
+    CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
+    NOVO_TESTE_SPRITE = create_sprite_xpm((xpm_map_t)novoTeste_xpm);
 
     A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
     B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
@@ -71,13 +77,14 @@ void initialize_sprites(){
     X_SPRITE = create_sprite_xpm((xpm_map_t)KEY_X_xpm);
     Y_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Y_xpm);
     Z_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Z_xpm);
+
 }
 
 int offset_handler(int x){
     if (x==0){
-        x_offset+=20;
+        x_offset+=13;
     }
-    if (x_offset>800){
+    if (x_offset + 13 >=mode_info.XResolution){
         x_offset=0;
         y_offset+=20;
     }
@@ -86,6 +93,7 @@ int offset_handler(int x){
 
 void update_timer(){
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
+    memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
 
 }
@@ -122,91 +130,165 @@ Key char_to_key(char c) {
     return NONE_KEY;
 }
 
+void key_handler(){
+    if (currentState == MENU){
+        update_keyboard();
+        if (currentKey == ENTER){
+            currentState = GAME;
+            gameStateChange = 1;
+        }
+    }else if (currentState == GAME){
+        update_keyboard();
+    }
+}
+
 
 void update_keyboard(){
     (kbc_ih)();
-    offset_handler(0);
+    if (!(data&BIT(7))){ 
     switch (data) {
         case KEY_A:
             currentKey = A;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_B:
             currentKey = B;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_C:
             currentKey = C;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_D:
             currentKey = D;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_E:
             currentKey = E;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_F:
             currentKey = F;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_G:
             currentKey = G;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_H:
             currentKey = H;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_I:
             currentKey = I;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_J:
             currentKey = J;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_K:
             currentKey = K;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_L:
             currentKey = L;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_M:
             currentKey = M;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_N:
             currentKey = N;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_O:
             currentKey = O;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_P:
             currentKey = P;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_Q:
             currentKey = Q;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_R:
             currentKey = R;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_S:
             currentKey = S;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_T:
             currentKey = T;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_U:
             currentKey = U;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_V:
             currentKey = V;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_W:
             currentKey = W;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_X:
             currentKey = X;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_Y:
             currentKey = Y;
+            drawCurrentLetter();
+            offset_handler(0);
             break;
         case KEY_Z:
             currentKey = Z;
+            drawCurrentLetter();
+            offset_handler(0);
+            break;
+        case KEY_ENTER:
+            currentKey = ENTER;
+            break;
+        case KEY_SPACE:
+            offset_handler(0);
+            break;
+        case KEY_DELETE:
+            printf("DELETE\n");
             break;
         default:
             break;
+    }
     }
 }
 
@@ -238,5 +320,7 @@ void destroy_sprites(){
     destroy_sprite(X_SPRITE);
     destroy_sprite(Y_SPRITE);
     destroy_sprite(Z_SPRITE);
+    destroy_sprite(CURSOR_SPRITE);
+    destroy_sprite(NOVO_TESTE_SPRITE);
 }
 

@@ -18,7 +18,8 @@ int drawBackground();
  * @brief Draws the cursor on the screen
  * @return 0 if successful, 1 otherwise
 */
-int draw_cursor();
+int drawCursor();
+int GameDrawer();
 
 /**
  * @brief Draws a text on the screen

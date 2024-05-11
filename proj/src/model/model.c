@@ -119,8 +119,6 @@ void update_timer(){
 
 // MOUSE STUFF
 void initialize_mouse_data(){
-    // mouse_pos.last_x = 500;
-    // mouse_pos.last_y = 300;
     mouse_pos.x = 500;
     mouse_pos.y = 300;
 }
@@ -159,6 +157,15 @@ Key char_to_key(char c) {
     if (c >= 'A' && c <= 'Z') {
         return (Key)(c - 'A' + 2); 
     }
+    switch (c)
+        {
+        case ',':
+            return COMMA;
+        case '.':
+            return PERIOD;    
+        default:
+            return NONE_KEY;
+        }
     return NONE_KEY;
 }
 

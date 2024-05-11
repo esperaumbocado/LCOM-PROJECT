@@ -73,11 +73,12 @@ int end(){
 }
 
 int (proj_main_loop)(int argc, char **argv) {
-  
+
   setup();
 
   int ipc_status;
   message msg;
+
   while (currentKey != Q) {
     
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {

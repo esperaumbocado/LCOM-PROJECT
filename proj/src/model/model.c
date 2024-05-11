@@ -1,4 +1,5 @@
 #include "model.h"
+#include "../view/view.h"
 
 extern uint8_t data;
 Key currentKey = NONE_KEY;
@@ -122,7 +123,13 @@ void update_cursor_last_pos(){
 }
 
 // -------------
-
+// TODO: dots and commas
+Key char_to_key(char c) {
+    if (c >= 'A' && c <= 'Z') {
+        return (Key)(c - 'A' + 2); 
+    }
+    return NONE_KEY;
+}
 
 void key_handler(){
     if (currentState == MENU){
@@ -143,132 +150,132 @@ void update_keyboard(){
     switch (data) {
         case KEY_A:
             currentKey = A;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_B:
             currentKey = B;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_C:
             currentKey = C;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_D:
             currentKey = D;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_E:
             currentKey = E;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_F:
             currentKey = F;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_G:
             currentKey = G;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_H:
             currentKey = H;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_I:
             currentKey = I;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_J:
             currentKey = J;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_K:
             currentKey = K;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_L:
             currentKey = L;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_M:
             currentKey = M;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_N:
             currentKey = N;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_O:
             currentKey = O;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_P:
             currentKey = P;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_Q:
             currentKey = Q;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_R:
             currentKey = R;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_S:
             currentKey = S;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_T:
             currentKey = T;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_U:
             currentKey = U;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_V:
             currentKey = V;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_W:
             currentKey = W;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_X:
             currentKey = X;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_Y:
             currentKey = Y;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_Z:
             currentKey = Z;
-            drawCurrentLetter();
+            drawLetter(currentKey);
             offset_handler(0);
             break;
         case KEY_ENTER:

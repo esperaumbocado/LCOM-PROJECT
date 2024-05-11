@@ -48,9 +48,6 @@ int (map_vram)(uint16_t mode){
     bits_per_pixel = vbe_mode_info.BitsPerPixel;
     bytes_per_pixel = (bits_per_pixel+7)/8;
 
-    printf("bits per pixel: %d\n", bits_per_pixel);
-    printf("bytes per pixel: %d\n", bytes_per_pixel);
-
     unsigned int vram_size = h_res * v_res * bytes_per_pixel; // in bytes
     
     mem_model = vbe_mode_info.MemoryModel;
@@ -58,7 +55,7 @@ int (map_vram)(uint16_t mode){
     red_mask_size = vbe_mode_info.RedMaskSize;
     green_mask_size = vbe_mode_info.GreenMaskSize;
     blue_mask_size = vbe_mode_info.BlueMaskSize;
-
+    
     red_field_position = vbe_mode_info.RedFieldPosition;
     green_field_position = vbe_mode_info.GreenFieldPosition;
     blue_field_position = vbe_mode_info.BlueFieldPosition;
@@ -172,6 +169,7 @@ int (vg_draw_pattern)(uint8_t no_rectangles, uint32_t first, uint8_t step){
                 color = (red << red_field_position) 
                         | (green << green_field_position) 
                         | (blue << blue_field_position);
+                
             }
             
             vg_draw_rectangle(j*width, i*height, width, height, color);
@@ -215,7 +213,6 @@ int (vg_clear)(){
         }
     }
     return 0;
-
 }
 
 // ----------- SPRITE ---------------

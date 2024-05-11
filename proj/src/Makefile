@@ -12,7 +12,7 @@ PROG=proj
 
 
 # source code files to be compiled
-SRCS = proj.c timer.c keyboard.c mouse.c video.c utils.c model.c view.c sprite.c
+SRCS = proj.c timer.c keyboard.c mouse.c video.c utils.c model.c view.c sprite.c text.c
 
 # Flags de compilação
 CFLAGS += -pedantic -D_LCOM_OPTIMIZED_ -O2

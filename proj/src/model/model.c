@@ -48,6 +48,9 @@ Sprite *X_SPRITE;
 Sprite *Y_SPRITE;
 Sprite *Z_SPRITE;
 
+Sprite *COMMA_SPRITE;
+Sprite *PERIOD_SPRITE;
+
 int startPlayX;
 int startPlayY;
 int endPlayX;
@@ -55,6 +58,8 @@ int endPlayY;
 
 void initialize_sprites(){
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
+    
+
     PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
 
     startPlayX = mode_info.XResolution/2 - PLAY_SPRITE->width/2;
@@ -88,6 +93,9 @@ void initialize_sprites(){
     X_SPRITE = create_sprite_xpm((xpm_map_t)KEY_X_xpm);
     Y_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Y_xpm);
     Z_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Z_xpm);
+
+    COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm);
+    PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm);
 
 }
 
@@ -310,6 +318,16 @@ void update_keyboard(){
         case KEY_DELETE:
             printf("DELETE\n");
             break;
+        case KEY_COMMA:
+            currentKey = COMMA;
+            drawLetter(currentKey);
+            offset_handler(0);
+            break;
+        case KEY_PERIOD:
+            currentKey = PERIOD;
+            drawLetter(currentKey);
+            offset_handler(0);
+            break;
         default:
             break;
     }
@@ -346,5 +364,8 @@ void destroy_sprites(){
     destroy_sprite(Z_SPRITE);
     destroy_sprite(CURSOR_SPRITE);
     destroy_sprite(PLAY_SPRITE);
+
+    destroy_sprite(COMMA_SPRITE);
+    destroy_sprite(PERIOD_SPRITE);
 }
 

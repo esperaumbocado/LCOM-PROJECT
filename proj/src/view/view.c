@@ -45,6 +45,9 @@ extern Sprite *X_SPRITE;
 extern Sprite *Y_SPRITE;
 extern Sprite *Z_SPRITE;
 
+extern Sprite *COMMA_SPRITE;
+extern Sprite *PERIOD_SPRITE;
+
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -241,6 +244,12 @@ int drawLetter(Key key) {
             break;
         case Z:
             return drawSpriteXPM(Z_SPRITE, x_offset, y_offset);
+            break;
+        case COMMA:
+            return drawSpriteXPM(COMMA_SPRITE, x_offset, y_offset);
+            break;
+        case PERIOD:
+            return drawSpriteXPM(PERIOD_SPRITE, x_offset, y_offset);
             break;
         default:
             break;

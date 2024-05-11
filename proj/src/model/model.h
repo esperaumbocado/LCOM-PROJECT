@@ -10,6 +10,8 @@
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
 #include "xpm/play.xpm"
+#include "xpm/comma.xpm"
+#include "xpm/period.xpm"
 
 
 typedef enum{
@@ -40,7 +42,9 @@ typedef enum{
     W,
     X,
     Y,
-    Z
+    Z,
+    COMMA,
+    PERIOD
 } Key;
 
 typedef enum{

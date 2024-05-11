@@ -13,7 +13,10 @@ extern GameState currentState;
 extern mouse_position mouse_pos;
 
 extern Sprite *CURSOR_SPRITE;
-extern Sprite *NOVO_TESTE_SPRITE;
+extern Sprite *PLAY_SPRITE;
+
+extern int startPlayX;
+extern int startPlayY;
 
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
@@ -41,6 +44,7 @@ extern Sprite *W_SPRITE;
 extern Sprite *X_SPRITE;
 extern Sprite *Y_SPRITE;
 extern Sprite *Z_SPRITE;
+
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -103,7 +107,7 @@ int GameDrawer(){
         case MENU:
         if (gameStateChange){
             drawBackground();
-            drawSpriteXPM(NOVO_TESTE_SPRITE, mode_info.XResolution/2 - NOVO_TESTE_SPRITE->width/2, mode_info.YResolution/2 - NOVO_TESTE_SPRITE->height/2);
+            drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
             gameStateChange = 0;
         }
             drawCursor();

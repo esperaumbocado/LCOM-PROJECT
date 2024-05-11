@@ -9,7 +9,7 @@
 #include "model/sprite.h"
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
-#include "xpm/novoTeste.xpm"
+#include "xpm/play.xpm"
 
 
 typedef enum{
@@ -80,9 +80,9 @@ void initialize_mouse_data();
 void update_mouse();
 
 /**
- * @brief Updates last position of the cursor
+ * @brief Checks the actions to be taken based on the mouse data
 */
-void update_cursor_last_pos();
+void checkActions();
 
 /**
  * @brief Gets a key based on a char

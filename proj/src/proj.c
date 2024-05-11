@@ -52,6 +52,7 @@ int setup(){
   if(timer_set_frequency(0,60)!=0) return 1;
   if(setUpFrameBuffer()!=0) return 1;
   if (set_graphic_mode(0x14C) != 0) return 1;
+
   if(keyboard_subscribe_int()!=0) return 1;
   if(timer_subscribe()!=0) return 1;
 

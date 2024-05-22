@@ -9,7 +9,9 @@
 #include "model/sprite.h"
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
-#include "xpm/novoTeste.xpm"
+#include "xpm/play.xpm"
+#include "xpm/comma.xpm"
+#include "xpm/period.xpm"
 
 
 typedef enum{
@@ -40,7 +42,9 @@ typedef enum{
     W,
     X,
     Y,
-    Z
+    Z,
+    COMMA,
+    PERIOD
 } Key;
 
 typedef enum{
@@ -80,9 +84,9 @@ void initialize_mouse_data();
 void update_mouse();
 
 /**
- * @brief Updates last position of the cursor
+ * @brief Checks the actions to be taken based on the mouse data
 */
-void update_cursor_last_pos();
+void checkActions();
 
 /**
  * @brief Gets a key based on a char

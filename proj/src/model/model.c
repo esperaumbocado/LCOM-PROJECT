@@ -19,7 +19,7 @@ extern mouse_position mouse_pos;
 
 Sprite *CURSOR_SPRITE;
 
-Sprite *NOVO_TESTE_SPRITE;
+Sprite *PLAY_SPRITE;
 
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
@@ -48,9 +48,24 @@ Sprite *X_SPRITE;
 Sprite *Y_SPRITE;
 Sprite *Z_SPRITE;
 
+Sprite *COMMA_SPRITE;
+Sprite *PERIOD_SPRITE;
+
+int startPlayX;
+int startPlayY;
+int endPlayX;
+int endPlayY;
+
 void initialize_sprites(){
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
-    NOVO_TESTE_SPRITE = create_sprite_xpm((xpm_map_t)novoTeste_xpm);
+    
+
+    PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
+
+    startPlayX = mode_info.XResolution/2 - PLAY_SPRITE->width/2;
+    startPlayY = mode_info.YResolution/2 - PLAY_SPRITE->height/2;
+    endPlayX = startPlayX + PLAY_SPRITE->width;
+    endPlayY = startPlayY + PLAY_SPRITE->height;
 
     A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
     B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
@@ -79,6 +94,9 @@ void initialize_sprites(){
     Y_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Y_xpm);
     Z_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Z_xpm);
 
+    COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm);
+    PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm);
+
 }
 
 int offset_handler(int x){
@@ -101,8 +119,6 @@ void update_timer(){
 
 // MOUSE STUFF
 void initialize_mouse_data(){
-    mouse_pos.last_x = 500;
-    mouse_pos.last_y = 300;
     mouse_pos.x = 500;
     mouse_pos.y = 300;
 }
@@ -112,14 +128,27 @@ void update_mouse(){
     sync();
     if (bytes_read == 3) {
         parse();
+        checkActions();
         bytes_read = 0;
     }
 }
 
-void update_cursor_last_pos(){
-    // save position for erasing later
-    mouse_pos.last_x = mouse_pos.x;
-    mouse_pos.last_y = mouse_pos.y;
+void checkActions(){
+    switch(currentState){
+        case MENU:
+            if (mouse_pos.x >= startPlayX && mouse_pos.x <= endPlayX && 
+                mouse_pos.y >= startPlayY && mouse_pos.y <= endPlayY &&
+                pp.lb){
+                currentState = GAME;
+                gameStateChange = 1;
+            }
+            break;
+        case GAME:
+            
+            break;
+        case NONE_STATE:
+            break;
+    }
 }
 
 // -------------
@@ -128,6 +157,15 @@ Key char_to_key(char c) {
     if (c >= 'A' && c <= 'Z') {
         return (Key)(c - 'A' + 2); 
     }
+    switch (c)
+        {
+        case ',':
+            return COMMA;
+        case '.':
+            return PERIOD;    
+        default:
+            return NONE_KEY;
+        }
     return NONE_KEY;
 }
 
@@ -287,6 +325,16 @@ void update_keyboard(){
         case KEY_DELETE:
             printf("DELETE\n");
             break;
+        case KEY_COMMA:
+            currentKey = COMMA;
+            drawLetter(currentKey);
+            offset_handler(0);
+            break;
+        case KEY_PERIOD:
+            currentKey = PERIOD;
+            drawLetter(currentKey);
+            offset_handler(0);
+            break;
         default:
             break;
     }
@@ -322,6 +370,9 @@ void destroy_sprites(){
     destroy_sprite(Y_SPRITE);
     destroy_sprite(Z_SPRITE);
     destroy_sprite(CURSOR_SPRITE);
-    destroy_sprite(NOVO_TESTE_SPRITE);
+    destroy_sprite(PLAY_SPRITE);
+
+    destroy_sprite(COMMA_SPRITE);
+    destroy_sprite(PERIOD_SPRITE);
 }
 

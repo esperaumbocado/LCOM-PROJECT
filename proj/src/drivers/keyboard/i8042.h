@@ -46,9 +46,13 @@
 #define KEY_X 0x2D
 #define KEY_Y 0x15
 #define KEY_Z 0x2C
+
 #define KEY_ENTER 0x1c
 #define KEY_SPACE 0x39
 #define KEY_DELETE 0x0e
+
+#define KEY_COMMA 0x33
+#define KEY_PERIOD 0x34
 
 /**@}*/
 

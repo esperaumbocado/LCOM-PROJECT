@@ -6,6 +6,7 @@
 #include "drivers/keyboard/keyboard.h"
 #include "drivers/timer/timer.h"
 #include "drivers/mouse/mouse.h"
+#include "drivers/rtc/rtc.h"
 #include "model/model.h"
 #include "model/sprite.h"
 #include "view/view.h"
@@ -15,6 +16,7 @@ GeneralState generalState = RUNNING;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
 extern uint32_t frame_size;
+extern real_time_info time_info;
 extern int counter;
 
 
@@ -52,9 +54,20 @@ int setup(){
   if(timer_set_frequency(0,60)!=0) return 1;
   if(setUpFrameBuffer()!=0) return 1;
   if (set_graphic_mode(0x14C) != 0) return 1;
+
   if(keyboard_subscribe_int()!=0) return 1;
   if(timer_subscribe()!=0) return 1;
 
+  if(rtc_subscribe_interrupts()!=0) return 1;
+
+  // if (rtc_read_time(&time_info) != 0) {
+  //     printf("Failed to read RTC time\n");
+  // } else {
+  //     printf("Current time: %02d:%02d:%02d, Date: %02d/%02d/%02d\n",
+  //             time_info.hours, time_info.minutes, time_info.seconds,
+  //             time_info.day, time_info.month, time_info.year % 100);
+  // }
+  
   initialize_sprites();
   return 0;
 }
@@ -63,7 +76,8 @@ int end(){
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;
   if(vg_exit()!=0) return 1;
-
+  if(rtc_unsubscribe_interrupts()!=0) return 1;
+  
 
   // mouse stuff 
   if (mouse_unsubscribe_int()) return 1;
@@ -78,7 +92,6 @@ int (proj_main_loop)(int argc, char **argv) {
 
   int ipc_status;
   message msg;
-
   while (currentKey != Q) {
     
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {

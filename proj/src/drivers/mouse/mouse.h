@@ -7,8 +7,6 @@
 #include "i8042.h"
 
 typedef struct {
-    int last_x;
-    int last_y;
     int x;
     int y;
 } mouse_position;

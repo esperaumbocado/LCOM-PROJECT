@@ -6,13 +6,14 @@ PROG=proj
 .PATH: ${.CURDIR}/drivers/mouse
 .PATH: ${.CURDIR}/drivers/graphics
 .PATH: ${.CURDIR}/drivers/timer
+.PATH: ${.CURDIR}/drivers/rtc
 .PATH: ${.CURDIR}/drivers
 .PATH: ${.CURDIR}/model
 .PATH: ${.CURDIR}/view
 
 
 # source code files to be compiled
-SRCS = proj.c timer.c keyboard.c mouse.c video.c utils.c model.c view.c sprite.c text.c
+SRCS = proj.c timer.c keyboard.c mouse.c video.c utils.c model.c view.c sprite.c text.c rtc.c
 
 # Flags de compilação
 CFLAGS += -pedantic -D_LCOM_OPTIMIZED_ -O2

@@ -89,12 +89,10 @@ void (parse)(){
   
   pp.x_ov = pp_bytes[0] & BIT(6);
   pp.y_ov = pp_bytes[0] & BIT(7);
-
-  mouse_pos.last_x = mouse_pos.x;
-  mouse_pos.last_y = mouse_pos.y;
-
+  
   mouse_pos.x = mouse_pos.x + pp.delta_x;
   mouse_pos.y = mouse_pos.y - pp.delta_y;
+
 }
 
 void (sync)(){  

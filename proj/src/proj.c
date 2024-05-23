@@ -69,6 +69,8 @@ int setup(){
   // }
   
   initialize_sprites();
+  initialize_words();
+  initialize_key_maps();
   return 0;
 }
 
@@ -104,6 +106,7 @@ int (proj_main_loop)(int argc, char **argv) {
         case HARDWARE: 
           if (msg.m_notify.interrupts & KEYBOARD_BIT){
             key_handler();
+            
           }
           if (msg.m_notify.interrupts & TIMER_BIT) {
             update_timer();

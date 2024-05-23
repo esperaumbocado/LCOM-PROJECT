@@ -1,5 +1,9 @@
 #include "model.h"
 #include "../view/view.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 
 extern uint8_t data;
 Key currentKey = NONE_KEY;
@@ -9,8 +13,20 @@ extern uint8_t *secondary_frame_buffer;
 extern uint8_t *secondary_frame_buffer_no_mouse;
 extern uint32_t frame_size;
 extern vbe_mode_info_t mode_info;
-int x_offset=0;
-int y_offset=0;
+
+int x_offset = 0;
+int y_offset = 0;
+
+// Array of words
+Word* words;
+Word* typedWords;
+Word* currentWord;
+
+
+//Maps of keys
+Key keyMap[256];
+char charMap[256];
+
 bool gameStateChange = 1;
 
 extern int bytes_read;
@@ -18,9 +34,7 @@ extern struct packet pp;
 extern mouse_position mouse_pos;
 
 Sprite *CURSOR_SPRITE;
-
 Sprite *PLAY_SPRITE;
-
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
 Sprite *C_SPRITE;
@@ -47,7 +61,6 @@ Sprite *W_SPRITE;
 Sprite *X_SPRITE;
 Sprite *Y_SPRITE;
 Sprite *Z_SPRITE;
-
 Sprite *COMMA_SPRITE;
 Sprite *PERIOD_SPRITE;
 
@@ -56,14 +69,13 @@ int startPlayY;
 int endPlayX;
 int endPlayY;
 
-void initialize_sprites(){
+void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
-    
 
     PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
 
-    startPlayX = mode_info.XResolution/2 - PLAY_SPRITE->width/2;
-    startPlayY = mode_info.YResolution/2 - PLAY_SPRITE->height/2;
+    startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
+    startPlayY = mode_info.YResolution / 2 - PLAY_SPRITE->height / 2;
     endPlayX = startPlayX + PLAY_SPRITE->width;
     endPlayY = startPlayY + PLAY_SPRITE->height;
 
@@ -96,34 +108,123 @@ void initialize_sprites(){
 
     COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm);
     PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm);
-
 }
 
-int offset_handler(int x){
-    if (x==0){
-        x_offset+=13;
+
+void initialize_words() {
+    words = (Word*)malloc(100 * sizeof(Word));
+    if (words == NULL) {
+        perror("Failed to allocate memory for words");
+        exit(1);
     }
-    if (x_offset + 13 >=mode_info.XResolution){
-        x_offset=0;
-        y_offset+=20;
+    for (int i = 0; i < 100; i++) {
+        words[i].word = (char*)malloc(100);
+        if (words[i].word == NULL) {
+            perror("Failed to allocate memory for word");
+            exit(1);
+        }
+        words[i].index = 0;
+        words[i].length = 0;
+    }
+
+    typedWords = (Word*)malloc(100 * sizeof(Word));
+    if (typedWords == NULL) {
+        perror("Failed to allocate memory for typedWords");
+        exit(1);
+    }
+    for (int i = 0; i < 100; i++) {
+        typedWords[i].word = (char*)malloc(100);
+        if (typedWords[i].word == NULL) {
+            perror("Failed to allocate memory for typedWord");
+            exit(1);
+        }
+        typedWords[i].index = 0;
+        typedWords[i].length = 0;
+    }
+
+    currentWord = (Word*)malloc(sizeof(Word));
+    if (currentWord == NULL) {
+        perror("Failed to allocate memory for currentWord");
+        exit(1);
+    }
+    currentWord->word = (char*)malloc(100);
+    if (currentWord->word == NULL) {
+        perror("Failed to allocate memory for currentWord's word");
+        exit(1);
+    }
+    currentWord->index = 0;
+    currentWord->length = 0;
+    currentWord->word[0] = '\0'; 
+}
+
+void initialize_key_maps() {
+    for (int i = 0; i < 256; i++) {
+        keyMap[i] = NONE_KEY;
+        charMap[i] = 0;
+    }
+
+    keyMap[KEY_A] = A; charMap[KEY_A] = 'A';
+    keyMap[KEY_B] = B; charMap[KEY_B] = 'B';
+    keyMap[KEY_C] = C; charMap[KEY_C] = 'C';
+    keyMap[KEY_D] = D; charMap[KEY_D] = 'D';
+    keyMap[KEY_E] = E; charMap[KEY_E] = 'E';
+    keyMap[KEY_F] = F; charMap[KEY_F] = 'F';
+    keyMap[KEY_G] = G; charMap[KEY_G] = 'G';
+    keyMap[KEY_H] = H; charMap[KEY_H] = 'H';
+    keyMap[KEY_I] = I; charMap[KEY_I] = 'I';
+    keyMap[KEY_J] = J; charMap[KEY_J] = 'J';
+    keyMap[KEY_K] = K; charMap[KEY_K] = 'K';
+    keyMap[KEY_L] = L; charMap[KEY_L] = 'L';
+    keyMap[KEY_M] = M; charMap[KEY_M] = 'M';
+    keyMap[KEY_N] = N; charMap[KEY_N] = 'N';
+    keyMap[KEY_O] = O; charMap[KEY_O] = 'O';
+    keyMap[KEY_P] = P; charMap[KEY_P] = 'P';
+    keyMap[KEY_Q] = Q; charMap[KEY_Q] = 'Q';
+    keyMap[KEY_R] = R; charMap[KEY_R] = 'R';
+    keyMap[KEY_S] = S; charMap[KEY_S] = 'S';
+    keyMap[KEY_T] = T; charMap[KEY_T] = 'T';
+    keyMap[KEY_U] = U; charMap[KEY_U] = 'U';
+    keyMap[KEY_V] = V; charMap[KEY_V] = 'V';
+    keyMap[KEY_W] = W; charMap[KEY_W] = 'W';
+    keyMap[KEY_X] = X; charMap[KEY_X] = 'X';
+    keyMap[KEY_Y] = Y; charMap[KEY_Y] = 'Y';
+    keyMap[KEY_Z] = Z; charMap[KEY_Z] = 'Z';
+    keyMap[KEY_COMMA] = COMMA; charMap[KEY_COMMA] = ',';
+    keyMap[KEY_PERIOD] = PERIOD; charMap[KEY_PERIOD] = '.';
+    keyMap[KEY_ENTER] = ENTER;
+    keyMap[KEY_SPACE] = NONE_KEY;
+}
+
+
+int offset_handler(int x) {
+    if (x == 0) {
+        x_offset += 13;
+    }if (x == 1) {
+        x_offset -= 13;
+    }
+    if (x_offset-13 < 0) {
+        x_offset = mode_info.XResolution - 13;
+        y_offset -= 20;
+    }
+    if (x_offset + 13 >= mode_info.XResolution) {
+        x_offset = 0;
+        y_offset += 20;
     }
     return 1;
 }
 
-void update_timer(){
+void update_timer() {
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
     memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
-
 }
 
-// MOUSE STUFF
-void initialize_mouse_data(){
+void initialize_mouse_data() {
     mouse_pos.x = 500;
     mouse_pos.y = 300;
 }
 
-void update_mouse(){
+void update_mouse() {
     mouse_ih();
     sync();
     if (bytes_read == 3) {
@@ -133,212 +234,107 @@ void update_mouse(){
     }
 }
 
-void checkActions(){
-    switch(currentState){
+void checkActions() {
+    switch (currentState) {
         case MENU:
-            if (mouse_pos.x >= startPlayX && mouse_pos.x <= endPlayX && 
+            if (mouse_pos.x >= startPlayX && mouse_pos.x <= endPlayX &&
                 mouse_pos.y >= startPlayY && mouse_pos.y <= endPlayY &&
-                pp.lb){
+                pp.lb) {
                 currentState = GAME;
                 gameStateChange = 1;
             }
             break;
         case GAME:
-            
             break;
         case NONE_STATE:
             break;
     }
 }
 
-// -------------
-// TODO: dots and commas
 Key char_to_key(char c) {
     if (c >= 'A' && c <= 'Z') {
-        return (Key)(c - 'A' + 2); 
+        return (Key)(c - 'A' + 2);
     }
-    switch (c)
-        {
+    switch (c) {
         case ',':
             return COMMA;
         case '.':
-            return PERIOD;    
+            return PERIOD;
         default:
             return NONE_KEY;
-        }
+    }
     return NONE_KEY;
 }
 
-void key_handler(){
-    if (currentState == MENU){
+void key_handler() {
+    printf("Current word %d: %.*s\n", currentWord->index, currentWord->length, currentWord->word);
+
+    for (int i = 0; i < 100; i++) {
+        if (typedWords[i].length > 0) {
+            printf("Typed word %d: %s\n", i, typedWords[i].word);
+        }
+    }
+
+    if (currentState == MENU) {
         update_keyboard();
-        if (currentKey == ENTER){
+        if (currentKey == ENTER) {
             currentState = GAME;
             gameStateChange = 1;
         }
-    }else if (currentState == GAME){
+    } else if (currentState == GAME) {
         update_keyboard();
     }
 }
 
+void process_key(char c, Key key) {
+    currentKey = key;
+    currentWord->word[currentWord->length] = c;
+    currentWord->length++;
+    drawLetter(currentKey);
+    offset_handler(0);
+}
 
-void update_keyboard(){
-    (kbc_ih)();
-    if (!(data&BIT(7))){ 
-    switch (data) {
-        case KEY_A:
-            currentKey = A;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_B:
-            currentKey = B;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_C:
-            currentKey = C;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_D:
-            currentKey = D;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_E:
-            currentKey = E;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_F:
-            currentKey = F;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_G:
-            currentKey = G;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_H:
-            currentKey = H;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_I:
-            currentKey = I;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_J:
-            currentKey = J;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_K:
-            currentKey = K;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_L:
-            currentKey = L;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_M:
-            currentKey = M;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_N:
-            currentKey = N;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_O:
-            currentKey = O;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_P:
-            currentKey = P;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_Q:
-            currentKey = Q;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_R:
-            currentKey = R;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_S:
-            currentKey = S;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_T:
-            currentKey = T;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_U:
-            currentKey = U;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_V:
-            currentKey = V;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_W:
-            currentKey = W;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_X:
-            currentKey = X;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_Y:
-            currentKey = Y;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_Z:
-            currentKey = Z;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_ENTER:
-            currentKey = ENTER;
-            break;
-        case KEY_SPACE:
-            offset_handler(0);
-            break;
-        case KEY_DELETE:
-            printf("DELETE\n");
-            break;
-        case KEY_COMMA:
-            currentKey = COMMA;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        case KEY_PERIOD:
-            currentKey = PERIOD;
-            drawLetter(currentKey);
-            offset_handler(0);
-            break;
-        default:
-            break;
+void update_keyboard() {
+    kbc_ih();
+    if (!(data & BIT(7))) {
+        Key currentKey = keyMap[data];
+        char currentChar = charMap[data];
+
+        if (currentChar) {
+            process_key(currentChar, currentKey);
+        } else {
+            switch (data) {
+                case KEY_SPACE:
+                    add_current_word_to_typedWords();
+                    currentWord->index++;
+                    offset_handler(0);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
+}
+
+
+
+void clear_current_word() {
+    memset(currentWord->word, 0, 100);
+    currentWord->length = 0;
+}
+
+
+void add_current_word_to_typedWords() {
+    for (int i = 0; i < 100; i++) {
+        if (typedWords[i].length == 0) {
+            strcpy(typedWords[i].word, currentWord->word);
+            typedWords[i].length = currentWord->length;
+            typedWords[i].index = i;
+            break;
+        }
     }
+
+    clear_current_word();
 }
 
 
@@ -375,4 +371,3 @@ void destroy_sprites(){
     destroy_sprite(COMMA_SPRITE);
     destroy_sprite(PERIOD_SPRITE);
 }
-

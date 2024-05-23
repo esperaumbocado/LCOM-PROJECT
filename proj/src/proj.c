@@ -18,6 +18,7 @@ extern uint8_t *secondary_frame_buffer;
 extern uint32_t frame_size;
 extern real_time_info time_info;
 extern int counter;
+extern Word *typedWords;
 
 
 int main(int argc, char *argv[]) {
@@ -74,7 +75,22 @@ int setup(){
   return 0;
 }
 
+
+
 int end(){
+  /* DEBUGGING */
+
+  //PRINT TYPED WORDS AND ALL ATTRIBUTES OF WORDS
+  for(int i = 0; i < 10; i++){
+    printf("Word %d text: %s\n", i, typedWords[i].word);
+    printf("Word %d length: %d\n", i, typedWords[i].length);
+    printf("Word %d starting_x: %d\n", i, typedWords[i].starting_x);
+    printf("Word %d starting_y: %d\n", i, typedWords[i].starting_y);
+    printf("Word %d status: %d\n", i, typedWords[i].status);
+  }
+
+  /* END OF DEBUGGING*/
+
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;
   if(vg_exit()!=0) return 1;

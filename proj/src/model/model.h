@@ -58,10 +58,20 @@ typedef enum{
     EXIT
 } GeneralState;
 
+typedef enum{
+    CORRECT,
+    INCORRECT,
+    NOT_TYPED,
+    MAIN
+} WordStatus;
+
 typedef struct{
     int index;
     char *word;
     int length;
+    int starting_x;
+    int starting_y;
+    WordStatus status;
 } Word;
 
 void initialize_words();

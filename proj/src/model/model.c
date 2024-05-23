@@ -125,6 +125,10 @@ void initialize_words() {
         }
         words[i].index = 0;
         words[i].length = 0;
+        words[i].status = MAIN;
+        words[i].starting_x = 0;
+        words[i].starting_y = 0;
+
     }
 
     typedWords = (Word*)malloc(100 * sizeof(Word));
@@ -140,6 +144,9 @@ void initialize_words() {
         }
         typedWords[i].index = 0;
         typedWords[i].length = 0;
+        typedWords[i].status = NOT_TYPED;
+        typedWords[i].starting_x = 0;
+        typedWords[i].starting_y = 0;
     }
 
     currentWord = (Word*)malloc(sizeof(Word));
@@ -154,7 +161,10 @@ void initialize_words() {
     }
     currentWord->index = 0;
     currentWord->length = 0;
-    currentWord->word[0] = '\0'; 
+    currentWord->word[0] = '\0';
+    currentWord->status = NOT_TYPED;
+    currentWord->starting_x = 0;
+    currentWord->starting_y = 0;
 }
 
 void initialize_key_maps() {
@@ -267,13 +277,13 @@ Key char_to_key(char c) {
 }
 
 void key_handler() {
-    printf("Current word %d: %.*s\n", currentWord->index, currentWord->length, currentWord->word);
+    /*printf("Current word %d: %.*s\n", currentWord->index, currentWord->length, currentWord->word);
 
     for (int i = 0; i < 100; i++) {
         if (typedWords[i].length > 0) {
             printf("Typed word %d: %s\n", i, typedWords[i].word);
         }
-    }
+    }*/
 
     if (currentState == MENU) {
         update_keyboard();
@@ -321,6 +331,9 @@ void update_keyboard() {
 void clear_current_word() {
     memset(currentWord->word, 0, 100);
     currentWord->length = 0;
+    currentWord->starting_x = x_offset;
+    currentWord->starting_y = y_offset;
+    currentWord->status = NOT_TYPED;
 }
 
 
@@ -330,6 +343,13 @@ void add_current_word_to_typedWords() {
             strcpy(typedWords[i].word, currentWord->word);
             typedWords[i].length = currentWord->length;
             typedWords[i].index = i;
+            typedWords[i].starting_x = currentWord->starting_x;
+            typedWords[i].starting_y = currentWord->starting_y;
+            if (strcmp(typedWords[i].word, words[i].word) == 0) {
+                typedWords[i].status = CORRECT;
+            } else {
+                typedWords[i].status = INCORRECT;
+            }
             break;
         }
     }

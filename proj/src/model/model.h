@@ -58,12 +58,31 @@ typedef enum{
     EXIT
 } GeneralState;
 
+typedef enum{
+    CORRECT,
+    INCORRECT,
+    NOT_TYPED,
+    MAIN
+} WordStatus;
 
+typedef struct{
+    int index;
+    char *word;
+    int length;
+    int starting_x;
+    int starting_y;
+    WordStatus status;
+} Word;
+
+void initialize_words();
+void initialize_key_maps();
 void initialize_sprites();
 void destroy_sprites();
 void update_keyboard();
 void update_timer();
 void key_handler();
+void clear_current_word();
+void add_current_word_to_typedWords();
 
 /**
  * @brief Handles the offset for drawing

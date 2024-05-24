@@ -22,16 +22,26 @@ Word* words;
 Word* typedWords;
 Word* currentWord;
 
-
 //Maps of keys
 Key keyMap[256];
 char charMap[256];
 
 bool gameStateChange = 1;
 
+// TIMER VARIABLES
+int recorded_time;
+bool is_recording = false;
+bool recorded_time_has_changed = false;
+
+extern int counter;
+
+// MOUSE VARIABLES
+
 extern int bytes_read;
 extern struct packet pp;
 extern mouse_position mouse_pos;
+
+// 
 
 Sprite *CURSOR_SPRITE;
 Sprite *PLAY_SPRITE;
@@ -63,6 +73,17 @@ Sprite *Y_SPRITE;
 Sprite *Z_SPRITE;
 Sprite *COMMA_SPRITE;
 Sprite *PERIOD_SPRITE;
+
+Sprite *ZERO_SPRITE;
+Sprite *ONE_SPRITE;
+Sprite *TWO_SPRITE;
+Sprite *THREE_SPRITE;
+Sprite *FOUR_SPRITE;
+Sprite *FIVE_SPRITE;
+Sprite *SIX_SPRITE;
+Sprite *SEVEN_SPRITE;
+Sprite *EIGHT_SPRITE;
+Sprite *NINE_SPRITE;
 
 int startPlayX;
 int startPlayY;
@@ -108,6 +129,17 @@ void initialize_sprites() {
 
     COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm);
     PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm);
+
+    ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm);
+    ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm);
+    TWO_SPRITE = create_sprite_xpm((xpm_map_t)two_xpm);
+    THREE_SPRITE = create_sprite_xpm((xpm_map_t)three_xpm);
+    FOUR_SPRITE = create_sprite_xpm((xpm_map_t)four_xpm);
+    FIVE_SPRITE = create_sprite_xpm((xpm_map_t)five_xpm);
+    SIX_SPRITE = create_sprite_xpm((xpm_map_t)six_xpm);
+    SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm);
+    EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm);
+    NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm);
 }
 
 
@@ -227,6 +259,22 @@ void update_timer() {
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
     memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
+    
+    if (counter%60==0 && is_recording) {
+        recorded_time_has_changed = true;
+        recorded_time++;
+    } else 
+        recorded_time_has_changed = false;
+    
+}
+
+void startRecordingTime(){
+    is_recording = true;
+    recorded_time = 0;
+}
+
+void stopRecordingTime(){
+    is_recording = false;
 }
 
 void initialize_mouse_data() {
@@ -266,6 +314,26 @@ Key char_to_key(char c) {
         return (Key)(c - 'A' + 2);
     }
     switch (c) {
+        case '0':
+            return ZERO;
+        case '1':
+            return ONE;
+        case '2':
+            return TWO;
+        case '3':
+            return THREE;
+        case '4':
+            return FOUR;
+        case '5':
+            return FIVE;
+        case '6':
+            return SIX;
+        case '7':
+            return SEVEN;
+        case '8':
+            return EIGHT;
+        case '9':
+            return NINE;
         case ',':
             return COMMA;
         case '.':
@@ -390,4 +458,15 @@ void destroy_sprites(){
 
     destroy_sprite(COMMA_SPRITE);
     destroy_sprite(PERIOD_SPRITE);
+
+    destroy_sprite(ZERO_SPRITE);
+    destroy_sprite(ONE_SPRITE);
+    destroy_sprite(TWO_SPRITE);
+    destroy_sprite(THREE_SPRITE);
+    destroy_sprite(FOUR_SPRITE);
+    destroy_sprite(FIVE_SPRITE);
+    destroy_sprite(SIX_SPRITE);
+    destroy_sprite(SEVEN_SPRITE);
+    destroy_sprite(EIGHT_SPRITE);
+    destroy_sprite(NINE_SPRITE);
 }

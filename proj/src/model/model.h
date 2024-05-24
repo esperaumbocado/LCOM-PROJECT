@@ -13,6 +13,16 @@
 #include "xpm/comma.xpm"
 #include "xpm/period.xpm"
 
+#include "xpm/numbers/zero.xpm"
+#include "xpm/numbers/one.xpm"
+#include "xpm/numbers/two.xpm"
+#include "xpm/numbers/three.xpm"
+#include "xpm/numbers/four.xpm"
+#include "xpm/numbers/five.xpm"
+#include "xpm/numbers/six.xpm"
+#include "xpm/numbers/seven.xpm"
+#include "xpm/numbers/eight.xpm"
+#include "xpm/numbers/nine.xpm"
 
 typedef enum{
     NONE_KEY,
@@ -44,7 +54,17 @@ typedef enum{
     Y,
     Z,
     COMMA,
-    PERIOD
+    PERIOD,
+    ZERO,
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE
 } Key;
 
 typedef enum{
@@ -83,6 +103,16 @@ void update_timer();
 void key_handler();
 void clear_current_word();
 void add_current_word_to_typedWords();
+
+/**
+ * @brief Sets the recorded_time to zero and the recording to true
+*/
+void startRecordingTime();
+
+/**
+ * @brief Sets the recording to false
+*/
+void stopRecordingTime();
 
 /**
  * @brief Handles the offset for drawing

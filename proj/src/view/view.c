@@ -7,8 +7,15 @@ uint32_t frame_size;
 extern Key currentKey;
 extern int x_offset;
 extern int y_offset;
+
+
 extern int gameStateChange;
 extern GameState currentState;
+
+// TIMER VARIABLE
+
+extern int recorded_time;
+extern bool recorded_time_has_changed;
 
 extern mouse_position mouse_pos;
 
@@ -47,6 +54,17 @@ extern Sprite *Z_SPRITE;
 
 extern Sprite *COMMA_SPRITE;
 extern Sprite *PERIOD_SPRITE;
+
+extern Sprite *ZERO_SPRITE;
+extern Sprite *ONE_SPRITE;
+extern Sprite *TWO_SPRITE;
+extern Sprite *THREE_SPRITE;
+extern Sprite *FOUR_SPRITE;
+extern Sprite *FIVE_SPRITE;
+extern Sprite *SIX_SPRITE;
+extern Sprite *SEVEN_SPRITE;
+extern Sprite *EIGHT_SPRITE;
+extern Sprite *NINE_SPRITE;
 
 
 int setUpFrameBuffer() {
@@ -110,6 +128,8 @@ int GameDrawer(){
         case MENU:
         if (gameStateChange){
             drawBackground();
+            stopRecordingTime();
+            drawRecordedTime();
             drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
             gameStateChange = 0;
         }
@@ -118,9 +138,13 @@ int GameDrawer(){
         case GAME:
             if (gameStateChange){
                 drawBackground();
+                startRecordingTime();
+                drawRecordedTime();
                 drawText(text);
                 gameStateChange = 0;
             }
+            if (recorded_time_has_changed) 
+                drawRecordedTime(); 
             drawCursor();
             break;
         case NONE_STATE:
@@ -133,6 +157,58 @@ int GameDrawer(){
 int drawBackground() {
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, secondary_frame_buffer_no_mouse);
     return 0;
+}
+
+int drawRecordedTime(){
+
+    int x = 10;
+    int y = mode_info.YResolution - 40;
+
+    char recorded_time_string[5];
+    sprintf(recorded_time_string, "%d", recorded_time);
+
+    char *recorded_time_string_ptr = recorded_time_string;
+
+    while (*recorded_time_string_ptr) { 
+
+        Key key = char_to_key(*recorded_time_string_ptr);
+        if (drawNumber(key, x, y)) return 1;
+
+        recorded_time_string_ptr++;
+        x+=13;
+    }
+
+    return 0;
+}
+
+int drawNumber(Key key, int x, int y) {
+    switch(key){
+        case ZERO:
+            return drawSpriteXPM(ZERO_SPRITE, x, y);
+        case ONE:
+            return drawSpriteXPM(ONE_SPRITE, x, y);
+        case TWO:
+            return drawSpriteXPM(TWO_SPRITE, x, y);
+        case THREE:
+            return drawSpriteXPM(THREE_SPRITE, x, y);
+        case FOUR:
+            return drawSpriteXPM(FOUR_SPRITE, x, y);
+        case FIVE:
+            return drawSpriteXPM(FIVE_SPRITE, x, y);
+        case SIX:
+            return drawSpriteXPM(SIX_SPRITE, x, y);
+        case SEVEN:
+            return drawSpriteXPM(SEVEN_SPRITE, x, y);
+        case EIGHT: 
+            return drawSpriteXPM(EIGHT_SPRITE, x, y);
+        case NINE:
+            return drawSpriteXPM(NINE_SPRITE, x, y);
+        default:
+            printf("Key does not represent a number\n");
+            break;
+    }
+
+    return 1;
 }
 
 int drawCursor(){
@@ -151,6 +227,7 @@ int drawCursor(){
 }
 
 int drawText(const char* text) {
+
     while (*text) {    
         Key key = char_to_key(*text);
         if (drawLetter(key)) return 1;
@@ -169,88 +246,60 @@ int drawLetter(Key key) {
     switch(key){
         case A:
             return drawSpriteXPM(A_SPRITE, x_offset, y_offset);
-            break;
         case B:
             return drawSpriteXPM(B_SPRITE, x_offset, y_offset);
-            break;
         case C:
             return drawSpriteXPM(C_SPRITE, x_offset, y_offset);
-            break;
         case D:
             return drawSpriteXPM(D_SPRITE, x_offset, y_offset);
-            break;
         case E:
             return drawSpriteXPM(E_SPRITE, x_offset, y_offset);
-            break;
         case F:
             return drawSpriteXPM(F_SPRITE, x_offset, y_offset);
-            break;
         case G:
             return drawSpriteXPM(G_SPRITE, x_offset, y_offset);
-            break;
         case H:
             return drawSpriteXPM(H_SPRITE, x_offset, y_offset);
-            break;
         case I:
             return drawSpriteXPM(I_SPRITE, x_offset, y_offset);
-            break;
         case J:
             return drawSpriteXPM(J_SPRITE, x_offset, y_offset);
-            break;
         case K:
             return drawSpriteXPM(K_SPRITE, x_offset, y_offset);
-            break;
         case L:
             return drawSpriteXPM(L_SPRITE, x_offset, y_offset);
-            break;
         case M:
             return drawSpriteXPM(M_SPRITE, x_offset, y_offset);
-            break;
         case N:
             return drawSpriteXPM(N_SPRITE, x_offset, y_offset);
-            break;
         case O:
             return drawSpriteXPM(O_SPRITE, x_offset, y_offset);
-            break;
         case P:
             return drawSpriteXPM(P_SPRITE, x_offset, y_offset);
-            break;
         case Q:
             return drawSpriteXPM(Q_SPRITE, x_offset, y_offset);
-            break;
         case R:
             return drawSpriteXPM(R_SPRITE, x_offset, y_offset);
-            break;
         case S:
             return drawSpriteXPM(S_SPRITE, x_offset, y_offset);
-            break;
         case T:
             return drawSpriteXPM(T_SPRITE, x_offset, y_offset);
-            break;
         case U:
             return drawSpriteXPM(U_SPRITE, x_offset, y_offset);
-            break;
         case V:
             return drawSpriteXPM(V_SPRITE, x_offset, y_offset);
-            break;
         case W:
             return drawSpriteXPM(W_SPRITE, x_offset, y_offset);
-            break;
         case X:
             return drawSpriteXPM(X_SPRITE, x_offset, y_offset);
-            break;
         case Y:
             return drawSpriteXPM(Y_SPRITE, x_offset, y_offset);
-            break;
         case Z:
             return drawSpriteXPM(Z_SPRITE, x_offset, y_offset);
-            break;
         case COMMA:
             return drawSpriteXPM(COMMA_SPRITE, x_offset, y_offset);
-            break;
         case PERIOD:
             return drawSpriteXPM(PERIOD_SPRITE, x_offset, y_offset);
-            break;
         default:
             break;
     }

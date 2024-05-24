@@ -14,6 +14,22 @@ int mainDraw();
 int drawSpriteXPM(Sprite *sprite, int x, int y);
 int drawBackground();
 
+
+/**
+ * @brief Draws the record time on the screen
+ * @return 0 if successful, 1 otherwise
+*/
+int drawRecordedTime();
+
+/**
+ * @brief Draws a number on the screen
+ * @param key the key to be drawn
+ * @param x the x position of the number
+ * @param y the y position of the number
+ * @return 0 if successful, 1 otherwise
+*/
+int drawNumber(Key key, int x, int y);
+
 /**
  * @brief Draws the cursor on the screen
  * @return 0 if successful, 1 otherwise

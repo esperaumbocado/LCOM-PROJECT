@@ -18,8 +18,8 @@ extern uint8_t *secondary_frame_buffer;
 extern uint32_t frame_size;
 extern real_time_info time_info;
 extern int counter;
-extern Word *typedWords;
 
+extern TypingTest *test;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
   // enables to log function invocations that are being "wrapped" by LCF
   // [comment this out if you don't want/need it]
-  lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
+  //lcf_trace_calls("/home/lcom/labs/proj/src/trace.txt");
 
   // enables to save the output of printf function calls on a file
   // [comment this out if you don't want/need it]
@@ -70,7 +70,6 @@ int setup(){
   // }
   
   initialize_sprites();
-  initialize_words();
   initialize_key_maps();
   return 0;
 }
@@ -80,16 +79,14 @@ int setup(){
 int end(){
   /* DEBUGGING */
 
-  //PRINT TYPED WORDS AND ALL ATTRIBUTES OF WORDS
-  for(int i = 0; i < 10; i++){
-    printf("Word %d text: %s\n", i, typedWords[i].word);
-    printf("Word %d length: %d\n", i, typedWords[i].length);
-    printf("Word %d starting_x: %d\n", i, typedWords[i].starting_x);
-    printf("Word %d starting_y: %d\n", i, typedWords[i].starting_y);
-    printf("Word %d status: %d\n", i, typedWords[i].status);
+  for (int i = 0; i < test->wordCount; i++) {
+    printf("Word %d: %s\n", i, test->words[i]);
   }
 
   /* END OF DEBUGGING*/
+  free(test->correct);
+  free(test->words);
+  free(test);
 
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;

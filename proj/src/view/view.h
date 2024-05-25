@@ -12,6 +12,7 @@
 int setUpFrameBuffer();
 int mainDraw();
 int drawSpriteXPM(Sprite *sprite, int x, int y);
+int drawSpriteXPM_single_color(Sprite *sprite, int x, int y, uint32_t color);
 int drawBackground();
 
 
@@ -49,6 +50,12 @@ int drawText(const char* text);
  * @param key the key to be drawn
  * @return 0 if successful, 1 otherwise
 */
-int drawLetter(Key key);
+int drawLetter(Key key, uint32_t color);
+
+int drawWords(TypingTest *test);
+
+int word_length_in_pixels(const char *word);
+
+int num_words(char **words);
 
 #endif

@@ -1,5 +1,6 @@
 #include "model.h"
 #include "../view/view.h"
+#include "wordPool.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,10 +18,6 @@ extern vbe_mode_info_t mode_info;
 int x_offset = 0;
 int y_offset = 0;
 
-// Array of words
-Word* words;
-Word* typedWords;
-Word* currentWord;
 
 //Maps of keys
 Key keyMap[256];
@@ -41,7 +38,7 @@ extern int bytes_read;
 extern struct packet pp;
 extern mouse_position mouse_pos;
 
-// 
+//WORD
 
 Sprite *CURSOR_SPRITE;
 Sprite *PLAY_SPRITE;
@@ -89,6 +86,10 @@ int startPlayX;
 int startPlayY;
 int endPlayX;
 int endPlayY;
+
+TypingTest *test;
+extern char* wordPool[];
+
 
 void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
@@ -143,62 +144,6 @@ void initialize_sprites() {
 }
 
 
-void initialize_words() {
-    words = (Word*)malloc(100 * sizeof(Word));
-    if (words == NULL) {
-        perror("Failed to allocate memory for words");
-        exit(1);
-    }
-    for (int i = 0; i < 100; i++) {
-        words[i].word = (char*)malloc(100);
-        if (words[i].word == NULL) {
-            perror("Failed to allocate memory for word");
-            exit(1);
-        }
-        words[i].index = 0;
-        words[i].length = 0;
-        words[i].status = MAIN;
-        words[i].starting_x = 0;
-        words[i].starting_y = 0;
-
-    }
-
-    typedWords = (Word*)malloc(100 * sizeof(Word));
-    if (typedWords == NULL) {
-        perror("Failed to allocate memory for typedWords");
-        exit(1);
-    }
-    for (int i = 0; i < 100; i++) {
-        typedWords[i].word = (char*)malloc(100);
-        if (typedWords[i].word == NULL) {
-            perror("Failed to allocate memory for typedWord");
-            exit(1);
-        }
-        typedWords[i].index = 0;
-        typedWords[i].length = 0;
-        typedWords[i].status = NOT_TYPED;
-        typedWords[i].starting_x = 0;
-        typedWords[i].starting_y = 0;
-    }
-
-    currentWord = (Word*)malloc(sizeof(Word));
-    if (currentWord == NULL) {
-        perror("Failed to allocate memory for currentWord");
-        exit(1);
-    }
-    currentWord->word = (char*)malloc(100);
-    if (currentWord->word == NULL) {
-        perror("Failed to allocate memory for currentWord's word");
-        exit(1);
-    }
-    currentWord->index = 0;
-    currentWord->length = 0;
-    currentWord->word[0] = '\0';
-    currentWord->status = NOT_TYPED;
-    currentWord->starting_x = 0;
-    currentWord->starting_y = 0;
-}
-
 void initialize_key_maps() {
     for (int i = 0; i < 256; i++) {
         keyMap[i] = NONE_KEY;
@@ -235,6 +180,47 @@ void initialize_key_maps() {
     keyMap[KEY_PERIOD] = PERIOD; charMap[KEY_PERIOD] = '.';
     keyMap[KEY_ENTER] = ENTER;
     keyMap[KEY_SPACE] = NONE_KEY;
+}
+
+void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wordCount) {
+    if (poolSize > POOL_SIZE || poolSize <= 0) {
+        fprintf(stderr, "Invalid poolSize: %d\n", poolSize);
+        exit(EXIT_FAILURE);
+    }
+    if (wordCount <= 0 || wordCount > MAX_WORDS) {
+        fprintf(stderr, "Invalid wordCount: %d\n", wordCount);
+        exit(EXIT_FAILURE);
+    }
+
+    *testPtr = (TypingTest*)malloc(sizeof(TypingTest));
+    if (*testPtr == NULL) {
+        fprintf(stderr, "Failed to allocate memory for TypingTest\n");
+        exit(EXIT_FAILURE);
+    }
+    TypingTest *test = *testPtr;
+
+    test->words = malloc((wordCount + 1) * sizeof(char*)); // Allocate one extra element for the NULL terminator
+    if (test->words == NULL) {
+        fprintf(stderr, "Failed to allocate memory for words array\n");
+        free(test);
+        exit(EXIT_FAILURE);
+    }
+
+    test->wordCount = wordCount;
+    test->currentWordIndex = 0;
+    test->currentInputIndex = 0;
+    memset(test->currentInput, 0, MAX_WORD_LENGTH);
+    memset(test->correct, 0, wordCount * sizeof(int));
+    test->mistake = 0;
+
+    srand(time(NULL));
+
+    for (int i = 0; i < wordCount; i++) {
+        int index = rand() % poolSize;
+        test->words[i] = wordPool[index];
+    }
+
+    test->words[wordCount] = NULL;
 }
 
 
@@ -300,6 +286,7 @@ void checkActions() {
                 pp.lb) {
                 currentState = GAME;
                 gameStateChange = 1;
+                initializeTest(&test, wordPool, 10, 10);
             }
             break;
         case GAME:
@@ -354,75 +341,76 @@ void key_handler() {
     }*/
 
     if (currentState == MENU) {
-        update_keyboard();
+        update_keyboard(test);
         if (currentKey == ENTER) {
             currentState = GAME;
             gameStateChange = 1;
         }
     } else if (currentState == GAME) {
-        update_keyboard();
+        update_keyboard(test);
     }
 }
 
-void process_key(char c, Key key) {
+void process_key(char c, Key key, TypingTest *test) {
+
+    if (test->mistake == 0) {
+        if ((size_t)test->currentInputIndex < strlen(test->words[test->currentWordIndex])) {
+            test->currentInput[test->currentInputIndex] = c;
+            test->currentInputIndex++;
+            if (c != test->words[test->currentWordIndex][test->currentInputIndex - 1]) {
+                test->mistake = 1;
+                printf("Mistake\n");
+            }
+        }
+    }
+
     currentKey = key;
-    currentWord->word[currentWord->length] = c;
-    currentWord->length++;
-    drawLetter(currentKey);
+    drawWords(test);
     offset_handler(0);
 }
 
-void update_keyboard() {
+
+void handle_space_key(TypingTest *test) {
+    if (strcmp(test->currentInput, test->words[test->currentWordIndex]) == 0 && !test->mistake) {
+        test->correct[test->currentWordIndex] = 1;
+        printf("Correct word\n");
+    } else {
+        test->correct[test->currentWordIndex] = 0;
+        printf("Incorrect word\n");
+    }
+
+    test->currentWordIndex++;
+    test->currentInputIndex = 0;
+    memset(test->currentInput, 0, MAX_WORD_LENGTH);
+    test->mistake = 0;
+
+
+    offset_handler(0);
+}
+
+
+
+void update_keyboard(TypingTest *test) {
     kbc_ih();
     if (!(data & BIT(7))) {
-        Key currentKey = keyMap[data];
+        Key curKey = keyMap[data];
         char currentChar = charMap[data];
 
         if (currentChar) {
-            process_key(currentChar, currentKey);
+            process_key(currentChar, curKey, test);
         } else {
             switch (data) {
                 case KEY_SPACE:
-                    add_current_word_to_typedWords();
-                    currentWord->index++;
-                    offset_handler(0);
+                    handle_space_key(test);
+                    break;
+                case KEY_ENTER:
+                    currentKey = ENTER;
                     break;
                 default:
                     break;
             }
         }
     }
-}
-
-
-
-void clear_current_word() {
-    memset(currentWord->word, 0, 100);
-    currentWord->length = 0;
-    currentWord->starting_x = x_offset;
-    currentWord->starting_y = y_offset;
-    currentWord->status = NOT_TYPED;
-}
-
-
-void add_current_word_to_typedWords() {
-    for (int i = 0; i < 100; i++) {
-        if (typedWords[i].length == 0) {
-            strcpy(typedWords[i].word, currentWord->word);
-            typedWords[i].length = currentWord->length;
-            typedWords[i].index = i;
-            typedWords[i].starting_x = currentWord->starting_x;
-            typedWords[i].starting_y = currentWord->starting_y;
-            if (strcmp(typedWords[i].word, words[i].word) == 0) {
-                typedWords[i].status = CORRECT;
-            } else {
-                typedWords[i].status = INCORRECT;
-            }
-            break;
-        }
-    }
-
-    clear_current_word();
 }
 
 
@@ -470,3 +458,9 @@ void destroy_sprites(){
     destroy_sprite(EIGHT_SPRITE);
     destroy_sprite(NINE_SPRITE);
 }
+
+void destroy_test(){
+    free(test->words);
+    free(test);
+}
+

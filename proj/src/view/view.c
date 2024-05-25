@@ -16,7 +16,6 @@ extern real_time_info time_info;
 // TIMER VARIABLE
 
 extern int recorded_time;
-extern bool recorded_time_has_changed;
 
 extern mouse_position mouse_pos;
 
@@ -202,7 +201,7 @@ int drawRecordedTime(){
     sprintf(recorded_time_string, "%d", recorded_time);
 
     char *recorded_time_string_ptr = recorded_time_string;
-
+    
     while (*recorded_time_string_ptr) { 
 
         Key key = char_to_key(*recorded_time_string_ptr);
@@ -218,25 +217,25 @@ int drawRecordedTime(){
 int drawNumber(Key key, int x, int y) {
     switch(key){
         case ZERO:
-            return drawSpriteXPM(ZERO_SPRITE, x, y);
+            return drawSpriteXPM_mouse(ZERO_SPRITE, x, y);
         case ONE:
-            return drawSpriteXPM(ONE_SPRITE, x, y);
+            return drawSpriteXPM_mouse(ONE_SPRITE, x, y);
         case TWO:
-            return drawSpriteXPM(TWO_SPRITE, x, y);
+            return drawSpriteXPM_mouse(TWO_SPRITE, x, y);
         case THREE:
-            return drawSpriteXPM(THREE_SPRITE, x, y);
+            return drawSpriteXPM_mouse(THREE_SPRITE, x, y);
         case FOUR:
-            return drawSpriteXPM(FOUR_SPRITE, x, y);
+            return drawSpriteXPM_mouse(FOUR_SPRITE, x, y);
         case FIVE:
-            return drawSpriteXPM(FIVE_SPRITE, x, y);
+            return drawSpriteXPM_mouse(FIVE_SPRITE, x, y);
         case SIX:
-            return drawSpriteXPM(SIX_SPRITE, x, y);
+            return drawSpriteXPM_mouse(SIX_SPRITE, x, y);
         case SEVEN:
-            return drawSpriteXPM(SEVEN_SPRITE, x, y);
+            return drawSpriteXPM_mouse(SEVEN_SPRITE, x, y);
         case EIGHT: 
-            return drawSpriteXPM(EIGHT_SPRITE, x, y);
+            return drawSpriteXPM_mouse(EIGHT_SPRITE, x, y);
         case NINE:
-            return drawSpriteXPM(NINE_SPRITE, x, y);
+            return drawSpriteXPM_mouse(NINE_SPRITE, x, y);
         default:
             printf("Key does not represent a number\n");
             break;

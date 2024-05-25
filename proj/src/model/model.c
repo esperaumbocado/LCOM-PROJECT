@@ -31,7 +31,6 @@ bool gameStateChange = 1;
 // TIMER VARIABLES
 int recorded_time;
 bool is_recording = false;
-bool recorded_time_has_changed = false;
 
 extern int counter;
 
@@ -260,11 +259,8 @@ void update_timer() {
     memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
     
-    if (counter%60==0 && is_recording) {
-        recorded_time_has_changed = true;
+    if (counter%60==0 && is_recording)
         recorded_time++;
-    } else 
-        recorded_time_has_changed = false;
     
 }
 

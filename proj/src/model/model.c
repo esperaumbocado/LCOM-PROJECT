@@ -371,7 +371,6 @@ void process_key(char c, Key key, TypingTest *test) {
         currentWord->letters[test->currentInputIndex].status = 1;
         if (c != currentWord->letters[test->currentInputIndex].character) {
             currentWord->letters[test->currentInputIndex].status = -1;
-            test->mistake = 1;
             printf("Mistake\n");
         }
         test->currentInputIndex++;
@@ -387,13 +386,13 @@ void handle_space_key(TypingTest *test) {
 
     int isCorrect = 1;
     for (int i = 0; i < currentWord->length; i++) {
-        if (currentWord->letters[i].status == 0) { 
+        if (currentWord->letters[i].status == -1 || currentWord->letters[i].status == 0) { 
             isCorrect = 0;
             break;
         }
     }
 
-    if (isCorrect && !test->mistake) {
+    if (isCorrect) {
         currentWord->status = 1; 
         printf("Correct word\n");
     } else {
@@ -404,13 +403,11 @@ void handle_space_key(TypingTest *test) {
     test->currentWordIndex++;
     test->currentInputIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
-    test->mistake = 0;
     drawWords(test);
 }
 
 void handle_delete_key(TypingTest *test) {
     Word *currentWord = &test->words[test->currentWordIndex];
-
     if (test->currentInputIndex > 0) {
         test->currentInputIndex--;
         currentWord->letters[test->currentInputIndex].status = 0;

@@ -66,6 +66,8 @@ extern Sprite *SEVEN_SPRITE;
 extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
+extern TypingTest *test;
+
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -160,10 +162,9 @@ int GameDrawer(){
                 startRecordingTime();
                 drawRecordedTime();
                 gameStateChange = 0;
+                drawWords(test);
             }
-            if (recorded_time_has_changed){
-                drawRecordedTime(); 
-            }
+            drawRecordedTime(); 
             drawCursor();
             break;
         case NONE_STATE:
@@ -345,6 +346,8 @@ int drawWords(TypingTest *test) {
     y_offset = 0;
     for (int i = 0; i < test->wordCount; i++) {
         Word *currentWord = &(test->words[i]);
+        
+
 
         for (int j = 0; j < currentWord->length; j++) {
             Key key = char_to_key(currentWord->letters[j].character);
@@ -369,9 +372,12 @@ int drawWords(TypingTest *test) {
 
         offset_handler(0);
 
-        if (x_offset + word_length_in_pixels(currentWord) > mode_info.XResolution) {
-            x_offset = 0;
-            y_offset += 20;
+        if (i != (test->wordCount - 1)) {
+            Word *nextWord = &(test->words[i+1]);
+            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution) {
+                x_offset = 0;
+                y_offset += 30;
+            }
         }
     }
 

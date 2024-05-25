@@ -178,6 +178,7 @@ void initialize_key_maps() {
     keyMap[KEY_COMMA] = COMMA; charMap[KEY_COMMA] = ',';
     keyMap[KEY_PERIOD] = PERIOD; charMap[KEY_PERIOD] = '.';
     keyMap[KEY_ENTER] = ENTER;
+    keyMap[KEY_DELETE] = BACK;
     keyMap[KEY_SPACE] = NONE_KEY;
 }
 
@@ -242,11 +243,11 @@ int offset_handler(int x) {
     }
     if (x_offset-13 < 0) {
         x_offset = mode_info.XResolution - 13;
-        y_offset -= 20;
+        y_offset -= 30;
     }
     if (x_offset + 13 >= mode_info.XResolution) {
         x_offset = 0;
-        y_offset += 20;
+        y_offset += 30;
     }
     return 1;
 }
@@ -292,8 +293,8 @@ void checkActions() {
                 mouse_pos.y >= startPlayY && mouse_pos.y <= endPlayY &&
                 pp.lb) {
                 currentState = GAME;
-                gameStateChange = 1;
                 initializeTest(&test, wordPool, 50, 30);
+                gameStateChange = 1;
             }
             break;
         case GAME:
@@ -404,6 +405,16 @@ void handle_space_key(TypingTest *test) {
     drawWords(test);
 }
 
+void handle_delete_key(TypingTest *test) {
+    Word *currentWord = &test->words[test->currentWordIndex];
+
+    if (test->currentInputIndex > 0) {
+        test->currentInputIndex--;
+        currentWord->letters[test->currentInputIndex].status = 0;
+    }
+    drawWords(test);
+}
+
 void update_keyboard(TypingTest *test) {
     kbc_ih();
     if (!(data & BIT(7))) {
@@ -420,6 +431,11 @@ void update_keyboard(TypingTest *test) {
                 case KEY_ENTER:
                     currentKey = ENTER;
                     break;
+                case KEY_DELETE:
+                    currentKey = BACK;
+                    handle_delete_key(test);
+                    break;
+
                 default:
                     break;
             }

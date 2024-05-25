@@ -1,4 +1,5 @@
 #include "view.h"
+#include "../drivers/rtc/rtc.h"
 
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
@@ -11,7 +12,7 @@ extern int y_offset;
 
 extern int gameStateChange;
 extern GameState currentState;
-
+extern real_time_info time_info;
 // TIMER VARIABLE
 
 extern int recorded_time;
@@ -155,7 +156,22 @@ int GameDrawer(){
 }
 
 int drawBackground() {
-    draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, WHITE, secondary_frame_buffer_no_mouse);
+    if (rtc_read_time(&time_info) != 0) return 1;
+
+    uint32_t bg_color;
+
+    // Determine the background color based on the time
+    if (time_info.hours >= 6 && time_info.hours < 12) {
+        bg_color = COLOR_MORNING;
+    } else if (time_info.hours >= 12 && time_info.hours < 18) {
+        bg_color = COLOR_AFTERNOON;
+    } else if (time_info.hours >= 18 && time_info.hours < 21) {
+        bg_color = COLOR_EVENING;
+    } else {
+        bg_color = COLOR_NIGHT;
+    }
+
+    draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
     return 0;
 }
 

@@ -100,6 +100,25 @@ int drawSpriteXPM(Sprite *sprite, int x, int y) {
     return 0;
 }
 
+int drawSpriteXPM_single_color(Sprite *sprite, int x, int y, uint32_t color) {
+    if (sprite == NULL) return 1;
+
+    uint16_t width = sprite->width;
+    uint16_t height = sprite->height;
+
+    for (int row = 0; row < height; ++row) {
+        for (int col = 0; col < width; ++col) {
+            if (sprite->colors[col + row * width] != TRANSPARENT) {
+                if (draw_pixel(x + col, y + row, color, secondary_frame_buffer_no_mouse) != 0) {
+                    return 1;
+                }
+            }
+        }
+    }
+    
+    return 0;
+}
+
 
 int drawSpriteXPM_mouse(Sprite *sprite, int x, int y) {
     if (sprite == NULL) return 1;
@@ -141,7 +160,6 @@ int GameDrawer(){
                 drawBackground();
                 startRecordingTime();
                 drawRecordedTime();
-                drawText(text);
                 gameStateChange = 0;
             }
             if (recorded_time_has_changed) 
@@ -246,7 +264,7 @@ int drawText(const char* text) {
 
     while (*text) {    
         Key key = char_to_key(*text);
-        if (drawLetter(key)) return 1;
+        if (drawLetter(key,0x00FF00)) return 1;
         offset_handler(0);
         text++;
     }
@@ -258,60 +276,60 @@ int drawText(const char* text) {
     return 0;
 }
 
-int drawLetter(Key key) {
+int drawLetter(Key key, uint32_t color) {
     switch(key){
         case A:
-            return drawSpriteXPM(A_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(A_SPRITE, x_offset, y_offset, color);
         case B:
-            return drawSpriteXPM(B_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(B_SPRITE, x_offset, y_offset, color);
         case C:
-            return drawSpriteXPM(C_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(C_SPRITE, x_offset, y_offset, color);
         case D:
-            return drawSpriteXPM(D_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(D_SPRITE, x_offset, y_offset, color);
         case E:
-            return drawSpriteXPM(E_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(E_SPRITE, x_offset, y_offset, color);
         case F:
-            return drawSpriteXPM(F_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(F_SPRITE, x_offset, y_offset, color);
         case G:
-            return drawSpriteXPM(G_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(G_SPRITE, x_offset, y_offset, color);
         case H:
-            return drawSpriteXPM(H_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(H_SPRITE, x_offset, y_offset, color);
         case I:
-            return drawSpriteXPM(I_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(I_SPRITE, x_offset, y_offset, color);
         case J:
-            return drawSpriteXPM(J_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(J_SPRITE, x_offset, y_offset, color);
         case K:
-            return drawSpriteXPM(K_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(K_SPRITE, x_offset, y_offset, color);
         case L:
-            return drawSpriteXPM(L_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(L_SPRITE, x_offset, y_offset, color);
         case M:
-            return drawSpriteXPM(M_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(M_SPRITE, x_offset, y_offset, color);
         case N:
-            return drawSpriteXPM(N_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(N_SPRITE, x_offset, y_offset, color);
         case O:
-            return drawSpriteXPM(O_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(O_SPRITE, x_offset, y_offset, color);
         case P:
-            return drawSpriteXPM(P_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(P_SPRITE, x_offset, y_offset, color);
         case Q:
-            return drawSpriteXPM(Q_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(Q_SPRITE, x_offset, y_offset, color);
         case R:
-            return drawSpriteXPM(R_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(R_SPRITE, x_offset, y_offset, color);
         case S:
-            return drawSpriteXPM(S_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(S_SPRITE, x_offset, y_offset, color);
         case T:
-            return drawSpriteXPM(T_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(T_SPRITE, x_offset, y_offset, color);
         case U:
-            return drawSpriteXPM(U_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(U_SPRITE, x_offset, y_offset, color);
         case V:
-            return drawSpriteXPM(V_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(V_SPRITE, x_offset, y_offset, color);
         case W:
-            return drawSpriteXPM(W_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(W_SPRITE, x_offset, y_offset, color);
         case X:
-            return drawSpriteXPM(X_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(X_SPRITE, x_offset, y_offset, color);
         case Y:
-            return drawSpriteXPM(Y_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(Y_SPRITE, x_offset, y_offset, color);
         case Z:
-            return drawSpriteXPM(Z_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(Z_SPRITE, x_offset, y_offset, color);
         case COMMA:
             return drawSpriteXPM(COMMA_SPRITE, x_offset, y_offset);
         case PERIOD:
@@ -323,5 +341,46 @@ int drawLetter(Key key) {
     return 0;
 }
 
+int drawWords(TypingTest *test) {
+    x_offset = 0;
+    y_offset = 0;
+    for (int i = 0; i < num_words(test->words); i++) {
+        const char *word = test->words[i];
+        while (*word) {
+            Key key = char_to_key(*word);
+            if (drawLetter(key,0x00FF00)) return 1;
+            offset_handler(0);
+            word++;
+        }
+
+        offset_handler(0);
+        
+        if (i == num_words(test->words) - 1) {
+            break; 
+        }
+
+        if (x_offset + word_length_in_pixels(test->words[i + 1]) > mode_info.XResolution) {
+            x_offset = 0;
+            y_offset += 20;
+        }
+    }
+
+    return 0;
+}
+
+
+
+int num_words(char **words) {
+    int count = 0;
+    while (words[count] != NULL) {
+        count++;
+    }
+    return count;
+}
+
+
+int word_length_in_pixels(const char *word) {
+    return strlen(word) * 13;
+}
 
 

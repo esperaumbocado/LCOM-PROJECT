@@ -24,6 +24,11 @@
 #include "xpm/numbers/eight.xpm"
 #include "xpm/numbers/nine.xpm"
 
+#define MAX_WORDS 30
+#define MAX_WORD_LENGTH 20
+#define POOL_SIZE 100 
+
+
 typedef enum{
     NONE_KEY,
     ENTER,
@@ -78,31 +83,23 @@ typedef enum{
     EXIT
 } GeneralState;
 
-typedef enum{
-    CORRECT,
-    INCORRECT,
-    NOT_TYPED,
-    MAIN
-} WordStatus;
+typedef struct {
+    char **words;             // Array of words for the current test
+    int wordCount;            // Number of words in the current test
+    int currentWordIndex;     // Index of the current word
+    int currentInputIndex;    // Index of the current position in input
+    char currentInput[MAX_WORD_LENGTH];  // User's current input for the current word
+    int correct[MAX_WORDS];   // Array to track correct/incorrect words
+    int mistake;              // Flag to indicate a mistake in the current word
+} TypingTest;
 
-typedef struct{
-    int index;
-    char *word;
-    int length;
-    int starting_x;
-    int starting_y;
-    WordStatus status;
-} Word;
-
-void initialize_words();
 void initialize_key_maps();
 void initialize_sprites();
 void destroy_sprites();
 void update_keyboard();
 void update_timer();
 void key_handler();
-void clear_current_word();
-void add_current_word_to_typedWords();
+void destroy_test();
 
 /**
  * @brief Sets the recorded_time to zero and the recording to true
@@ -141,6 +138,8 @@ void checkActions();
  * @brief Gets a key based on a char
 */
 Key char_to_key(char c);
+
+void handle_space_key(TypingTest *test);
 
 #endif
 

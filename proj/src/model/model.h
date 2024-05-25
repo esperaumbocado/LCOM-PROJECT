@@ -84,6 +84,13 @@ typedef enum{
     EXIT
 } GeneralState;
 
+typedef struct{
+    int x;
+    int y;
+    int width;
+    int height;
+} Caret;
+
 
 typedef struct {
     char character;  // The character itself

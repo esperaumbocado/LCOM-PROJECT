@@ -56,4 +56,8 @@ int drawWords(TypingTest *test);
 
 int word_length_in_pixels(Word *word);
 
+int deleteCaret();
+
+int drawCaret(int x,int y);
+
 #endif

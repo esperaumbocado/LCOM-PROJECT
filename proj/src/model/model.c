@@ -18,6 +18,8 @@ extern vbe_mode_info_t mode_info;
 int x_offset = 0;
 int y_offset = 0;
 
+//Caret
+Caret caret;
 
 //Maps of keys
 Key keyMap[256];
@@ -362,7 +364,9 @@ void key_handler() {
 void process_key(char c, Key key, TypingTest *test) {
     Word *currentWord = &test->words[test->currentWordIndex];
 
-    
+    if (test->currentInputIndex == currentWord->length-1){
+        deleteCaret();
+    }
     if (test->currentInputIndex < currentWord->length) {
         currentWord->letters[test->currentInputIndex].status = 1;
         if (c != currentWord->letters[test->currentInputIndex].character) {
@@ -371,11 +375,10 @@ void process_key(char c, Key key, TypingTest *test) {
             printf("Mistake\n");
         }
         test->currentInputIndex++;
+        drawWords(test);
     }
     
     currentKey = key;
-    drawWords(test);
-    offset_handler(0);
 }
 
 

@@ -15,6 +15,10 @@ extern GameState currentState;
 extern real_time_info time_info;
 // TIMER VARIABLE
 
+//CARET
+extern Caret caret;
+
+
 extern int recorded_time;
 
 extern mouse_position mouse_pos;
@@ -67,6 +71,8 @@ extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
 extern TypingTest *test;
+
+uint32_t bg_color;
 
 
 int setUpFrameBuffer() {
@@ -176,8 +182,6 @@ int GameDrawer(){
 
 int drawBackground() {
     if (rtc_read_time(&time_info) != 0) return 1;
-
-    uint32_t bg_color;
 
     if (time_info.hours >= 6 && time_info.hours < 12) {
         bg_color = COLOR_MORNING;
@@ -341,6 +345,20 @@ int drawLetter(Key key, uint32_t color) {
     return 0;
 }
 
+int deleteCaret() {
+    if (draw_rectangle(caret.x, caret.y, caret.width, caret.height, bg_color, secondary_frame_buffer_no_mouse)) return 1;
+    return 0;
+}
+
+int drawCaret(int x,int y){
+    if (draw_rectangle(x, y, 13, 1, 0xFFFFFF, secondary_frame_buffer_no_mouse)) return 1;
+    caret.height = 1;
+    caret.width = 13;
+    caret.x = x;
+    caret.y = y;
+    return 0;
+}
+    
 int drawWords(TypingTest *test) {
     x_offset = 0;
     y_offset = 0;
@@ -351,6 +369,12 @@ int drawWords(TypingTest *test) {
 
         for (int j = 0; j < currentWord->length; j++) {
             Key key = char_to_key(currentWord->letters[j].character);
+
+            if (i == test->currentWordIndex && j == test->currentInputIndex) {
+                if(deleteCaret()!=0) return 1;
+                if(drawCaret(x_offset, y_offset+24)!=0) return 1;
+            }
+
             if (currentWord->status == 1){
                 if (drawLetter(key, 0x00FF00)) return 1;
             }else if (currentWord->status == -1){

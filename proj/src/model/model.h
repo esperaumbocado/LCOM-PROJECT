@@ -69,7 +69,8 @@ typedef enum{
     SIX,
     SEVEN,
     EIGHT,
-    NINE
+    NINE,
+    BACK
 } Key;
 
 typedef enum{
@@ -82,6 +83,13 @@ typedef enum{
     RUNNING,
     EXIT
 } GeneralState;
+
+typedef struct{
+    int x;
+    int y;
+    int width;
+    int height;
+} Caret;
 
 
 typedef struct {

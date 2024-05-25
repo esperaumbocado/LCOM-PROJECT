@@ -108,7 +108,6 @@ typedef struct {
     int wordCount;           // Number of words in the current test
     int currentWordIndex;    // Index of the current word
     int currentInputIndex;   // Index of the current input for the current word
-    int mistake;             // Mistake in the current word
     char currentInput[MAX_WORD_LENGTH];  // User's current input for the current word
     
 } TypingTest;

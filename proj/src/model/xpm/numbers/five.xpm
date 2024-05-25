@@ -1,7 +1,7 @@
 /* XPM */
 static char * five_xpm[] = {
 "13 21 47 1",
-" 	c #FFFFFF",
+" 	c #FFFFFE",
 ".	c #F7F7F7",
 "+	c #888888",
 "@	c #F4F4F4",

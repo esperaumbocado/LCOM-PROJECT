@@ -176,7 +176,6 @@ int drawBackground() {
 
     uint32_t bg_color;
 
-    // Determine the background color based on the time
     if (time_info.hours >= 6 && time_info.hours < 12) {
         bg_color = COLOR_MORNING;
     } else if (time_info.hours >= 12 && time_info.hours < 18) {
@@ -342,22 +341,30 @@ int drawLetter(Key key, uint32_t color) {
 int drawWords(TypingTest *test) {
     x_offset = 0;
     y_offset = 0;
-    for (int i = 0; i < num_words(test->words); i++) {
-        const char *word = test->words[i];
-        while (*word) {
-            Key key = char_to_key(*word);
-            if (drawLetter(key,0x00FF00)) return 1;
+    for (int i = 0; i < test->wordCount; i++) {
+        Word *currentWord = &(test->words[i]);
+        int word_status = test->words[i].status; 
+
+        for (int j = 0; j < test->words[i].length; j++) {
+            Key key = char_to_key(test->words[i].letters[j].character);
+            if (word_status == 1) {
+                if (drawLetter(key, 0x00FF00)) return 1;
+            } else if (word_status == -1) {
+                if (drawLetter(key, 0xFF0000)) return 1;
+            } else {
+                if (drawLetter(key, 0xFFFFFF)) return 1;
+            }
+
             offset_handler(0);
-            word++;
         }
 
-        offset_handler(0);
-        
-        if (i == num_words(test->words) - 1) {
+        if (i == (test->wordCount - 1)) {
             break; 
         }
 
-        if (x_offset + word_length_in_pixels(test->words[i + 1]) > mode_info.XResolution) {
+        offset_handler(0);
+
+        if (x_offset + word_length_in_pixels(currentWord) > mode_info.XResolution) {
             x_offset = 0;
             y_offset += 20;
         }
@@ -367,18 +374,6 @@ int drawWords(TypingTest *test) {
 }
 
 
-
-int num_words(char **words) {
-    int count = 0;
-    while (words[count] != NULL) {
-        count++;
-    }
-    return count;
+int word_length_in_pixels(Word *word) {
+    return word->length*13;
 }
-
-
-int word_length_in_pixels(const char *word) {
-    return strlen(word) * 13;
-}
-
-

@@ -54,8 +54,6 @@ int drawLetter(Key key, uint32_t color);
 
 int drawWords(TypingTest *test);
 
-int word_length_in_pixels(const char *word);
-
-int num_words(char **words);
+int word_length_in_pixels(Word *word);
 
 #endif

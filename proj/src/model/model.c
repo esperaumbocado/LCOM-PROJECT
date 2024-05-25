@@ -198,7 +198,7 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     }
     TypingTest *test = *testPtr;
 
-    test->words = malloc((wordCount + 1) * sizeof(char*)); // Allocate one extra element for the NULL terminator
+    test->words = (Word*)malloc((wordCount + 1) * sizeof(Word)); // Allocate one extra element for the NULL terminator
     if (test->words == NULL) {
         fprintf(stderr, "Failed to allocate memory for words array\n");
         free(test);
@@ -207,21 +207,32 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
 
     test->wordCount = wordCount;
     test->currentWordIndex = 0;
-    test->currentInputIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
-    memset(test->correct, 0, wordCount * sizeof(int));
-    test->mistake = 0;
 
     srand(time(NULL));
 
     for (int i = 0; i < wordCount; i++) {
         int index = rand() % poolSize;
-        test->words[i] = wordPool[index];
+        char *word = wordPool[index];
+        Word newWord;
+        newWord.length = strlen(word);
+        newWord.status = 0;
+        for (int j = 0; j < newWord.length; j++) {
+            newWord.letters[j].character = word[j];
+            newWord.letters[j].status = 0;
+        }
+        newWord.letters[newWord.length].character = '\0';
+        newWord.letters[newWord.length].status = 0;
+        test->words[i] = newWord;
+
+
     }
 
-    test->words[wordCount] = NULL;
+    test->words[wordCount].length = 0;
+    test->words[wordCount].status = 0;
+    test->words[wordCount].letters[0].character = '\0';
+    test->words[wordCount].letters[0].status = 0;
 }
-
 
 int offset_handler(int x) {
     if (x == 0) {
@@ -282,7 +293,7 @@ void checkActions() {
                 pp.lb) {
                 currentState = GAME;
                 gameStateChange = 1;
-                initializeTest(&test, wordPool, 10, 10);
+                initializeTest(&test, wordPool, 50, 10);
             }
             break;
         case GAME:
@@ -348,15 +359,16 @@ void key_handler() {
 }
 
 void process_key(char c, Key key, TypingTest *test) {
+    Word *currentWord = &test->words[test->currentWordIndex];
 
     if (test->mistake == 0) {
-        if ((size_t)test->currentInputIndex < strlen(test->words[test->currentWordIndex])) {
-            test->currentInput[test->currentInputIndex] = c;
-            test->currentInputIndex++;
-            if (c != test->words[test->currentWordIndex][test->currentInputIndex - 1]) {
+        if (test->currentInputIndex < currentWord->length) {
+            currentWord->letters[test->currentInputIndex].status = 1;
+            if (c != currentWord->letters[test->currentInputIndex].character) {
                 test->mistake = 1;
                 printf("Mistake\n");
             }
+            test->currentInputIndex++;
         }
     }
 
@@ -367,11 +379,21 @@ void process_key(char c, Key key, TypingTest *test) {
 
 
 void handle_space_key(TypingTest *test) {
-    if (strcmp(test->currentInput, test->words[test->currentWordIndex]) == 0 && !test->mistake) {
-        test->correct[test->currentWordIndex] = 1;
+    Word *currentWord = &test->words[test->currentWordIndex];
+
+    int isCorrect = 1;
+    for (int i = 0; i < currentWord->length; i++) {
+        if (currentWord->letters[i].status == 0) { 
+            isCorrect = 0;
+            break;
+        }
+    }
+
+    if (isCorrect && !test->mistake) {
+        currentWord->status = 1; 
         printf("Correct word\n");
     } else {
-        test->correct[test->currentWordIndex] = 0;
+        currentWord->status = -1; 
         printf("Incorrect word\n");
     }
 
@@ -379,12 +401,8 @@ void handle_space_key(TypingTest *test) {
     test->currentInputIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
     test->mistake = 0;
-
-
-    offset_handler(0);
+    drawWords(test);
 }
-
-
 
 void update_keyboard(TypingTest *test) {
     kbc_ih();

@@ -83,14 +83,26 @@ typedef enum{
     EXIT
 } GeneralState;
 
+
 typedef struct {
-    char **words;             // Array of words for the current test
-    int wordCount;            // Number of words in the current test
-    int currentWordIndex;     // Index of the current word
-    int currentInputIndex;    // Index of the current position in input
+    char character;  // The character itself
+    int status;      // Status of the letter: 0 for not typed, 1 for typed
+} Letter;
+
+typedef struct {
+    Letter letters[MAX_WORD_LENGTH];  // Array of letters for the current word
+    int length;                        // Length of the word
+    int status;                        // Status of the word: 0 for not typed, 1 for correct, -1 for incorrect
+} Word;
+
+typedef struct {
+    Word *words;             // Dynamic array of words for the current test
+    int wordCount;           // Number of words in the current test
+    int currentWordIndex;    // Index of the current word
+    int currentInputIndex;   // Index of the current input for the current word
+    int mistake;             // Mistake in the current word
     char currentInput[MAX_WORD_LENGTH];  // User's current input for the current word
-    int correct[MAX_WORDS];   // Array to track correct/incorrect words
-    int mistake;              // Flag to indicate a mistake in the current word
+    
 } TypingTest;
 
 void initialize_key_maps();

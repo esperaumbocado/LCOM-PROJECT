@@ -79,15 +79,19 @@ int setup(){
 int end(){
   /* DEBUGGING */
 
-  for (int i = 0; i < test->wordCount; i++) {
-    printf("Word %d: %s\n", i, test->words[i]);
+   //PRINT WORDS
+  for(int i=0; i<test->wordCount; i++){
+    printf("Word %d: ", i);
+     for(int j=0; j<test->words[i].length; j++){
+       printf("%c", test->words[i].letters[j].character);
+     }
+     printf("\n");
   }
 
-  /* END OF DEBUGGING*/
-  free(test->correct);
-  free(test->words);
-  free(test);
 
+  /* END OF DEBUGGING*/
+  destroy_test();
+  
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;
   if(vg_exit()!=0) return 1;

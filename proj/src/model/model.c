@@ -297,7 +297,7 @@ void checkActions() {
                 pp.lb) {
                 currentState = GAME;
                 gameStateChange = 1;
-                initializeTest(&test, wordPool, 50, 10);
+                initializeTest(&test, wordPool, 50, 30);
             }
             break;
         case GAME:
@@ -365,17 +365,17 @@ void key_handler() {
 void process_key(char c, Key key, TypingTest *test) {
     Word *currentWord = &test->words[test->currentWordIndex];
 
-    if (test->mistake == 0) {
-        if (test->currentInputIndex < currentWord->length) {
-            currentWord->letters[test->currentInputIndex].status = 1;
-            if (c != currentWord->letters[test->currentInputIndex].character) {
-                test->mistake = 1;
-                printf("Mistake\n");
-            }
-            test->currentInputIndex++;
+    
+    if (test->currentInputIndex < currentWord->length) {
+        currentWord->letters[test->currentInputIndex].status = 1;
+        if (c != currentWord->letters[test->currentInputIndex].character) {
+            currentWord->letters[test->currentInputIndex].status = -1;
+            test->mistake = 1;
+            printf("Mistake\n");
         }
+        test->currentInputIndex++;
     }
-
+    
     currentKey = key;
     drawWords(test);
     offset_handler(0);

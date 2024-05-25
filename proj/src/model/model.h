@@ -86,7 +86,7 @@ typedef enum{
 
 typedef struct {
     char character;  // The character itself
-    int status;      // Status of the letter: 0 for not typed, 1 for typed
+    int status;      // Status of the letter: 0 for not typed, 1 for typed, -1 for incorrect
 } Letter;
 
 typedef struct {

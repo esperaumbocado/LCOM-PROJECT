@@ -162,8 +162,9 @@ int GameDrawer(){
                 drawRecordedTime();
                 gameStateChange = 0;
             }
-            if (recorded_time_has_changed) 
+            if (recorded_time_has_changed){
                 drawRecordedTime(); 
+            }
             drawCursor();
             break;
         case NONE_STATE:
@@ -345,16 +346,19 @@ int drawWords(TypingTest *test) {
     y_offset = 0;
     for (int i = 0; i < test->wordCount; i++) {
         Word *currentWord = &(test->words[i]);
-        int word_status = test->words[i].status; 
 
-        for (int j = 0; j < test->words[i].length; j++) {
-            Key key = char_to_key(test->words[i].letters[j].character);
-            if (word_status == 1) {
+        for (int j = 0; j < currentWord->length; j++) {
+            Key key = char_to_key(currentWord->letters[j].character);
+            if (currentWord->status == 1){
                 if (drawLetter(key, 0x00FF00)) return 1;
-            } else if (word_status == -1) {
+            }else if (currentWord->status == -1){
                 if (drawLetter(key, 0xFF0000)) return 1;
+            }else if (currentWord->letters[j].status == -1) {
+                if (drawLetter(key, 0xFF0000)) return 1;  // Red 
+            } else if (currentWord->letters[j].status == 1) {
+                if (drawLetter(key, 0xFFFFFF)) return 1;  // Green 
             } else {
-                if (drawLetter(key, 0xFFFFFF)) return 1;
+                if (drawLetter(key, 0x808080)) return 1; // Grey
             }
 
             offset_handler(0);

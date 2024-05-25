@@ -89,9 +89,8 @@ int end(){
   }
 
 
-  /* END OF DEBUGGING*/
   destroy_test();
-  
+
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;
   if(vg_exit()!=0) return 1;

@@ -39,6 +39,10 @@ extern int bytes_read;
 extern struct packet pp;
 extern mouse_position mouse_pos;
 
+// Checking for swipe right gesture
+GestureState gestureState = GESTURE_ZERO;
+int x_gesture = 0;
+
 //WORD
 
 Sprite *CURSOR_SPRITE;
@@ -300,11 +304,47 @@ void checkActions() {
             }
             break;
         case GAME:
+            checkGesture();
             break;
         case NONE_STATE:
             break;
     }
 }
+
+void checkGesture() {
+    switch (gestureState){
+        case GESTURE_ZERO:
+            if (pp.lb)
+                gestureState = GESTURE_LB;
+            break;
+        case GESTURE_LB:
+            if (!pp.lb){
+                gestureState =GESTURE_ZERO;
+                x_gesture = 0; // reset x_gesture
+            } else { // lb maintained pressed
+                if (pp.delta_x > 0){
+                    x_gesture+=pp.delta_x;
+                }
+                if (x_gesture > 100){ // TODO: discover a good value
+                    fill_current_word();
+                    gestureState =GESTURE_ZERO;
+                    x_gesture = 0; // reset x_gesture
+                }
+            }
+            break;
+    }
+}
+
+void fill_current_word() {
+    Word *currentWord = &test->words[test->currentWordIndex];
+    for (int i = test->currentInputIndex; i < currentWord->length; i++) {
+        currentWord->letters[i].status = 1;  // Mark the remaining letters as correct
+        test->currentInput[i] = currentWord->letters[i].character; // Fill the remaining letters in the input
+    }
+    test->currentInputIndex = currentWord->length;  // Update the input index
+    drawWords(test);  // Update words on the screen
+}
+
 
 Key char_to_key(char c) {
     if (c >= 'A' && c <= 'Z') {

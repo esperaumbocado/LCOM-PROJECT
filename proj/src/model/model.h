@@ -28,7 +28,6 @@
 #define MAX_WORD_LENGTH 20
 #define POOL_SIZE 100 
 
-
 typedef enum{
     NONE_KEY,
     ENTER,
@@ -112,6 +111,12 @@ typedef struct {
     
 } TypingTest;
 
+typedef enum {
+    GESTURE_ZERO,
+    GESTURE_LB
+} GestureState;
+
+
 void initialize_key_maps();
 void initialize_sprites();
 void destroy_sprites();
@@ -157,6 +162,16 @@ void checkActions();
  * @brief Gets a key based on a char
 */
 Key char_to_key(char c);
+
+/**
+ * @brief Updates the swipe-right gesture status
+*/
+void checkGesture();
+
+/**
+ * @brief Fills correctly the remaining letters of the current word
+*/
+void fill_current_word();
 
 void handle_space_key(TypingTest *test);
 

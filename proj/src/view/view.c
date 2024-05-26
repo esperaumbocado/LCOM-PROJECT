@@ -378,9 +378,9 @@ int drawWords(TypingTest *test) {
             if (currentWord->status == 1){
                 if (drawLetter(key, 0x00FF00)) return 1;
             }else if (currentWord->status == -1){
-                if (drawLetter(key, 0xFF0000)) return 1;
+                if (drawLetter(key, RED)) return 1;
             }else if (currentWord->letters[j].status == -1) {
-                if (drawLetter(key, 0xFF0000)) return 1;  // Red 
+                if (drawLetter(key, RED)) return 1;  // Red 
             } else if (currentWord->letters[j].status == 1) {
                 if (drawLetter(key, 0xFFFFFF)) return 1;  // Green 
             } else {

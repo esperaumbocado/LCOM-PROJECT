@@ -47,6 +47,7 @@ int x_gesture = 0;
 
 Sprite *CURSOR_SPRITE;
 Sprite *PLAY_SPRITE;
+Sprite *INSTRUCTIONS_SPRITE;
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
 Sprite *C_SPRITE;
@@ -100,6 +101,8 @@ void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
 
     PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
+
+    INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm);
 
     startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
     startPlayY = mode_info.YResolution / 2 - PLAY_SPRITE->height / 2;

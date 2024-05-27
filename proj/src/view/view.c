@@ -25,6 +25,7 @@ extern mouse_position mouse_pos;
 
 extern Sprite *CURSOR_SPRITE;
 extern Sprite *PLAY_SPRITE;
+extern Sprite *INSTRUCTIONS_SPRITE;
 
 extern int startPlayX;
 extern int startPlayY;
@@ -158,6 +159,7 @@ int GameDrawer(){
             stopRecordingTime();
             drawRecordedTime();
             drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
+            drawSpriteXPM(INSTRUCTIONS_SPRITE, startPlayX, startPlayY+100);
             gameStateChange = 0;
         }
             drawCursor();

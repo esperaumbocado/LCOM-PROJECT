@@ -10,6 +10,7 @@
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
 #include "xpm/play.xpm"
+#include "xpm/instructions.xpm"
 #include "xpm/comma.xpm"
 #include "xpm/period.xpm"
 

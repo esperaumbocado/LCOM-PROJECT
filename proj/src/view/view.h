@@ -46,6 +46,14 @@ int GameDrawer();
 int drawText(const char* text);
 
 /**
+ * @brief Draws a text on the screen with a specific color
+ * @param text the text to be drawn
+ * @param color color to be used
+ * @return 0 if successful, 1 otherwise
+*/
+int drawTextInColor(const char* text, uint32_t color);
+
+/**
  * @brief Draws a letter on the screen
  * @param key the key to be drawn
  * @return 0 if successful, 1 otherwise

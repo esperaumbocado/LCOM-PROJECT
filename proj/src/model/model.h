@@ -76,6 +76,7 @@ typedef enum{
 typedef enum{
     NONE_STATE,
     MENU,
+    INSTRUCTIONS,
     GAME
 } GameState;
 

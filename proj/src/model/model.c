@@ -93,6 +93,11 @@ int startPlayY;
 int endPlayX;
 int endPlayY;
 
+int startInstructionsX;
+int startInstructionsY;
+int endInstructionsX;
+int endInstructionsY;
+
 TypingTest *test;
 extern char* wordPool[];
 
@@ -108,6 +113,11 @@ void initialize_sprites() {
     startPlayY = mode_info.YResolution / 2 - PLAY_SPRITE->height / 2;
     endPlayX = startPlayX + PLAY_SPRITE->width;
     endPlayY = startPlayY + PLAY_SPRITE->height;
+
+    startInstructionsX = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
+    startInstructionsY = mode_info.YResolution / 2 - INSTRUCTIONS_SPRITE->height / 2 +100;
+    endInstructionsX = startInstructionsX + INSTRUCTIONS_SPRITE->width;
+    endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
 
     A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
     B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
@@ -305,9 +315,21 @@ void checkActions() {
                 initializeTest(&test, wordPool, 50, 30);
                 gameStateChange = 1;
             }
+            if (mouse_pos.x >= startInstructionsX && mouse_pos.x <= endInstructionsX &&
+                mouse_pos.y >= startInstructionsY && mouse_pos.y <= endInstructionsY &&
+                pp.lb) {
+                currentState = INSTRUCTIONS;
+                gameStateChange = 1;
+            }
             break;
         case GAME:
             checkGesture();
+            break;
+        case INSTRUCTIONS:
+            if (pp.lb) {
+                currentState = MENU;
+                gameStateChange = 1;
+                }
             break;
         case NONE_STATE:
             break;
@@ -516,6 +538,7 @@ void destroy_sprites(){
     destroy_sprite(Z_SPRITE);
     destroy_sprite(CURSOR_SPRITE);
     destroy_sprite(PLAY_SPRITE);
+    destroy_sprite(INSTRUCTIONS_SPRITE);
 
     destroy_sprite(COMMA_SPRITE);
     destroy_sprite(PERIOD_SPRITE);

@@ -30,6 +30,9 @@ extern Sprite *INSTRUCTIONS_SPRITE;
 extern int startPlayX;
 extern int startPlayY;
 
+extern int startInstructionsX;
+extern int startInstructionsY;
+
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
 extern Sprite *C_SPRITE;
@@ -159,7 +162,7 @@ int GameDrawer(){
             stopRecordingTime();
             drawRecordedTime();
             drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
-            drawSpriteXPM(INSTRUCTIONS_SPRITE, startPlayX, startPlayY+100);
+            drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
             gameStateChange = 0;
         }
             drawCursor();
@@ -173,6 +176,18 @@ int GameDrawer(){
                 drawWords(test);
             }
             drawRecordedTime(); 
+            drawCursor();
+            break;
+        case INSTRUCTIONS:
+            if (gameStateChange) {
+                drawBackground();
+                drawTextInColor("HOW TO PLAY", 0xFFFFFF);
+                drawTextInColor("TYPE AS FAST AS YOU CAN", 0xFFFFFF);
+                drawTextInColor("USE THE SPACEBAR TO ADVANCE WORDS", 0xFFFFFF);
+                drawTextInColor("USE THE BACKSPACE TO UNDO THE LAST LETTER", 0xFFFFFF);
+                drawTextInColor("PRESS ANYWHERE TO GO BACK", 0xFFFFFF);
+                gameStateChange = 0;
+            }
             drawCursor();
             break;
         case NONE_STATE:
@@ -278,6 +293,21 @@ int drawText(const char* text) {
     // Begin writing in a new line
     x_offset=0;
     y_offset+=20;
+
+    return 0;
+}
+
+int drawTextInColor(const char* text, uint32_t color) {
+    while (*text) {
+        Key key = char_to_key(*text);
+        if (drawLetter(key, color)) return 1;
+        offset_handler(0);
+        text++;
+    }
+
+    // Begin writing in a new line
+    x_offset = 0;
+    y_offset += 20;
 
     return 0;
 }

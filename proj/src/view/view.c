@@ -85,8 +85,8 @@ uint32_t bg_color;
 
 
 // screen box dimensions
-int startBoxX = 100;
-int startBoxY = 100;
+int startBoxX = 200;
+int startBoxY = 200;
 int sizeBoxX;
 int sizeBoxY;
 
@@ -96,8 +96,8 @@ int setUpFrameBuffer() {
     secondary_frame_buffer = (uint8_t *) malloc(frame_size);
     secondary_frame_buffer_no_mouse = (uint8_t *) malloc(frame_size);
 
-    sizeBoxX = mode_info.XResolution - 200;
-    sizeBoxY = mode_info.YResolution - 200;
+    sizeBoxX = mode_info.XResolution - 400;
+    sizeBoxY = mode_info.YResolution - 400;
 
     return 0;
 }
@@ -173,7 +173,7 @@ int GameDrawer(){
     switch(currentState){
         case MENU:
         if (gameStateChange){
-            drawBackground();
+            drawBackground(currentState);
             stopRecordingTime();
             drawRecordedTime();
             drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
@@ -184,7 +184,7 @@ int GameDrawer(){
             break;
         case GAME:
             if (gameStateChange){
-                drawBackground();
+                drawBackground(currentState);
                 startRecordingTime();
                 drawRecordedTime();
                 gameStateChange = 0;
@@ -195,7 +195,7 @@ int GameDrawer(){
             break;
         case INSTRUCTIONS:
             if (gameStateChange) {
-                drawBackground();
+                drawBackground(currentState);
                 drawText(game_instructions, GREY);
                 gameStateChange = 0;
             }
@@ -208,7 +208,7 @@ int GameDrawer(){
     return 0;
 }
 
-int drawBackground() {
+int drawBackground(GameState state) {
     if (rtc_read_time(&time_info) != 0) return 1;
 
     if (time_info.hours >= 6 && time_info.hours < 12) {
@@ -223,7 +223,12 @@ int drawBackground() {
 
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
 
-    draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, SALMON, secondary_frame_buffer_no_mouse);
+    if(state == GAME){
+        draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, SALMON, secondary_frame_buffer_no_mouse);
+    }else if(state == INSTRUCTIONS){
+        draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, SALMON, secondary_frame_buffer_no_mouse);
+    }
+
     return 0;
 }
 
@@ -301,7 +306,7 @@ int drawText(const char* text, uint32_t color) {
     while (*text) {    
 
         if (*text == '\n') {
-            x_offset =startBoxX; // new line
+            x_offset = 100; // new line
             y_offset += 20;  
             text++; 
             continue;

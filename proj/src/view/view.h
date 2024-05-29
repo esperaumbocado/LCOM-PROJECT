@@ -13,7 +13,7 @@ int setUpFrameBuffer();
 int mainDraw();
 int drawSpriteXPM(Sprite *sprite, int x, int y);
 int drawSpriteXPM_single_color(Sprite *sprite, int x, int y, uint32_t color);
-int drawBackground();
+int drawBackground(GameState state);
 
 
 /**

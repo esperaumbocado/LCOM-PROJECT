@@ -388,7 +388,7 @@ int drawLetter(Key key, uint32_t color) {
 }
 
 int deleteCaret() {
-    if (draw_rectangle(caret.x, caret.y, caret.width, caret.height, bg_color, secondary_frame_buffer_no_mouse)) return 1;
+    if (draw_rectangle(caret.x, caret.y, caret.width, caret.height, SALMON, secondary_frame_buffer_no_mouse)) return 1;
     return 0;
 }
 
@@ -441,7 +441,7 @@ int drawWords(TypingTest *test) {
 
         if (i != (test->wordCount - 1)) {
             Word *nextWord = &(test->words[i+1]);
-            if (x_offset + word_length_in_pixels(nextWord) > sizeBoxX) {
+            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - startBoxX) {
                 x_offset = startBoxX;
                 y_offset += 30;
             }

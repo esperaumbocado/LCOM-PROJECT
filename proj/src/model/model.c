@@ -282,7 +282,7 @@ int offset_handler(int x) {
         x_offset = sizeBoxX - 13;
         y_offset -= 30;
     }
-    if (x_offset + 13 >= sizeBoxX) {
+    if (x_offset + 13 >= startBoxX + sizeBoxX) {
         x_offset = startBoxX;
         y_offset += 30;
     }
@@ -448,6 +448,9 @@ void key_handler() {
         }
     } else if (currentState == GAME) {
         update_keyboard(test);
+    } else if (currentState == INSTRUCTIONS) {
+        update_keyboard(test);
+        return;
     }
 }
 

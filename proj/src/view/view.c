@@ -1,4 +1,5 @@
 #include "view.h"
+#include "instructions.h"
 #include "../drivers/rtc/rtc.h"
 
 extern uint8_t *main_frame_buffer;
@@ -63,6 +64,10 @@ extern Sprite *Z_SPRITE;
 extern Sprite *COMMA_SPRITE;
 extern Sprite *PERIOD_SPRITE;
 
+extern Sprite *EXCLAMATION_SPRITE;
+extern Sprite *COLON_SPRITE;
+extern Sprite *RIGHT_PARENTHESIS_SPRITE;
+
 extern Sprite *ZERO_SPRITE;
 extern Sprite *ONE_SPRITE;
 extern Sprite *TWO_SPRITE;
@@ -79,11 +84,21 @@ extern TypingTest *test;
 uint32_t bg_color;
 
 
+// screen box dimensions
+int startBoxX = 100;
+int startBoxY = 100;
+int sizeBoxX;
+int sizeBoxY;
+
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
     frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
     secondary_frame_buffer = (uint8_t *) malloc(frame_size);
     secondary_frame_buffer_no_mouse = (uint8_t *) malloc(frame_size);
+
+    sizeBoxX = mode_info.XResolution - 200;
+    sizeBoxY = mode_info.YResolution - 200;
+
     return 0;
 }
 
@@ -181,11 +196,7 @@ int GameDrawer(){
         case INSTRUCTIONS:
             if (gameStateChange) {
                 drawBackground();
-                drawTextInColor("HOW TO PLAY", 0xFFFFFF);
-                drawTextInColor("TYPE AS FAST AS YOU CAN", 0xFFFFFF);
-                drawTextInColor("USE THE SPACEBAR TO ADVANCE WORDS", 0xFFFFFF);
-                drawTextInColor("USE THE BACKSPACE TO UNDO THE LAST LETTER", 0xFFFFFF);
-                drawTextInColor("PRESS ANYWHERE TO GO BACK", 0xFFFFFF);
+                drawText(game_instructions, GREY);
                 gameStateChange = 0;
             }
             drawCursor();
@@ -211,6 +222,8 @@ int drawBackground() {
     }
 
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
+
+    draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, SALMON, secondary_frame_buffer_no_mouse);
     return 0;
 }
 
@@ -281,33 +294,24 @@ int drawCursor(){
     return drawSpriteXPM_mouse(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
 
-int drawText(const char* text) {
+int drawText(const char* text, uint32_t color) {
+
+    reset_offset();
 
     while (*text) {    
-        Key key = char_to_key(*text);
-        if (drawLetter(key,0x00FF00)) return 1;
-        offset_handler(0);
-        text++;
-    }
 
-    // Begin writing in a new line
-    x_offset=0;
-    y_offset+=20;
+        if (*text == '\n') {
+            x_offset =startBoxX; // new line
+            y_offset += 20;  
+            text++; 
+            continue;
+        }
 
-    return 0;
-}
-
-int drawTextInColor(const char* text, uint32_t color) {
-    while (*text) {
         Key key = char_to_key(*text);
         if (drawLetter(key, color)) return 1;
         offset_handler(0);
         text++;
     }
-
-    // Begin writing in a new line
-    x_offset = 0;
-    y_offset += 20;
 
     return 0;
 }
@@ -367,9 +371,15 @@ int drawLetter(Key key, uint32_t color) {
         case Z:
             return drawSpriteXPM_single_color(Z_SPRITE, x_offset, y_offset, color);
         case COMMA:
-            return drawSpriteXPM(COMMA_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(COMMA_SPRITE, x_offset, y_offset, color);
         case PERIOD:
-            return drawSpriteXPM(PERIOD_SPRITE, x_offset, y_offset);
+            return drawSpriteXPM_single_color(PERIOD_SPRITE, x_offset, y_offset, color);
+        case EXCLAMATION:
+            return drawSpriteXPM_single_color(EXCLAMATION_SPRITE, x_offset, y_offset, color);
+        case COLON:
+            return drawSpriteXPM_single_color(COLON_SPRITE, x_offset, y_offset, color);
+        case RIGHT_PARENTHESIS:
+            return drawSpriteXPM_single_color(RIGHT_PARENTHESIS_SPRITE, x_offset, y_offset, color);
         default:
             break;
     }
@@ -392,8 +402,9 @@ int drawCaret(int x,int y){
 }
     
 int drawWords(TypingTest *test) {
-    x_offset = 0;
-    y_offset = 0;
+
+    reset_offset();
+
     for (int i = 0; i < test->wordCount; i++) {
         Word *currentWord = &(test->words[i]);
         
@@ -416,7 +427,7 @@ int drawWords(TypingTest *test) {
             } else if (currentWord->letters[j].status == 1) {
                 if (drawLetter(key, 0xFFFFFF)) return 1;  // Green 
             } else {
-                if (drawLetter(key, 0x808080)) return 1; // Grey
+                if (drawLetter(key, GREY)) return 1; // Grey
             }
 
             offset_handler(0);
@@ -430,8 +441,8 @@ int drawWords(TypingTest *test) {
 
         if (i != (test->wordCount - 1)) {
             Word *nextWord = &(test->words[i+1]);
-            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution) {
-                x_offset = 0;
+            if (x_offset + word_length_in_pixels(nextWord) > sizeBoxX) {
+                x_offset = startBoxX;
                 y_offset += 30;
             }
         }

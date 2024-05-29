@@ -11,8 +11,12 @@
 #include "xpm/cursor.xpm"
 #include "xpm/play.xpm"
 #include "xpm/instructions.xpm"
-#include "xpm/comma.xpm"
-#include "xpm/period.xpm"
+
+#include "xpm/punctuation/comma.xpm"
+#include "xpm/punctuation/period.xpm"
+#include "xpm/punctuation/colon.xpm"
+#include "xpm/punctuation/exclamation.xpm"
+#include "xpm/punctuation/right_parenthesis.xpm"
 
 #include "xpm/numbers/zero.xpm"
 #include "xpm/numbers/one.xpm"
@@ -60,6 +64,9 @@ typedef enum{
     Z,
     COMMA,
     PERIOD,
+    COLON,
+    EXCLAMATION,
+    RIGHT_PARENTHESIS,
     ZERO,
     ONE,
     TWO,
@@ -136,6 +143,11 @@ void startRecordingTime();
  * @brief Sets the recording to false
 */
 void stopRecordingTime();
+
+/**
+ * @brief Resets offset to starting of box
+*/
+void reset_offset();
 
 /**
  * @brief Handles the offset for drawing

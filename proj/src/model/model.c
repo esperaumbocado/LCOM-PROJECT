@@ -15,8 +15,8 @@ extern uint8_t *secondary_frame_buffer_no_mouse;
 extern uint32_t frame_size;
 extern vbe_mode_info_t mode_info;
 
-int x_offset = 0;
-int y_offset = 0;
+int x_offset;
+int y_offset;
 
 //Caret
 Caret caret;
@@ -77,6 +77,10 @@ Sprite *Z_SPRITE;
 Sprite *COMMA_SPRITE;
 Sprite *PERIOD_SPRITE;
 
+Sprite *EXCLAMATION_SPRITE;
+Sprite *COLON_SPRITE;
+Sprite *RIGHT_PARENTHESIS_SPRITE;
+
 Sprite *ZERO_SPRITE;
 Sprite *ONE_SPRITE;
 Sprite *TWO_SPRITE;
@@ -101,6 +105,11 @@ int endInstructionsY;
 TypingTest *test;
 extern char* wordPool[];
 
+// Box dimensions
+extern int startBoxX;
+extern int startBoxY;
+extern int sizeBoxX;
+extern int sizeBoxY;
 
 void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
@@ -148,6 +157,10 @@ void initialize_sprites() {
 
     COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm);
     PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm);
+
+    EXCLAMATION_SPRITE = create_sprite_xpm((xpm_map_t)exclamation_xpm);
+    COLON_SPRITE = create_sprite_xpm((xpm_map_t)colon_xpm);
+    RIGHT_PARENTHESIS_SPRITE = create_sprite_xpm((xpm_map_t)right_parenthesis_xpm);
 
     ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm);
     ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm);
@@ -254,6 +267,11 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     test->words[wordCount].letters[0].status = 0;
 }
 
+void reset_offset() {
+    x_offset = startBoxX;
+    y_offset = startBoxY;
+}
+
 int offset_handler(int x) {
     if (x == 0) {
         x_offset += 13;
@@ -261,11 +279,11 @@ int offset_handler(int x) {
         x_offset -= 13;
     }
     if (x_offset-13 < 0) {
-        x_offset = mode_info.XResolution - 13;
+        x_offset = sizeBoxX - 13;
         y_offset -= 30;
     }
-    if (x_offset + 13 >= mode_info.XResolution) {
-        x_offset = 0;
+    if (x_offset + 13 >= sizeBoxX) {
+        x_offset = startBoxX;
         y_offset += 30;
     }
     return 1;
@@ -400,6 +418,12 @@ Key char_to_key(char c) {
             return COMMA;
         case '.':
             return PERIOD;
+        case '!':
+            return EXCLAMATION;
+        case ':':
+            return COLON;
+        case ')':
+            return RIGHT_PARENTHESIS;
         default:
             return NONE_KEY;
     }

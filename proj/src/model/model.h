@@ -109,6 +109,9 @@ typedef struct {
     Letter letters[MAX_WORD_LENGTH];  // Array of letters for the current word
     int length;                        // Length of the word
     int status;                        // Status of the word: 0 for not typed, 1 for correct, -1 for incorrect
+    int x;                             // X position of the word
+    int y;                             // Y position of the word
+    int line;                          // Line of the word
 } Word;
 
 typedef struct {

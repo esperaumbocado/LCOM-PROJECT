@@ -263,6 +263,9 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
 
     test->words[wordCount].length = 0;
     test->words[wordCount].status = 0;
+    test->words[wordCount].x = -1;
+    test->words[wordCount].y = -1;
+    test->words[wordCount].line = -1;
     test->words[wordCount].letters[0].character = '\0';
     test->words[wordCount].letters[0].status = 0;
 }

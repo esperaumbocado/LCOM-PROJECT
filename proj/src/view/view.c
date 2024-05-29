@@ -409,11 +409,12 @@ int drawCaret(int x,int y){
 int drawWords(TypingTest *test) {
 
     reset_offset();
-
     for (int i = 0; i < test->wordCount; i++) {
+        int current_line = 0;
         Word *currentWord = &(test->words[i]);
-        
-
+        currentWord->x = x_offset;
+        currentWord->y = y_offset;
+        currentWord->line = current_line;
 
         for (int j = 0; j < currentWord->length; j++) {
             Key key = char_to_key(currentWord->letters[j].character);
@@ -449,6 +450,7 @@ int drawWords(TypingTest *test) {
             if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - startBoxX) {
                 x_offset = startBoxX;
                 y_offset += 30;
+                current_line++;
             }
         }
     }

@@ -181,6 +181,8 @@ int GameDrawer(){
         case INSTRUCTIONS:
             if (gameStateChange) {
                 drawBackground();
+                x_offset = 0;
+                y_offset = 0;
                 drawTextInColor("HOW TO PLAY", 0xFFFFFF);
                 drawTextInColor("TYPE AS FAST AS YOU CAN", 0xFFFFFF);
                 drawTextInColor("USE THE SPACEBAR TO ADVANCE WORDS", 0xFFFFFF);

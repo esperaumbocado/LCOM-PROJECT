@@ -443,6 +443,7 @@ void key_handler() {
         update_keyboard(test);
         if (currentKey == ENTER) {
             currentState = GAME;
+            initializeTest(&test, wordPool, 50, 30);
             gameStateChange = 1;
         }
     } else if (currentState == GAME) {
@@ -450,22 +451,24 @@ void key_handler() {
     }
 }
 
-void process_key(char c, Key key, TypingTest *test) {
-    Word *currentWord = &test->words[test->currentWordIndex];
+void process_key(char c, Key key, TypingTest *test, GameState state) {
+    if (state == GAME){
+        Word *currentWord = &test->words[test->currentWordIndex];
 
-    if (test->currentInputIndex == currentWord->length-1){
-        deleteCaret();
-    }
-    if (test->currentInputIndex < currentWord->length) {
-        currentWord->letters[test->currentInputIndex].status = 1;
-        if (c != currentWord->letters[test->currentInputIndex].character) {
-            currentWord->letters[test->currentInputIndex].status = -1;
-            printf("Mistake\n");
+        if (test->currentInputIndex == currentWord->length-1){
+            deleteCaret();
         }
-        test->currentInputIndex++;
-        drawWords(test);
+        if (test->currentInputIndex < currentWord->length) {
+            currentWord->letters[test->currentInputIndex].status = 1;
+            if (c != currentWord->letters[test->currentInputIndex].character) {
+                currentWord->letters[test->currentInputIndex].status = -1;
+                printf("Mistake\n");
+            }
+            test->currentInputIndex++;
+            drawWords(test);
+        }
     }
-    
+
     currentKey = key;
 }
 
@@ -511,20 +514,23 @@ void update_keyboard(TypingTest *test) {
         char currentChar = charMap[data];
 
         if (currentChar) {
-            process_key(currentChar, curKey, test);
+            process_key(currentChar, curKey, test, currentState);
         } else {
             switch (data) {
                 case KEY_SPACE:
-                    handle_space_key(test);
+                    if (currentState == GAME){
+                        handle_space_key(test);
+                    }
                     break;
                 case KEY_ENTER:
                     currentKey = ENTER;
                     break;
                 case KEY_DELETE:
                     currentKey = BACK;
-                    handle_delete_key(test);
+                    if (currentState == GAME){
+                        handle_delete_key(test);
+                    }
                     break;
-
                 default:
                     break;
             }

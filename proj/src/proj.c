@@ -80,17 +80,9 @@ int setup(){
 int end(){
   /* DEBUGGING */
 
-   //PRINT WORDS
-  for(int i=0; i<test->wordCount; i++){
-    printf("Word %d: ", i);
-     for(int j=0; j<test->words[i].length; j++){
-       printf("%c", test->words[i].letters[j].character);
-     }
-     printf("\n");
-  }
 
-
-  destroy_test();
+  destroy_test();   // SHOULD BE CALLED WHEN LEAVING THE GAME MODE, HERE TO AVOID MEMORY LEAKS DURING DEVELOPMENT
+                    // LEAVING THE APPLICATION WITHOUT STARTING A GAME WILL CAUSE A CRASH BECAUSE OF THIS
 
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;

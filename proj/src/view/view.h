@@ -22,6 +22,12 @@ int drawBackground();
 int drawRecordedTime();
 
 /**
+ * @brief Draws the remaining stars on the screen
+ * @return 0 if successful, 1 otherwise
+*/
+int drawStars();
+
+/**
  * @brief Displays the timers xpms on the screen
  * @return 0 if successful, 1 otherwise
 */

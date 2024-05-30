@@ -42,9 +42,14 @@ extern mouse_position mouse_pos;
 GestureState gestureState = GESTURE_ZERO;
 int x_gesture = 0;
 
+int stars; // stars for swiping right
+
 //WORD
 
 Sprite *CURSOR_SPRITE;
+
+Sprite *STAR_SPRITE;
+
 Sprite *PLAY_SPRITE;
 Sprite *INSTRUCTIONS_SPRITE;
 
@@ -127,14 +132,17 @@ int endTimer60Y;
 TypingTest *test;
 extern char* wordPool[];
 
-// Box dimensions
-extern int startBoxX;
-extern int startBoxY;
-extern int sizeBoxX;
-extern int sizeBoxY;
+// screen box dimensions
+int startBoxX = 100;
+int startBoxY = 100;
+int sizeBoxX;
+int sizeBoxY;
+
 
 void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
+
+    STAR_SPRITE = create_sprite_xpm((xpm_map_t)star_xpm);
 
     PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
 
@@ -354,6 +362,9 @@ void update_timer() {
 void setGameState(GameState state) {
     currentState = state;
     gameStateChange = 1;
+    if (state == GAME){
+        stars = 3;
+    }
 }
 
 void initialize_mouse_data() {
@@ -415,26 +426,28 @@ void checkActions() {
 }
 
 void checkGesture() {
-    switch (gestureState){
-        case GESTURE_ZERO:
-            if (pp.lb)
-                gestureState = GESTURE_LB;
-            break;
-        case GESTURE_LB:
-            if (!pp.lb){
-                gestureState =GESTURE_ZERO;
-                x_gesture = 0; // reset x_gesture
-            } else { // lb maintained pressed
-                if (pp.delta_x > 0){
-                    x_gesture+=pp.delta_x;
-                }
-                if (x_gesture > 100){ // TODO: discover a good value
-                    fill_current_word();
+    if (stars){
+        switch (gestureState){
+            case GESTURE_ZERO:
+                if (pp.lb)
+                    gestureState = GESTURE_LB;
+                break;
+            case GESTURE_LB:
+                if (!pp.lb){
                     gestureState =GESTURE_ZERO;
                     x_gesture = 0; // reset x_gesture
+                } else { // lb maintained pressed
+                    if (pp.delta_x > 0){
+                        x_gesture+=pp.delta_x;
+                    }
+                    if (x_gesture > 300){ 
+                        fill_current_word();
+                        gestureState =GESTURE_ZERO;
+                        x_gesture = 0; // reset x_gesture
+                    }
                 }
-            }
-            break;
+                break;
+        }
     }
 }
 
@@ -446,6 +459,8 @@ void fill_current_word() {
     }
     test->currentInputIndex = currentWord->length;  // Update the input index
     drawWords(test);  // Update words on the screen
+
+    stars--; // Decrement stars
 }
 
 
@@ -640,6 +655,9 @@ void destroy_sprites(){
     destroy_sprite(Y_SPRITE);
     destroy_sprite(Z_SPRITE);
     destroy_sprite(CURSOR_SPRITE);
+
+    destroy_sprite(STAR_SPRITE);
+
     destroy_sprite(PLAY_SPRITE);
     destroy_sprite(INSTRUCTIONS_SPRITE);
 

@@ -9,6 +9,7 @@
 #include "model/sprite.h"
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
+#include "xpm/star.xpm"
 
 #include "xpm/play.xpm"
 #include "xpm/instructions.xpm"
@@ -129,8 +130,6 @@ typedef enum {
     GESTURE_ZERO,
     GESTURE_LB
 } GestureState;
-
-
 
 
 void initialize_key_maps();

@@ -24,7 +24,13 @@ extern int timer;
 
 extern mouse_position mouse_pos;
 
+extern int stars;
+
+
 extern Sprite *CURSOR_SPRITE;
+
+extern Sprite *STAR_SPRITE;
+
 extern Sprite *PLAY_SPRITE;
 extern Sprite *INSTRUCTIONS_SPRITE;
 
@@ -46,6 +52,12 @@ extern int startTimer30Y;
 
 extern int startTimer60X;
 extern int startTimer60Y;
+
+// Box dimensions
+extern int startBoxX;
+extern int startBoxY;
+extern int sizeBoxX;
+extern int sizeBoxY;
 
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
@@ -97,11 +109,6 @@ extern TypingTest *test;
 uint32_t bg_color;
 
 
-// screen box dimensions
-int startBoxX = 100;
-int startBoxY = 100;
-int sizeBoxX;
-int sizeBoxY;
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -201,6 +208,7 @@ int GameDrawer(){
                 drawWords(test);
             }
             drawRecordedTime(); 
+            drawStars();
             drawCursor();
             break;
         case TIMERS:
@@ -262,6 +270,14 @@ int drawRecordedTime(){
         x+=13;
     }
 
+    return 0;
+}
+
+int drawStars(){
+
+    for (int i = 0; i < stars; i++) 
+        if (drawSpriteXPM_mouse(STAR_SPRITE, 10 + i*30, 10)) return 1;
+    
     return 0;
 }
 

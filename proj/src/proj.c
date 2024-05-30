@@ -97,8 +97,6 @@ int end(){
   if (mouse_unsubscribe_int()) return 1;
   if (mouse_command(0xF5)) return 1; // disable data reporting
 
-
-
   return 0;
 }
 

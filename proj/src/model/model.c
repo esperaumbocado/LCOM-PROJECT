@@ -28,8 +28,7 @@ char charMap[256];
 bool gameStateChange;
 
 // TIMER VARIABLES
-int timer = 0;
-bool is_recording = false;
+int timer;
 
 extern int counter;
 
@@ -339,11 +338,10 @@ void update_timer() {
     switch (currentState){
         case GAME:
             if (timer == 0){
-                stopRecordingTime();
                 setGameState(MENU);
             }
 
-            if (counter%60==0 && is_recording)
+            if (counter%60==0 && timer)
                 timer--;
 
             break;
@@ -351,14 +349,6 @@ void update_timer() {
             break;
     }
     
-}
-
-void startRecordingTime(){
-    is_recording = true;
-}
-
-void stopRecordingTime(){
-    is_recording = false;
 }
 
 void setGameState(GameState state) {

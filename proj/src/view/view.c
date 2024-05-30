@@ -192,6 +192,12 @@ int GameDrawer(){
             }
             drawRecordedTime(); 
             drawCursor();
+            
+            if (test->testCompleted) {
+                int wpm = calculate_wpm(test);
+                drawWPM(wpm);  // Display WPM 
+                drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY); // teste para a condicao do IF
+            }
             break;
         case INSTRUCTIONS:
             if (gameStateChange) {
@@ -205,6 +211,22 @@ int GameDrawer(){
             break;
     }
 
+    return 0;
+}
+
+int drawWPM(int wpm) {
+    int x = 10;  // X position for the WPM display (adjust as needed)
+    int y = mode_info.YResolution - 80;  // Y position for the WPM display (below the timer)
+    char wpm_string[20];
+    sprintf(wpm_string, "WPM: %d", wpm);
+    char *wpm_string_ptr = wpm_string;
+
+    while (*wpm_string_ptr) {
+        Key key = char_to_key(*wpm_string_ptr);
+        if (drawNumber(key, x, y)) return 1;  // Use drawNumber to draw each character
+        wpm_string_ptr++;
+        x += 13;
+    }
     return 0;
 }
 

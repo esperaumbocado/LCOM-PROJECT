@@ -117,7 +117,9 @@ typedef struct {
     int currentWordIndex;    // Index of the current word
     int currentInputIndex;   // Index of the current input for the current word
     char currentInput[MAX_WORD_LENGTH];  // User's current input for the current word
-    
+    int correctCharCount;
+    time_t startTime;
+    bool testCompleted;    
 } TypingTest;
 
 typedef enum {
@@ -188,6 +190,8 @@ void checkGesture();
 void fill_current_word();
 
 void handle_space_key(TypingTest *test);
+
+int calculate_wpm(TypingTest *test);
 
 #endif
 

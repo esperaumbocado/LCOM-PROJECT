@@ -61,4 +61,6 @@ int deleteCaret();
 
 int drawCaret(int x,int y);
 
+int drawWPM(int wpm);
+
 #endif

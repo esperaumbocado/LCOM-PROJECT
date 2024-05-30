@@ -240,7 +240,11 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
 
     test->wordCount = wordCount;
     test->currentWordIndex = 0;
+    test->currentInputIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
+    test->correctCharCount = 0;
+    test->startTime = time(NULL);  // Initialize start time
+    test->testCompleted = false;
 
     srand(time(NULL));
 
@@ -466,13 +470,32 @@ void process_key(char c, Key key, TypingTest *test, GameState state) {
             if (c != currentWord->letters[test->currentInputIndex].character) {
                 currentWord->letters[test->currentInputIndex].status = -1;
                 printf("Mistake\n");
+            } else {
+                test->correctCharCount++;  // Increment correct character count
             }
             test->currentInputIndex++;
             drawWords(test);
         }
+
+        // Check if test is completed
+        if (test->currentWordIndex == test->wordCount - 1 && test->currentInputIndex == currentWord->length) {
+            test->testCompleted = true;
+            printf("Test completed.\n");
+        }
     }
 
     currentKey = key;
+}
+
+int calculate_wpm(TypingTest *test) {
+    time_t currentTime = time(NULL);
+    double minutes = difftime(currentTime, test->startTime) / 60.0;
+    if (minutes > 0) {
+        int wpm = (test->correctCharCount / 5) / minutes;
+        printf("WPM: %d\n", wpm);  // Debug print
+        return wpm;  // Assume average word length is 5 characters
+    }
+    return 0;
 }
 
 

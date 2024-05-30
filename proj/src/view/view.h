@@ -7,7 +7,6 @@
 #include "../drivers/graphics/video.h"
 #include "../model/sprite.h"
 #include "../model/model.h"
-#include "model/text.h"
 
 int setUpFrameBuffer();
 int mainDraw();
@@ -21,6 +20,12 @@ int drawBackground();
  * @return 0 if successful, 1 otherwise
 */
 int drawRecordedTime();
+
+/**
+ * @brief Displays the timers xpms on the screen
+ * @return 0 if successful, 1 otherwise
+*/
+int drawTimers();
 
 /**
  * @brief Draws a number on the screen

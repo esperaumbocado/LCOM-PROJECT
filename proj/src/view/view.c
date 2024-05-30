@@ -1,5 +1,5 @@
 #include "view.h"
-#include "instructions.h"
+#include "messages.h"
 #include "../drivers/rtc/rtc.h"
 
 extern uint8_t *main_frame_buffer;
@@ -20,7 +20,7 @@ extern real_time_info time_info;
 extern Caret caret;
 
 
-extern int recorded_time;
+extern int timer;
 
 extern mouse_position mouse_pos;
 
@@ -28,11 +28,24 @@ extern Sprite *CURSOR_SPRITE;
 extern Sprite *PLAY_SPRITE;
 extern Sprite *INSTRUCTIONS_SPRITE;
 
+extern Sprite *TIMER15_SPRITE;
+extern Sprite *TIMER30_SPRITE;
+extern Sprite *TIMER60_SPRITE;
+
 extern int startPlayX;
 extern int startPlayY;
 
 extern int startInstructionsX;
 extern int startInstructionsY;
+
+extern int startTimer15X;
+extern int startTimer15Y;
+
+extern int startTimer30X;
+extern int startTimer30Y;
+
+extern int startTimer60X;
+extern int startTimer60Y;
 
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
@@ -172,25 +185,33 @@ int drawSpriteXPM_mouse(Sprite *sprite, int x, int y) {
 int GameDrawer(){
     switch(currentState){
         case MENU:
-        if (gameStateChange){
-            drawBackground();
-            stopRecordingTime();
-            drawRecordedTime();
-            drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
-            drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
-            gameStateChange = 0;
-        }
+            if (gameStateChange){
+                drawBackground();
+                drawRecordedTime(); // TODO: change it to Results screen
+                drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
+                drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
+                gameStateChange = 0;
+            }
             drawCursor();
             break;
         case GAME:
             if (gameStateChange){
+                printf("just moved to GAME\n");
                 drawBackground();
                 startRecordingTime();
-                drawRecordedTime();
+                drawRecordedTime(); 
                 gameStateChange = 0;
                 drawWords(test);
             }
             drawRecordedTime(); 
+            drawCursor();
+            break;
+        case TIMERS:
+            if (gameStateChange){
+                drawBackground();
+                drawTimers();
+                gameStateChange = 0;
+            }
             drawCursor();
             break;
         case INSTRUCTIONS:
@@ -200,8 +221,6 @@ int GameDrawer(){
                 gameStateChange = 0;
             }
             drawCursor();
-            break;
-        case NONE_STATE:
             break;
     }
 
@@ -232,19 +251,30 @@ int drawRecordedTime(){
     int x = 10;
     int y = mode_info.YResolution - 40;
 
-    char recorded_time_string[5];
-    sprintf(recorded_time_string, "%d", recorded_time);
+    char timer_string[5];
+    sprintf(timer_string, "%d", timer);
 
-    char *recorded_time_string_ptr = recorded_time_string;
+    char *timer_string_ptr = timer_string;
     
-    while (*recorded_time_string_ptr) { 
+    while (*timer_string_ptr) { 
 
-        Key key = char_to_key(*recorded_time_string_ptr);
+        Key key = char_to_key(*timer_string_ptr);
         if (drawNumber(key, x, y)) return 1;
 
-        recorded_time_string_ptr++;
+        timer_string_ptr++;
         x+=13;
     }
+
+    return 0;
+}
+
+int drawTimers() {
+
+    if (drawText(timer_selection, GREY)) return 1;
+
+    if (drawSpriteXPM(TIMER15_SPRITE, startTimer15X, startTimer15Y)) return 1;
+    if (drawSpriteXPM(TIMER30_SPRITE, startTimer30X, startTimer30Y)) return 1;
+    if (drawSpriteXPM(TIMER60_SPRITE, startTimer60X, startTimer60Y)) return 1;
 
     return 0;
 }

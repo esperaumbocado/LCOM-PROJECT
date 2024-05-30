@@ -142,16 +142,6 @@ void key_handler();
 void destroy_test();
 
 /**
- * @brief Sets the recorded_time to zero and the recording to true
-*/
-void startRecordingTime();
-
-/**
- * @brief Sets the recording to false
-*/
-void stopRecordingTime();
-
-/**
 * @brief Updates currentState and gameStateChange
 */
 void setGameState(GameState state);

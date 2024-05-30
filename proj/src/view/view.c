@@ -187,7 +187,6 @@ int GameDrawer(){
         case MENU:
             if (gameStateChange){
                 drawBackground();
-                drawRecordedTime(); // TODO: change it to Results screen
                 drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
                 drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
                 gameStateChange = 0;
@@ -196,9 +195,7 @@ int GameDrawer(){
             break;
         case GAME:
             if (gameStateChange){
-                printf("just moved to GAME\n");
                 drawBackground();
-                startRecordingTime();
                 drawRecordedTime(); 
                 gameStateChange = 0;
                 drawWords(test);

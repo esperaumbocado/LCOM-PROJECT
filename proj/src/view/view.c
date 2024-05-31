@@ -485,7 +485,7 @@ int drawWords(TypingTest *test) {
                 if (drawLetter(key, GREY)) return 1; // Grey
             }
 
-            x_offset += 13;
+            x_offset += 16;
         }
 
         if (i == (test->wordCount - 1)) {
@@ -494,12 +494,12 @@ int drawWords(TypingTest *test) {
 
         if (i != (test->wordCount - 1)) {
             Word *nextWord = &(test->words[i+1]);
-            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - startBoxX) {
+            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - startBoxX - 1) {
                 x_offset = startBoxX;
-                y_offset += 30;
+                y_offset += 32;
                 current_line++;
             }else{
-                x_offset += 13;
+                x_offset += 16;
             }
         }
     }
@@ -510,5 +510,5 @@ int drawWords(TypingTest *test) {
 
 
 int word_length_in_pixels(Word *word) {
-    return word->length*13;
+    return word->length*16;
 }

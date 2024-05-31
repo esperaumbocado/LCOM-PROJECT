@@ -382,13 +382,13 @@ void reset_offset() {
 
 int offset_handler(int x) {
     if (x == 0) {
-        x_offset += 13;
+        x_offset += 16;
     }if (x == 1) {
-        x_offset -= 13;
+        x_offset -= 16;
     }
-    if (x_offset + 13 >= startBoxX + sizeBoxX) {
+    if (x_offset + 16 >= startBoxX + sizeBoxX) {
         x_offset = startBoxX;
-        y_offset += 30;
+        y_offset += 32;
     }
     return 1;
 }

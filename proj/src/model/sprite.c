@@ -14,17 +14,6 @@ Sprite *create_sprite_xpm(xpm_map_t sprite){
     free(sp);
     return NULL;
   }
-  printf("Sprite created\n");
-  return sp;
-}
-
-Sprite *create_sprite_button(uint16_t width, uint16_t height, uint32_t color){
-  Sprite *sp = (Sprite *) malloc(sizeof(Sprite));
-  sp->height = height;
-  sp->width = width;
-  sp->colors = NULL;
-  sp->color = color;
-  sp->pressed = 0;
   return sp;
 }
 

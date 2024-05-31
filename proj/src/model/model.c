@@ -138,6 +138,9 @@ int startBoxY = 200;
 int sizeBoxX;
 int sizeBoxY;
 
+Statistics *stats;
+
+
 
 void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
@@ -318,6 +321,21 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     test->words[wordCount].letters[0].character = '\0';
     test->words[wordCount].letters[0].status = 0;
 }
+void initializeStats(Statistics **statsPtr) {
+    *statsPtr = (Statistics*)malloc(sizeof(Statistics));
+    if (*statsPtr == NULL) {
+        fprintf(stderr, "Failed to allocate memory for Statistics\n");
+        exit(EXIT_FAILURE);
+    }
+    Statistics *stats = *statsPtr;
+
+    stats->correctWords = 0;
+    stats->incorrectWords = 0;
+    stats->correctLetters = 0;
+    stats->incorrectLetters = 0;
+    stats->typedLetters = 0;
+    stats->typedWords = 0;
+}
 
 
 void load_new_word(TypingTest *test, int index){
@@ -365,13 +383,13 @@ void reset_offset() {
 
 int offset_handler(int x) {
     if (x == 0) {
-        x_offset += 13;
+        x_offset += 16;
     }if (x == 1) {
-        x_offset -= 13;
+        x_offset -= 16;
     }
-    if (x_offset + 13 >= startBoxX + sizeBoxX) {
+    if (x_offset + 16 >= startBoxX + sizeBoxX) {
         x_offset = startBoxX;
-        y_offset += 30;
+        y_offset += 32;
     }
     return 1;
 }
@@ -385,6 +403,13 @@ void update_timer() {
         case GAME:
             if (timer == 0){
                 setGameState(MENU);
+                printf("Stats:\n");
+                printf("Correct words: %d\n", stats->correctWords);
+                printf("Incorrect words: %d\n", stats->incorrectWords);
+                printf("Correct letters: %d\n", stats->correctLetters);
+                printf("Incorrect letters: %d\n", stats->incorrectLetters);
+                printf("Typed letters: %d\n", stats->typedLetters);
+                printf("Typed words: %d\n", stats->typedWords);
             }
 
             if (counter%60==0 && timer)
@@ -428,6 +453,7 @@ void checkActions() {
                 pp.lb) {
                 setGameState(TIMERS);
                 initializeTest(&test, wordPool, 50, 30);
+                initializeStats(&stats);
             }
             if (mouse_pos.x >= startInstructionsX && mouse_pos.x <= endInstructionsX &&
                 mouse_pos.y >= startInstructionsY && mouse_pos.y <= endInstructionsY &&
@@ -589,10 +615,14 @@ void process_key(char c, Key key, TypingTest *test, GameState state) {
             deleteCaret();
         }
         if (test->currentInputIndex < currentWord->length) {
+            stats->typedLetters++;
             currentWord->letters[test->currentInputIndex].status = 1;
             if (c != currentWord->letters[test->currentInputIndex].character) {
                 currentWord->letters[test->currentInputIndex].status = -1;
+                stats->incorrectLetters++;
                 printf("Mistake\n");
+            } else {
+                stats->correctLetters++;
             }
             test->currentInputIndex++;
             drawWords(test);
@@ -604,6 +634,7 @@ void process_key(char c, Key key, TypingTest *test, GameState state) {
 
 
 void handle_space_key(TypingTest *test) {
+
     Word *currentWord = &test->words[test->currentWordIndex];
     int isCorrect = 1;
     for (int i = 0; i < currentWord->length; i++) {
@@ -613,11 +644,14 @@ void handle_space_key(TypingTest *test) {
         }
     }
 
+    stats->typedWords++;
     if (isCorrect) {
         currentWord->status = 1; 
+        stats->correctWords++;
         printf("Correct word\n");
     } else {
         currentWord->status = -1; 
+        stats->incorrectWords++;
         printf("Incorrect word\n");
     }
 
@@ -758,5 +792,10 @@ void destroy_sprites(){
 void destroy_test(){
     free(test->words);
     free(test);
+}
+
+
+void destroy_stats(){
+    free(stats);
 }
 

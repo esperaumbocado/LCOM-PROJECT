@@ -122,6 +122,15 @@ typedef struct {
 } Word;
 
 typedef struct {
+    int correctWords;    // Number of correct words typed
+    int incorrectWords;  // Number of incorrect words typed
+    int correctLetters;  // Number of correct letters typed
+    int incorrectLetters;// Number of incorrect letters typed
+    int typedLetters;    // Number of letters typed
+    int typedWords;      // Number of words typed
+} Statistics;
+
+typedef struct {
     Word *words;             // Dynamic array of words for the current test
     int wordCount;           // Number of words in the current test
     int currentWordIndex;    // Index of the current word

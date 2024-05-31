@@ -102,6 +102,8 @@ Sprite *EIGHT_SPRITE;
 Sprite *NINE_SPRITE;
 
 Sprite *PANDA_SPRITE;
+Sprite *BAMBU_RIGHT_SPRITE;
+Sprite *BAMBU_LEFT_SPRITE;
 
 // Panda dimensions
 
@@ -155,6 +157,8 @@ Statistics *stats;
 void initialize_sprites() {
 
     PANDA_SPRITE = create_sprite_xpm((xpm_map_t)panda_xpm);
+    BAMBU_LEFT_SPRITE = create_sprite_xpm((xpm_map_t)bambu_left_xpm);
+    BAMBU_RIGHT_SPRITE = create_sprite_xpm((xpm_map_t)bambu_right_xpm);
 
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
 

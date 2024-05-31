@@ -169,12 +169,12 @@ void initialize_sprites() {
     TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm);
 
     startPandaX = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
-    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 180;
+    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
     endPandaX = startPandaX + PANDA_SPRITE->width;
     endPandaY = startPandaY + PANDA_SPRITE->height;
 
     startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
-    startPlayY = endPandaY + 50;
+    startPlayY = endPandaY + 30;
     endPlayX = startPlayX + PLAY_SPRITE->width;
     endPlayY = startPlayY + PLAY_SPRITE->height;
 

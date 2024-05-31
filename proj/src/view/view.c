@@ -38,6 +38,9 @@ extern Sprite *TIMER15_SPRITE;
 extern Sprite *TIMER30_SPRITE;
 extern Sprite *TIMER60_SPRITE;
 
+extern int startPandaX;
+extern int startPandaY;
+
 extern int startPlayX;
 extern int startPlayY;
 
@@ -200,7 +203,7 @@ int GameDrawer(){
         case MENU:
             if (gameStateChange){
                 drawBackground(MENU);
-                drawSpriteXPM(PANDA_SPRITE, startPlayX, startPlayY-300);
+                drawSpriteXPM(PANDA_SPRITE, startPandaX, startPandaY);
                 drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
                 drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
                 gameStateChange = 0;

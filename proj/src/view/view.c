@@ -38,6 +38,9 @@ extern Sprite *TIMER15_SPRITE;
 extern Sprite *TIMER30_SPRITE;
 extern Sprite *TIMER60_SPRITE;
 
+extern int startPandaX;
+extern int startPandaY;
+
 extern int startPlayX;
 extern int startPlayY;
 
@@ -200,7 +203,7 @@ int GameDrawer(){
         case MENU:
             if (gameStateChange){
                 drawBackground(MENU);
-                drawSpriteXPM(PANDA_SPRITE, startPlayX, startPlayY-300);
+                drawSpriteXPM(PANDA_SPRITE, startPandaX, startPandaY);
                 drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
                 drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
                 gameStateChange = 0;
@@ -329,7 +332,7 @@ int drawStars(){
 
 int drawTimers() {
 
-    if (drawText(timer_selection, GREY)) return 1;
+    if (drawText(timer_selection, WHITE)) return 1;
 
     if (drawSpriteXPM(TIMER15_SPRITE, startTimer15X, startTimer15Y)) return 1;
     if (drawSpriteXPM(TIMER30_SPRITE, startTimer30X, startTimer30Y)) return 1;
@@ -385,13 +388,14 @@ int drawCursor(){
 
 int drawText(const char* text, uint32_t color) {
 
-    reset_offset();
+    x_offset = 200;
+    y_offset = mode_info.YResolution/2 - 300;
 
     while (*text) {    
 
         if (*text == '\n') {
             x_offset = 100; // new line
-            y_offset += 20;  
+            y_offset += 22;  
             text++; 
             continue;
         }

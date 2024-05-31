@@ -169,12 +169,12 @@ void initialize_sprites() {
     TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm);
 
     startPandaX = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
-    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 180;
+    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
     endPandaX = startPandaX + PANDA_SPRITE->width;
     endPandaY = startPandaY + PANDA_SPRITE->height;
 
     startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
-    startPlayY = endPandaY + 50;
+    startPlayY = endPandaY + 30;
     endPlayX = startPlayX + PLAY_SPRITE->width;
     endPlayY = startPlayY + PLAY_SPRITE->height;
 
@@ -184,17 +184,17 @@ void initialize_sprites() {
     endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
 
     startTimer15X = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
-    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 ;
+    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 50;
     endTimer15X = startTimer15X + TIMER15_SPRITE->width;
     endTimer15Y = startTimer15Y + TIMER15_SPRITE->height;
 
     startTimer30X = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2;
-    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 100;
+    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 50;
     endTimer30X = startTimer30X + TIMER30_SPRITE->width;
     endTimer30Y = startTimer30Y + TIMER30_SPRITE->height;
 
     startTimer60X = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;
-    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 200;
+    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 150;
     endTimer60X = startTimer60X + TIMER60_SPRITE->width;
     endTimer60Y = startTimer60Y + TIMER60_SPRITE->height;
 

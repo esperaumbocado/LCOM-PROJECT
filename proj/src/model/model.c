@@ -260,6 +260,7 @@ void initialize_key_maps() {
     keyMap[KEY_PERIOD] = PERIOD; charMap[KEY_PERIOD] = '.';
     keyMap[KEY_ENTER] = ENTER;
     keyMap[KEY_DELETE] = BACK;
+    keyMap[KEY_ESC] = ESC;
     keyMap[KEY_SPACE] = NONE_KEY;
 }
 
@@ -561,6 +562,10 @@ void key_handler() {
             break;
         case GAME:
             update_keyboard(test);
+            if (currentKey == ESC) {
+                setGameState(MENU);
+                currentKey = NONE_KEY;
+            }
             break;
         case INSTRUCTIONS:
             update_keyboard(test);
@@ -682,6 +687,9 @@ void update_keyboard(TypingTest *test) {
                     if (currentState == GAME){
                         handle_delete_key(test);
                     }
+                    break;
+                case KEY_ESC:
+                    currentKey = ESC;
                     break;
                 default:
                     break;

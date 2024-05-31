@@ -1,4 +1,5 @@
 #include "view.h"
+#include <math.h>
 #include "messages.h"
 #include "../drivers/rtc/rtc.h"
 
@@ -107,10 +108,22 @@ extern Sprite *SEVEN_SPRITE;
 extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
+extern Sprite *BIG_ZERO_SPRITE;
+extern Sprite *BIG_ONE_SPRITE;
+extern Sprite *BIG_TWO_SPRITE;
+extern Sprite *BIG_THREE_SPRITE;
+extern Sprite *BIG_FOUR_SPRITE;
+extern Sprite *BIG_FIVE_SPRITE;
+extern Sprite *BIG_SIX_SPRITE;
+extern Sprite *BIG_SEVEN_SPRITE;
+extern Sprite *BIG_EIGHT_SPRITE;
+extern Sprite *BIG_NINE_SPRITE;
+
 extern Sprite* PANDA_SPRITE;
 extern Sprite* BAMBU_LEFT_SPRITE;
 extern Sprite* BAMBU_RIGHT_SPRITE;
 extern TypingTest *test;
+extern Statistics *stats;
 
 uint32_t bg_color;
 
@@ -252,12 +265,26 @@ int GameDrawer(){
         case STATISTICS:
             if (gameStateChange) {
                 draw_rectangle(statisticsBoxX, statisticsBoxY, statisticsBoxSizeX, statisticsBoxSizeY, WHITE, secondary_frame_buffer_no_mouse);
+                drawText(statistics, GREY, statisticsBoxX, statisticsBoxX+statisticsBoxSizeX, statisticsBoxY);
+                drawStatistics();
                 gameStateChange = 0;
             }
             drawCursor();
             break;
     }
 
+    return 0;
+}
+
+int drawStatistics() {
+    int accuracy = round(((double)stats->correctWords / stats->typedWords) * 100);
+    printf("Accuracy: %d\n", accuracy);
+    int speed = round((double)stats->typedWords / (stats->time / 60.0));
+    printf("Speed: %d\n", speed);
+    if (drawInt(accuracy, statisticsBoxX + 368, statisticsBoxY + 110)) return 1;
+    printf("Drawn accuracy\n");
+    if (drawInt(speed, statisticsBoxX + 322, statisticsBoxY + 132)) return 1;
+    printf("Drawn speed\n");
     return 0;
 }
 
@@ -388,6 +415,69 @@ int drawNumber(Key key, int x, int y) {
     return 1;
 }
 
+
+int drawBigNumber(Key key, int x, int y) {
+    printf("Drawing big number %d\n", key);
+    switch(key){
+        case ZERO:
+            return drawSpriteXPM(BIG_ZERO_SPRITE, x, y);
+        case ONE:
+            return drawSpriteXPM(BIG_ONE_SPRITE, x, y);
+        case TWO:
+            return drawSpriteXPM(BIG_TWO_SPRITE, x, y);
+        case THREE:
+            return drawSpriteXPM(BIG_THREE_SPRITE, x, y);
+        case FOUR:
+            return drawSpriteXPM(BIG_FOUR_SPRITE, x, y);
+        case FIVE:
+            return drawSpriteXPM(BIG_FIVE_SPRITE, x, y);
+        case SIX:
+            return drawSpriteXPM(BIG_SIX_SPRITE, x, y);
+        case SEVEN:
+            return drawSpriteXPM(BIG_SEVEN_SPRITE, x, y);
+        case EIGHT: 
+            return drawSpriteXPM(BIG_EIGHT_SPRITE, x, y);
+        case NINE:
+            return drawSpriteXPM(BIG_NINE_SPRITE, x, y);
+        default:
+            printf("Key:  does not represent a number\n");
+            break;
+    }
+
+    return 1;
+}
+
+int drawInt(int number, int x, int y) {
+    printf("Entering drawInt with number: %d\n", number);
+    
+    char number_string[12];
+    sprintf(number_string, "%d", number);
+    printf("Number string: %s\n", number_string);
+
+    char *number_string_ptr = number_string;
+    printf("Drawing number %d at (%d, %d)\n", number, x, y);
+
+    while (*number_string_ptr) {
+        printf("Processing character: %c\n", *number_string_ptr);
+        Key key = char_to_key(*number_string_ptr);
+        printf("Character '%c' converted to key %d\n", *number_string_ptr, key);
+        if (key == NONE_KEY) {
+            printf("Invalid key for character '%c'\n", *number_string_ptr);
+            return 1;
+        }
+
+        if (drawBigNumber(key, x, y)) return 1;
+
+        number_string_ptr++;
+        x += 16;
+    }
+
+    printf("Exiting drawInt successfully\n");
+    return 0;
+}
+
+
+
 int drawCursor(){
 
     if (mouse_pos.x < 0) mouse_pos.x = 0;
@@ -411,7 +501,7 @@ int drawText(const char* text, uint32_t color, int start_x, int end_x, int start
     while (*text) {    
 
         if (*text == '\n') {
-            x_offset = 100; // new line
+            x_offset = start_x; // new line
             y_offset += 22;  
             text++; 
             continue;

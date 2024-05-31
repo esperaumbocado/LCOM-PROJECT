@@ -101,6 +101,17 @@ Sprite *SEVEN_SPRITE;
 Sprite *EIGHT_SPRITE;
 Sprite *NINE_SPRITE;
 
+Sprite *BIG_ZERO_SPRITE;
+Sprite *BIG_ONE_SPRITE;
+Sprite *BIG_TWO_SPRITE;
+Sprite *BIG_THREE_SPRITE;
+Sprite *BIG_FOUR_SPRITE;
+Sprite *BIG_FIVE_SPRITE;
+Sprite *BIG_SIX_SPRITE;
+Sprite *BIG_SEVEN_SPRITE;
+Sprite *BIG_EIGHT_SPRITE;
+Sprite *BIG_NINE_SPRITE;
+
 Sprite *PANDA_SPRITE;
 Sprite *BAMBU_RIGHT_SPRITE;
 Sprite *BAMBU_LEFT_SPRITE;
@@ -253,6 +264,17 @@ void initialize_sprites() {
     SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm);
     EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm);
     NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm);
+
+    BIG_ZERO_SPRITE = create_sprite_xpm((xpm_map_t)big_zero_xpm);
+    BIG_ONE_SPRITE = create_sprite_xpm((xpm_map_t)big_one_xpm);
+    BIG_TWO_SPRITE = create_sprite_xpm((xpm_map_t)big_two_xpm);
+    BIG_THREE_SPRITE = create_sprite_xpm((xpm_map_t)big_three_xpm);
+    BIG_FOUR_SPRITE = create_sprite_xpm((xpm_map_t)big_four_xpm);
+    BIG_FIVE_SPRITE = create_sprite_xpm((xpm_map_t)big_five_xpm);
+    BIG_SIX_SPRITE = create_sprite_xpm((xpm_map_t)big_six_xpm);
+    BIG_SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)big_seven_xpm);
+    BIG_EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)big_eight_xpm);
+    BIG_NINE_SPRITE = create_sprite_xpm((xpm_map_t)big_nine_xpm);
 }
 
 
@@ -412,10 +434,11 @@ void reset_offset() {
 }
 
 int offset_handler(int x, int endX) {
-    x_offset += 16;
-    if (x_offset + 16 >= startBoxX + sizeBoxX) {
-        x_offset = startBoxX;
+    if (x_offset + 16 >= endX) {
+        x_offset = x;
         y_offset += 32;
+    }else{
+        x_offset += 16;
     }
     return 1;
 }
@@ -436,6 +459,7 @@ void update_timer() {
                 printf("Incorrect letters: %d\n", stats->incorrectLetters);
                 printf("Typed letters: %d\n", stats->typedLetters);
                 printf("Typed words: %d\n", stats->typedWords);
+                printf("Time: %d\n", stats->time);
             }
 
             if (counter%60==0 && timer)
@@ -824,6 +848,22 @@ void destroy_sprites(){
     destroy_sprite(SEVEN_SPRITE);
     destroy_sprite(EIGHT_SPRITE);
     destroy_sprite(NINE_SPRITE);
+
+    destroy_sprite(BIG_ZERO_SPRITE);
+    destroy_sprite(BIG_ONE_SPRITE);
+    destroy_sprite(BIG_TWO_SPRITE);
+    destroy_sprite(BIG_THREE_SPRITE);
+    destroy_sprite(BIG_FOUR_SPRITE);
+    destroy_sprite(BIG_FIVE_SPRITE);
+    destroy_sprite(BIG_SIX_SPRITE);
+    destroy_sprite(BIG_SEVEN_SPRITE);
+    destroy_sprite(BIG_EIGHT_SPRITE);
+    destroy_sprite(BIG_NINE_SPRITE);
+
+    destroy_sprite(PANDA_SPRITE);
+    destroy_sprite(BAMBU_RIGHT_SPRITE);
+    destroy_sprite(BAMBU_LEFT_SPRITE);
+
 }
 
 void destroy_test(){

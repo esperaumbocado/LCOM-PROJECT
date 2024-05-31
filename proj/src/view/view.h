@@ -40,6 +40,9 @@ int drawTimers();
 int drawRealTime();
 
 
+int drawStatistics();
+
+
 /**
  * @brief Draws a number on the screen
  * @param key the key to be drawn
@@ -78,5 +81,7 @@ int word_length_in_pixels(Word *word);
 int deleteCaret();
 
 int drawCaret(int x,int y);
+
+int drawInt(int number, int x, int y);
 
 #endif

@@ -36,6 +36,8 @@
 #include "xpm/numbers/nine.xpm"
 
 #include "xpm/panda.xpm"
+#include "xpm/bambu_right.xpm"
+#include "xpm/bambu_left.xpm"
 
 #define MAX_WORDS 30
 #define MAX_WORD_LENGTH 20

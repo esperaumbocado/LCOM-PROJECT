@@ -108,6 +108,8 @@ extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
 extern Sprite* PANDA_SPRITE;
+extern Sprite* BAMBU_LEFT_SPRITE;
+extern Sprite* BAMBU_RIGHT_SPRITE;
 extern TypingTest *test;
 
 uint32_t bg_color;
@@ -204,6 +206,8 @@ int GameDrawer(){
             if (gameStateChange){
                 drawBackground(MENU);
                 drawSpriteXPM(PANDA_SPRITE, startPandaX, startPandaY);
+                drawSpriteXPM(BAMBU_RIGHT_SPRITE,0,mode_info.YResolution - BAMBU_RIGHT_SPRITE->height);
+                drawSpriteXPM(BAMBU_LEFT_SPRITE,mode_info.XResolution - BAMBU_LEFT_SPRITE->width,mode_info.YResolution - BAMBU_LEFT_SPRITE->height);
                 drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
                 drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
                 gameStateChange = 0;

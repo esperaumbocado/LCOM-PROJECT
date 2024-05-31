@@ -34,6 +34,13 @@ int drawStars();
 int drawTimers();
 
 /**
+ * @brief Draws the real-time clock on the screen.
+ * @return 0 if successful, 1 otherwise
+*/
+int drawRealTime();
+
+
+/**
  * @brief Draws a number on the screen
  * @param key the key to be drawn
  * @param x the x position of the number

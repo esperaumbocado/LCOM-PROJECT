@@ -85,7 +85,8 @@ typedef enum{
     SEVEN,
     EIGHT,
     NINE,
-    BACK
+    BACK,
+    ESC
 } Key;
 
 typedef enum{

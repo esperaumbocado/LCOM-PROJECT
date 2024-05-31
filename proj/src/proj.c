@@ -20,6 +20,7 @@ extern real_time_info time_info;
 extern int counter;
 
 extern TypingTest *test;
+extern GameState currentState;
 
 int main(int argc, char *argv[]) {
   // sets the language of LCF messages (can be either EN-US or PT-PT)
@@ -60,14 +61,6 @@ int setup(){
   if(timer_subscribe()!=0) return 1;
 
   if(rtc_subscribe_interrupts()!=0) return 1;
-
-  // if (rtc_read_time(&time_info) != 0) {
-  //     printf("Failed to read RTC time\n");
-  // } else {
-  //     printf("Current time: %02d:%02d:%02d, Date: %02d/%02d/%02d\n",
-  //             time_info.hours, time_info.minutes, time_info.seconds,
-  //             time_info.day, time_info.month, time_info.year % 100);
-  // }
   
   initialize_sprites();
   initialize_key_maps();
@@ -106,7 +99,7 @@ int (proj_main_loop)(int argc, char **argv) {
 
   int ipc_status;
   message msg;
-  while (currentKey != Q) {
+  while (!(currentState==MENU && currentKey == ESC)) {
     
     if (driver_receive(ANY, &msg, &ipc_status) != 0) {
       printf("Error");

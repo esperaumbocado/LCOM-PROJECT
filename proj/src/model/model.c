@@ -312,6 +312,7 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     test->wordCount = wordCount;
     test->number_of_lines = -1;
     test->currentWordIndex = 0;
+    test->currentInputIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
 
     srand(time(NULL));

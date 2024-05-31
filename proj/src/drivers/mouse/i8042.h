@@ -16,7 +16,6 @@
 #define DELAY_US 20000
 
 #define BREAK BIT(7)
-#define ESC 0x81
 
 
 /**@}*/

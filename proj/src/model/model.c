@@ -133,8 +133,8 @@ TypingTest *test;
 extern char* wordPool[];
 
 // screen box dimensions
-int startBoxX = 100;
-int startBoxY = 100;
+int startBoxX = 200;
+int startBoxY = 200;
 int sizeBoxX;
 int sizeBoxY;
 
@@ -163,17 +163,17 @@ void initialize_sprites() {
     endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
 
     startTimer15X = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
-    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 100;
+    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 ;
     endTimer15X = startTimer15X + TIMER15_SPRITE->width;
     endTimer15Y = startTimer15Y + TIMER15_SPRITE->height;
 
     startTimer30X = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2;
-    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2;
+    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 100;
     endTimer30X = startTimer30X + TIMER30_SPRITE->width;
     endTimer30Y = startTimer30Y + TIMER30_SPRITE->height;
 
     startTimer60X = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;
-    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 100;
+    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 200;
     endTimer60X = startTimer60X + TIMER60_SPRITE->width;
     endTimer60Y = startTimer60Y + TIMER60_SPRITE->height;
 
@@ -288,6 +288,7 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     }
 
     test->wordCount = wordCount;
+    test->number_of_lines = -1;
     test->currentWordIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
 
@@ -306,14 +307,54 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
         newWord.letters[newWord.length].character = '\0';
         newWord.letters[newWord.length].status = 0;
         test->words[i] = newWord;
-
-
     }
 
     test->words[wordCount].length = 0;
     test->words[wordCount].status = 0;
+    test->words[wordCount].x = -1;
+    test->words[wordCount].y = -1;
+    test->words[wordCount].line = -1;
     test->words[wordCount].letters[0].character = '\0';
     test->words[wordCount].letters[0].status = 0;
+}
+
+
+void load_new_word(TypingTest *test, int index){
+    int wordIndex = rand() % 50;
+    char *word = wordPool[wordIndex];
+    Word newWord;
+    newWord.length = strlen(word);
+    newWord.status = 0;
+    for (int j = 0; j < newWord.length; j++) {
+        newWord.letters[j].character = word[j];
+        newWord.letters[j].status = 0;
+    }
+    newWord.letters[newWord.length].character = '\0';
+    newWord.letters[newWord.length].status = 0;
+    test->words[index] = newWord;
+}
+
+void shift_words_up(TypingTest *test) {
+    int penultimate_line_index = 0;
+    int last_line_index = 0;
+    for (int i = 0; i < test->wordCount - 1; i++) {
+        if (test->words[i].line == test->number_of_lines - 1) {
+            test->words[0+penultimate_line_index] = test->words[i];
+            penultimate_line_index++;
+        }
+
+        if (test->words[i].line == test->number_of_lines) {
+            test->words[penultimate_line_index+last_line_index] = test->words[i];
+            last_line_index++;
+        }
+    }
+
+    for (int i = penultimate_line_index+last_line_index; i < test->wordCount; i++) {
+        load_new_word(test, i);
+    }
+
+    
+    drawBackground(GAME);
 }
 
 void reset_offset() {
@@ -326,10 +367,6 @@ int offset_handler(int x) {
         x_offset += 13;
     }if (x == 1) {
         x_offset -= 13;
-    }
-    if (x_offset-13 < 0) {
-        x_offset = sizeBoxX - 13;
-        y_offset -= 30;
     }
     if (x_offset + 13 >= startBoxX + sizeBoxX) {
         x_offset = startBoxX;
@@ -563,7 +600,6 @@ void process_key(char c, Key key, TypingTest *test, GameState state) {
 
 void handle_space_key(TypingTest *test) {
     Word *currentWord = &test->words[test->currentWordIndex];
-
     int isCorrect = 1;
     for (int i = 0; i < currentWord->length; i++) {
         if (currentWord->letters[i].status == -1 || currentWord->letters[i].status == 0) { 
@@ -580,9 +616,37 @@ void handle_space_key(TypingTest *test) {
         printf("Incorrect word\n");
     }
 
+    int number_of_words_in_penultimate_line = 0;
+    for (int i = 0; i < test->wordCount; i++) {
+        if (test->words[i].line == test->number_of_lines - 1) {
+            number_of_words_in_penultimate_line++;
+        }
+    }
+
+
+    if (test->words[test->currentWordIndex].line == test->number_of_lines - 1) {
+        int isLastWordOnLine = 1;
+        for (int i = test->currentWordIndex + 1; i < test->wordCount; i++) {
+            if (test->words[i].line == test->number_of_lines - 1) {
+                isLastWordOnLine = 0;
+                break;
+            }
+
+        }
+        if (isLastWordOnLine) {
+            shift_words_up(test);
+            test->currentWordIndex = number_of_words_in_penultimate_line;
+            test->currentInputIndex = 0;
+            memset(test->currentInput, 0, MAX_WORD_LENGTH);
+            drawWords(test);
+            return;
+        }
+    }
+
     test->currentWordIndex++;
     test->currentInputIndex = 0;
     memset(test->currentInput, 0, MAX_WORD_LENGTH);
+
     drawWords(test);
 }
 

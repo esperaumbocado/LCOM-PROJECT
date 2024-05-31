@@ -15,8 +15,6 @@
 #define DELAY_US 20000
 
 #define BREAK BIT(7)
-#define ESC 0x81
-
 
 //KEYS
 #define KEY_ESC 0x01

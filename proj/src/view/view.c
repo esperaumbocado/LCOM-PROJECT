@@ -213,8 +213,10 @@ int GameDrawer(){
                 drawRecordedTime(); 
                 gameStateChange = 0;
                 drawWords(test);
+                drawRealTime();
             }
-            drawRecordedTime(); 
+            drawRealTime();
+            drawRecordedTime();
             drawStars();
             drawCursor();
             break;
@@ -234,6 +236,38 @@ int GameDrawer(){
             }
             drawCursor();
             break;
+    }
+
+    return 0;
+}
+
+int drawRealTime() {
+    if (rtc_read_time(&time_info) != 0) {
+        printf("Failed to read RTC time\n");
+        return 1;
+    } else {
+        int x = mode_info.XResolution - 13 * 8; // 8 characters (HH:MM:SS) * 13 pixels per character
+        int y = mode_info.YResolution - 40; // 40 pixels from the bottom
+
+        char time_string[9]; // HH:MM:SS
+        sprintf(time_string, "%02d:%02d:%02d", time_info.hours, time_info.minutes, time_info.seconds);
+
+        printf(time_string);
+        char *time_string_ptr = time_string;
+
+        while (*time_string_ptr) {
+            Key key = char_to_key(*time_string_ptr);
+            if (drawNumber(key, x, y)) {
+                if(drawSpriteXPM_single_color(COLON_SPRITE, x, y, GREY)) return 1;
+            }
+            
+            time_string_ptr++;
+            x += 13; // Move to the next position
+        }
+
+        // printf("Current time: %02d:%02d:%02d, Date: %02d/%02d/%02d\n",
+        //        time_info.hours, time_info.minutes, time_info.seconds,
+        //        time_info.day, time_info.month, time_info.year % 100);
     }
 
     return 0;
@@ -327,7 +361,7 @@ int drawNumber(Key key, int x, int y) {
         case NINE:
             return drawSpriteXPM_mouse(NINE_SPRITE, x, y);
         default:
-            printf("Key does not represent a number\n");
+            printf("Key:  does not represent a number\n");
             break;
     }
 

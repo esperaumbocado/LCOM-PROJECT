@@ -184,17 +184,17 @@ void initialize_sprites() {
     endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
 
     startTimer15X = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
-    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 100;
+    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 ;
     endTimer15X = startTimer15X + TIMER15_SPRITE->width;
     endTimer15Y = startTimer15Y + TIMER15_SPRITE->height;
 
     startTimer30X = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2;
-    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2;
+    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 100;
     endTimer30X = startTimer30X + TIMER30_SPRITE->width;
     endTimer30Y = startTimer30Y + TIMER30_SPRITE->height;
 
     startTimer60X = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;
-    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 100;
+    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 200;
     endTimer60X = startTimer60X + TIMER60_SPRITE->width;
     endTimer60Y = startTimer60Y + TIMER60_SPRITE->height;
 
@@ -281,6 +281,7 @@ void initialize_key_maps() {
     keyMap[KEY_PERIOD] = PERIOD; charMap[KEY_PERIOD] = '.';
     keyMap[KEY_ENTER] = ENTER;
     keyMap[KEY_DELETE] = BACK;
+    keyMap[KEY_ESC] = ESC;
     keyMap[KEY_SPACE] = NONE_KEY;
 }
 
@@ -605,6 +606,10 @@ void key_handler() {
             break;
         case GAME:
             update_keyboard(test);
+            if (currentKey == ESC) {
+                setGameState(MENU);
+                currentKey = NONE_KEY;
+            }
             break;
         case INSTRUCTIONS:
             update_keyboard(test);
@@ -734,6 +739,9 @@ void update_keyboard(TypingTest *test) {
                     if (currentState == GAME){
                         handle_delete_key(test);
                     }
+                    break;
+                case KEY_ESC:
+                    currentKey = ESC;
                     break;
                 default:
                     break;

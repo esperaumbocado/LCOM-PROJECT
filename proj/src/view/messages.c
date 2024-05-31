@@ -1,7 +1,7 @@
 #include "messages.h"
 
 const char* game_instructions = 
-    "\n\n\n\n"
+    "\n\n"
     "                       WELCOME TO TYPING TUTOR GAME! :) \n\n\n\n"
     "                               HOW TO PLAY:\n\n"
     "                         TYPE AS FAST AS YOU CAN! \n\n"
@@ -9,11 +9,13 @@ const char* game_instructions =
     "                   USE BACKSPACE TO UNDO THE LAST LETTER. \n\n"
     "                   PRESS THE LEFT BUTTON AND SWIPE RIGHT \n"
     "                        TO AUTOCOMPLETE THE WORD. \n\n\n"
-    "                   PRESS BACKSPACE TO GO BACK TO MAIN MENU \n"
+    "                   PRESS ESC WHILE IN GAME TO EXIT TO MAIN MENU \n\n"
+    "                     PRESS ESC WHILE IN MAIN MENU TO EXIT GAME \n\n"
+    "                      PRESS BACKSPACE TO GO BACK TO MAIN MENU \n"
     "                               AND GOOD LUCK! \n";
 
 const char* timer_selection = 
-    "\n\n"
+    "\n"
     "                       CHOOSE THE TIMER FOR YOUR GAME :) \n\n\n"
     "                   PRESS BACKSPACE TO GO BACK TO MAIN MENU\n\n";
 

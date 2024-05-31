@@ -298,7 +298,7 @@ int drawStars(){
 
 int drawTimers() {
 
-    if (drawText(timer_selection, GREY)) return 1;
+    if (drawText(timer_selection, WHITE)) return 1;
 
     if (drawSpriteXPM(TIMER15_SPRITE, startTimer15X, startTimer15Y)) return 1;
     if (drawSpriteXPM(TIMER30_SPRITE, startTimer30X, startTimer30Y)) return 1;
@@ -354,13 +354,14 @@ int drawCursor(){
 
 int drawText(const char* text, uint32_t color) {
 
-    reset_offset();
+    x_offset = 200;
+    y_offset = mode_info.YResolution/2 - 300;
 
     while (*text) {    
 
         if (*text == '\n') {
             x_offset = 100; // new line
-            y_offset += 20;  
+            y_offset += 22;  
             text++; 
             continue;
         }

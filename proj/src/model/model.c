@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 extern uint8_t data;
 Key currentKey = NONE_KEY;
 GameState currentState;
@@ -36,7 +35,6 @@ extern int counter;
 
 extern int bytes_read;
 extern struct packet pp;
-extern mouse_position mouse_pos;
 
 // Checking for swipe right gesture
 GestureState gestureState = GESTURE_ZERO;
@@ -105,147 +103,98 @@ Sprite *PANDA_SPRITE;
 Sprite *BAMBU_RIGHT_SPRITE;
 Sprite *BAMBU_LEFT_SPRITE;
 
-// Panda dimensions
-
-int startPandaX;
-int startPandaY;
-int endPandaX;
-int endPandaY;
-
-
-// Play button dimensions
-int startPlayX;
-int startPlayY;
-int endPlayX;
-int endPlayY;
-
-// Instructions button dimensions
-int startInstructionsX;
-int startInstructionsY;
-int endInstructionsX;
-int endInstructionsY;
-
-// Timer buttons dimensions
-int startTimer15X;
-int startTimer15Y;
-int endTimer15X;
-int endTimer15Y;
-
-int startTimer30X;
-int startTimer30Y;
-int endTimer30X;
-int endTimer30Y;
-
-int startTimer60X;
-int startTimer60Y;
-int endTimer60X;
-int endTimer60Y;
-
 TypingTest *test;
 extern char* wordPool[];
 
 // screen box dimensions
-int startBoxX = 200;
-int startBoxY = 200;
-int sizeBoxX;
-int sizeBoxY;
+int x_margin = 200;
+int y_margin = 200;
 
 Statistics *stats;
 
-
-
 void initialize_sprites() {
 
-    PANDA_SPRITE = create_sprite_xpm((xpm_map_t)panda_xpm);
-    BAMBU_LEFT_SPRITE = create_sprite_xpm((xpm_map_t)bambu_left_xpm);
-    BAMBU_RIGHT_SPRITE = create_sprite_xpm((xpm_map_t)bambu_right_xpm);
+    PANDA_SPRITE = create_sprite_xpm((xpm_map_t)panda_xpm, 0, 0);
+    PANDA_SPRITE->x = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
+    PANDA_SPRITE->y = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
 
-    CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
+    BAMBU_LEFT_SPRITE = create_sprite_xpm((xpm_map_t)bambu_left_xpm, 0, 0);
+    BAMBU_LEFT_SPRITE->y = mode_info.YResolution - BAMBU_LEFT_SPRITE->height;
 
-    STAR_SPRITE = create_sprite_xpm((xpm_map_t)star_xpm);
+    BAMBU_RIGHT_SPRITE = create_sprite_xpm((xpm_map_t)bambu_right_xpm, 0, 0);
+    BAMBU_RIGHT_SPRITE->x = mode_info.XResolution - BAMBU_RIGHT_SPRITE->width;
+    BAMBU_RIGHT_SPRITE->y = mode_info.YResolution - BAMBU_RIGHT_SPRITE->height;
 
-    PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
+    PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm, 0, 0);
+    PLAY_SPRITE->x = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
+    PLAY_SPRITE->y = PANDA_SPRITE->y + PANDA_SPRITE->height + 30; // 30 pixels below the panda
 
-    INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm);
+    INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm, 0, 0);
+    INSTRUCTIONS_SPRITE->x = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
+    INSTRUCTIONS_SPRITE->y = PLAY_SPRITE->y + PLAY_SPRITE->height + 30; // 30 pixels below the play button
 
-    TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm);
-    TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm);
-    TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm);
+    TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm, 0, 0);
+    TIMER15_SPRITE->x = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
+    TIMER15_SPRITE->y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 50; // 50 pixels above the center of the screen
 
-    startPandaX = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
-    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
-    endPandaX = startPandaX + PANDA_SPRITE->width;
-    endPandaY = startPandaY + PANDA_SPRITE->height;
+    TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm, 0, 0);
+    TIMER30_SPRITE->x = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2; 
+    TIMER30_SPRITE->y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 50; // 50 pixels below the center of the screen
 
-    startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
-    startPlayY = endPandaY + 30;
-    endPlayX = startPlayX + PLAY_SPRITE->width;
-    endPlayY = startPlayY + PLAY_SPRITE->height;
+    TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm, 0, 0);
+    TIMER60_SPRITE->x = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;
+    TIMER60_SPRITE->y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 150; // 150 pixels below the center of the screen
 
-    startInstructionsX = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
-    startInstructionsY = endPlayY + 30;
-    endInstructionsX = startInstructionsX + INSTRUCTIONS_SPRITE->width;
-    endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
+    CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm, 500, 500);
+    STAR_SPRITE = create_sprite_xpm((xpm_map_t)star_xpm, 10, 10);
 
-    startTimer15X = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
-    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 50;
-    endTimer15X = startTimer15X + TIMER15_SPRITE->width;
-    endTimer15Y = startTimer15Y + TIMER15_SPRITE->height;
+    A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm, 0, 0);
+    B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm, 0, 0);
+    C_SPRITE = create_sprite_xpm((xpm_map_t)KEY_C_xpm, 0, 0);
+    D_SPRITE = create_sprite_xpm((xpm_map_t)KEY_D_xpm, 0, 0);
+    E_SPRITE = create_sprite_xpm((xpm_map_t)KEY_E_xpm, 0, 0);
+    F_SPRITE = create_sprite_xpm((xpm_map_t)KEY_F_xpm, 0, 0);
+    G_SPRITE = create_sprite_xpm((xpm_map_t)KEY_G_xpm, 0, 0);
+    H_SPRITE = create_sprite_xpm((xpm_map_t)KEY_H_xpm, 0, 0);
+    I_SPRITE = create_sprite_xpm((xpm_map_t)KEY_I_xpm, 0, 0);
+    J_SPRITE = create_sprite_xpm((xpm_map_t)KEY_J_xpm, 0, 0);
+    K_SPRITE = create_sprite_xpm((xpm_map_t)KEY_K_xpm, 0, 0);
+    L_SPRITE = create_sprite_xpm((xpm_map_t)KEY_L_xpm, 0, 0);
+    M_SPRITE = create_sprite_xpm((xpm_map_t)KEY_M_xpm, 0, 0);
+    N_SPRITE = create_sprite_xpm((xpm_map_t)KEY_N_xpm, 0, 0);
+    O_SPRITE = create_sprite_xpm((xpm_map_t)KEY_O_xpm, 0, 0);
+    P_SPRITE = create_sprite_xpm((xpm_map_t)KEY_P_xpm, 0, 0);
+    Q_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Q_xpm, 0, 0);
+    R_SPRITE = create_sprite_xpm((xpm_map_t)KEY_R_xpm, 0, 0);
+    S_SPRITE = create_sprite_xpm((xpm_map_t)KEY_S_xpm, 0, 0);
+    T_SPRITE = create_sprite_xpm((xpm_map_t)KEY_T_xpm, 0, 0);
+    U_SPRITE = create_sprite_xpm((xpm_map_t)KEY_U_xpm, 0, 0);
+    V_SPRITE = create_sprite_xpm((xpm_map_t)KEY_V_xpm, 0, 0);
+    W_SPRITE = create_sprite_xpm((xpm_map_t)KEY_W_xpm, 0, 0);
+    X_SPRITE = create_sprite_xpm((xpm_map_t)KEY_X_xpm, 0, 0);
+    Y_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Y_xpm, 0, 0);
+    Z_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Z_xpm, 0, 0);
 
-    startTimer30X = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2;
-    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 50;
-    endTimer30X = startTimer30X + TIMER30_SPRITE->width;
-    endTimer30Y = startTimer30Y + TIMER30_SPRITE->height;
+    COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm, 0, 0);
+    PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm, 0, 0);
 
-    startTimer60X = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;
-    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 150;
-    endTimer60X = startTimer60X + TIMER60_SPRITE->width;
-    endTimer60Y = startTimer60Y + TIMER60_SPRITE->height;
+    EXCLAMATION_SPRITE = create_sprite_xpm((xpm_map_t)exclamation_xpm, 0, 0);
+    COLON_SPRITE = create_sprite_xpm((xpm_map_t)colon_xpm, 0, 0);
+    RIGHT_PARENTHESIS_SPRITE = create_sprite_xpm((xpm_map_t)right_parenthesis_xpm, 0, 0);
 
-    A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
-    B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
-    C_SPRITE = create_sprite_xpm((xpm_map_t)KEY_C_xpm);
-    D_SPRITE = create_sprite_xpm((xpm_map_t)KEY_D_xpm);
-    E_SPRITE = create_sprite_xpm((xpm_map_t)KEY_E_xpm);
-    F_SPRITE = create_sprite_xpm((xpm_map_t)KEY_F_xpm);
-    G_SPRITE = create_sprite_xpm((xpm_map_t)KEY_G_xpm);
-    H_SPRITE = create_sprite_xpm((xpm_map_t)KEY_H_xpm);
-    I_SPRITE = create_sprite_xpm((xpm_map_t)KEY_I_xpm);
-    J_SPRITE = create_sprite_xpm((xpm_map_t)KEY_J_xpm);
-    K_SPRITE = create_sprite_xpm((xpm_map_t)KEY_K_xpm);
-    L_SPRITE = create_sprite_xpm((xpm_map_t)KEY_L_xpm);
-    M_SPRITE = create_sprite_xpm((xpm_map_t)KEY_M_xpm);
-    N_SPRITE = create_sprite_xpm((xpm_map_t)KEY_N_xpm);
-    O_SPRITE = create_sprite_xpm((xpm_map_t)KEY_O_xpm);
-    P_SPRITE = create_sprite_xpm((xpm_map_t)KEY_P_xpm);
-    Q_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Q_xpm);
-    R_SPRITE = create_sprite_xpm((xpm_map_t)KEY_R_xpm);
-    S_SPRITE = create_sprite_xpm((xpm_map_t)KEY_S_xpm);
-    T_SPRITE = create_sprite_xpm((xpm_map_t)KEY_T_xpm);
-    U_SPRITE = create_sprite_xpm((xpm_map_t)KEY_U_xpm);
-    V_SPRITE = create_sprite_xpm((xpm_map_t)KEY_V_xpm);
-    W_SPRITE = create_sprite_xpm((xpm_map_t)KEY_W_xpm);
-    X_SPRITE = create_sprite_xpm((xpm_map_t)KEY_X_xpm);
-    Y_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Y_xpm);
-    Z_SPRITE = create_sprite_xpm((xpm_map_t)KEY_Z_xpm);
+    ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm, 0, 0);
+    ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm, 0, 0);
+    TWO_SPRITE = create_sprite_xpm((xpm_map_t)two_xpm, 0, 0);
+    THREE_SPRITE = create_sprite_xpm((xpm_map_t)three_xpm, 0, 0);
+    FOUR_SPRITE = create_sprite_xpm((xpm_map_t)four_xpm, 0, 0);
+    FIVE_SPRITE = create_sprite_xpm((xpm_map_t)five_xpm, 0, 0);
+    SIX_SPRITE = create_sprite_xpm((xpm_map_t)six_xpm, 0, 0);
+    SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm, 0, 0);
+    EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm, 0, 0);
+    NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm, 0, 0);
 
-    COMMA_SPRITE = create_sprite_xpm((xpm_map_t)KEY_COMMA_xpm);
-    PERIOD_SPRITE = create_sprite_xpm((xpm_map_t)KEY_PERIOD_xpm);
+    printf("All sprites initialized. \n");
 
-    EXCLAMATION_SPRITE = create_sprite_xpm((xpm_map_t)exclamation_xpm);
-    COLON_SPRITE = create_sprite_xpm((xpm_map_t)colon_xpm);
-    RIGHT_PARENTHESIS_SPRITE = create_sprite_xpm((xpm_map_t)right_parenthesis_xpm);
-
-    ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm);
-    ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm);
-    TWO_SPRITE = create_sprite_xpm((xpm_map_t)two_xpm);
-    THREE_SPRITE = create_sprite_xpm((xpm_map_t)three_xpm);
-    FOUR_SPRITE = create_sprite_xpm((xpm_map_t)four_xpm);
-    FIVE_SPRITE = create_sprite_xpm((xpm_map_t)five_xpm);
-    SIX_SPRITE = create_sprite_xpm((xpm_map_t)six_xpm);
-    SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm);
-    EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm);
-    NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm);
 }
 
 
@@ -400,8 +349,8 @@ void shift_words_up(TypingTest *test) {
 }
 
 void reset_offset() {
-    x_offset = startBoxX;
-    y_offset = startBoxY;
+    x_offset = x_margin;
+    y_offset = y_margin;
 }
 
 int offset_handler(int x) {
@@ -410,8 +359,8 @@ int offset_handler(int x) {
     }if (x == 1) {
         x_offset -= 16;
     }
-    if (x_offset + 16 >= startBoxX + sizeBoxX) {
-        x_offset = startBoxX;
+    if (x_offset + 16 >= mode_info.XResolution - x_margin) {
+        x_offset = x_margin;
         y_offset += 32;
     }
     return 1;
@@ -453,10 +402,6 @@ void setGameState(GameState state) {
     }
 }
 
-void initialize_mouse_data() {
-    mouse_pos.x = 500;
-    mouse_pos.y = 300;
-}
 
 void update_mouse() {
     mouse_ih();
@@ -468,41 +413,41 @@ void update_mouse() {
     }
 }
 
+int within_bounds(Sprite *first_sprite, Sprite *second_sprite) {
+    return first_sprite->x >= second_sprite->x && first_sprite->x <= second_sprite->x + second_sprite->width &&
+           first_sprite->y >= second_sprite->y && first_sprite->y <= second_sprite->y + second_sprite->height;
+}
+
 void checkActions() {
     switch (currentState) {
         case MENU:
-            if (mouse_pos.x >= startPlayX && mouse_pos.x <= endPlayX &&
-                mouse_pos.y >= startPlayY && mouse_pos.y <= endPlayY &&
+            if (CURSOR_SPRITE->x >= PLAY_SPRITE->x && CURSOR_SPRITE->x <= PLAY_SPRITE->x + PLAY_SPRITE->width &&
+                CURSOR_SPRITE->y >= PLAY_SPRITE->y && CURSOR_SPRITE->y <= PLAY_SPRITE->y + PLAY_SPRITE->height &&
                 pp.lb) {
                 setGameState(TIMERS);
                 initializeTest(&test, wordPool, 50, 30);
                 initializeStats(&stats);
             }
-            if (mouse_pos.x >= startInstructionsX && mouse_pos.x <= endInstructionsX &&
-                mouse_pos.y >= startInstructionsY && mouse_pos.y <= endInstructionsY &&
+            if (CURSOR_SPRITE->x >= INSTRUCTIONS_SPRITE->x && CURSOR_SPRITE->x <= INSTRUCTIONS_SPRITE->x + INSTRUCTIONS_SPRITE->width &&
+                CURSOR_SPRITE->y >= INSTRUCTIONS_SPRITE->y && CURSOR_SPRITE->y <= INSTRUCTIONS_SPRITE->y + INSTRUCTIONS_SPRITE->height &&
                 pp.lb) {
                 setGameState(INSTRUCTIONS);
             }
             break;
         case TIMERS:
-            if (mouse_pos.x >= startTimer15X && mouse_pos.x <= endTimer15X &&
-                mouse_pos.y >= startTimer15Y && mouse_pos.y <= endTimer15Y &&
-                pp.lb) {
+            if (within_bounds(CURSOR_SPRITE, TIMER15_SPRITE) && pp.lb) {
                 timer = 15;
                 setGameState(GAME);
             }
-            if (mouse_pos.x >= startTimer30X && mouse_pos.x <= endTimer30X &&
-                mouse_pos.y >= startTimer30Y && mouse_pos.y <= endTimer30Y &&
-                pp.lb) {
+            if (within_bounds(CURSOR_SPRITE, TIMER30_SPRITE) && pp.lb) {
                 timer = 30;
                 setGameState(GAME);
             }
-            if (mouse_pos.x >= startTimer60X && mouse_pos.x <= endTimer60X &&
-                mouse_pos.y >= startTimer60Y && mouse_pos.y <= endTimer60Y &&
-                pp.lb) {
+            if (within_bounds(CURSOR_SPRITE, TIMER60_SPRITE) && pp.lb) {
                 timer = 60;
                 setGameState(GAME);
             }
+            
             break;
         case GAME:
             checkGesture();

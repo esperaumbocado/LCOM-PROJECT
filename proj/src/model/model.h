@@ -175,16 +175,19 @@ void reset_offset();
 */
 int offset_handler(int x);
 
-// MOUSE STUFF
-/**
- * @brief Initializes the mouse data
-*/
-void initialize_mouse_data();
-
 /**
  * @brief Sync mouse bytes and calls update_mouse_date
 */
 void update_mouse();
+
+
+/**
+ * @brief Checks if an sprite is within the bounds of another sprite
+ * @param first_sprite the first sprite
+ * @param second_sprite the second sprite
+ * @return 1 if the first sprite is within the bounds of the second sprite, 0 otherwise
+*/
+int within_bounds(Sprite *first_sprite, Sprite *second_sprite);
 
 /**
  * @brief Checks the actions to be taken based on the mouse data

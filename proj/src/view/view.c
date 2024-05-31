@@ -19,13 +19,9 @@ extern real_time_info time_info;
 //CARET
 extern Caret caret;
 
-
 extern int timer;
 
-extern mouse_position mouse_pos;
-
 extern int stars;
-
 
 extern Sprite *CURSOR_SPRITE;
 
@@ -38,29 +34,6 @@ extern Sprite *TIMER15_SPRITE;
 extern Sprite *TIMER30_SPRITE;
 extern Sprite *TIMER60_SPRITE;
 
-extern int startPandaX;
-extern int startPandaY;
-
-extern int startPlayX;
-extern int startPlayY;
-
-extern int startInstructionsX;
-extern int startInstructionsY;
-
-extern int startTimer15X;
-extern int startTimer15Y;
-
-extern int startTimer30X;
-extern int startTimer30Y;
-
-extern int startTimer60X;
-extern int startTimer60Y;
-
-// Box dimensions
-extern int startBoxX;
-extern int startBoxY;
-extern int sizeBoxX;
-extern int sizeBoxY;
 
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
@@ -114,21 +87,15 @@ extern TypingTest *test;
 
 uint32_t bg_color;
 
-
 // screen box dimensions
-extern int startBoxX;
-extern int startBoxY;
-extern int sizeBoxX;
-extern int sizeBoxY;
+extern int x_margin;
+extern int y_margin;
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
     frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
     secondary_frame_buffer = (uint8_t *) malloc(frame_size);
     secondary_frame_buffer_no_mouse = (uint8_t *) malloc(frame_size);
-
-    sizeBoxX = mode_info.XResolution - 400;
-    sizeBoxY = mode_info.YResolution - 400;
 
     return 0;
 }
@@ -205,11 +172,11 @@ int GameDrawer(){
         case MENU:
             if (gameStateChange){
                 drawBackground(MENU);
-                drawSpriteXPM(PANDA_SPRITE, startPandaX, startPandaY);
-                drawSpriteXPM(BAMBU_RIGHT_SPRITE,0,mode_info.YResolution - BAMBU_RIGHT_SPRITE->height);
-                drawSpriteXPM(BAMBU_LEFT_SPRITE,mode_info.XResolution - BAMBU_LEFT_SPRITE->width,mode_info.YResolution - BAMBU_LEFT_SPRITE->height);
-                drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
-                drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
+                drawSpriteXPM(PANDA_SPRITE, PANDA_SPRITE->x, PANDA_SPRITE->y);
+                drawSpriteXPM(BAMBU_RIGHT_SPRITE, BAMBU_RIGHT_SPRITE->x, BAMBU_RIGHT_SPRITE->y);
+                drawSpriteXPM(BAMBU_LEFT_SPRITE, BAMBU_LEFT_SPRITE->x, BAMBU_LEFT_SPRITE->y);
+                drawSpriteXPM(PLAY_SPRITE, PLAY_SPRITE->x, PLAY_SPRITE->y);
+                drawSpriteXPM(INSTRUCTIONS_SPRITE, INSTRUCTIONS_SPRITE->x, INSTRUCTIONS_SPRITE->y);
                 gameStateChange = 0;
             }
             drawCursor();
@@ -259,7 +226,6 @@ int drawRealTime() {
         char time_string[9]; // HH:MM:SS
         sprintf(time_string, "%02d:%02d:%02d", time_info.hours, time_info.minutes, time_info.seconds);
 
-        printf(time_string);
         char *time_string_ptr = time_string;
 
         while (*time_string_ptr) {
@@ -296,7 +262,7 @@ int drawBackground(GameState state) {
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
 
     if(state == GAME){
-        draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, BEIGE, secondary_frame_buffer_no_mouse);
+       draw_rectangle(x_margin, y_margin, mode_info.XResolution - 2*x_margin, mode_info.YResolution-2*y_margin, BEIGE, secondary_frame_buffer_no_mouse);
     }else if(state == INSTRUCTIONS){
         draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, BEIGE, secondary_frame_buffer_no_mouse);
     }
@@ -329,7 +295,7 @@ int drawRecordedTime(){
 int drawStars(){
 
     for (int i = 0; i < stars; i++) 
-        if (drawSpriteXPM_mouse(STAR_SPRITE, 10 + i*30, 10)) return 1;
+        if (drawSpriteXPM_mouse(STAR_SPRITE, STAR_SPRITE->x + i*30, STAR_SPRITE->y)) return 1;
     
     return 0;
 }
@@ -338,9 +304,9 @@ int drawTimers() {
 
     if (drawText(timer_selection, WHITE)) return 1;
 
-    if (drawSpriteXPM(TIMER15_SPRITE, startTimer15X, startTimer15Y)) return 1;
-    if (drawSpriteXPM(TIMER30_SPRITE, startTimer30X, startTimer30Y)) return 1;
-    if (drawSpriteXPM(TIMER60_SPRITE, startTimer60X, startTimer60Y)) return 1;
+    if (drawSpriteXPM(TIMER15_SPRITE, TIMER15_SPRITE->x, TIMER15_SPRITE->y)) return 1;
+    if (drawSpriteXPM(TIMER30_SPRITE, TIMER30_SPRITE->x, TIMER30_SPRITE->y)) return 1;
+    if (drawSpriteXPM(TIMER60_SPRITE, TIMER60_SPRITE->x, TIMER60_SPRITE->y)) return 1;
 
     return 0;
 }
@@ -368,7 +334,6 @@ int drawNumber(Key key, int x, int y) {
         case NINE:
             return drawSpriteXPM_mouse(NINE_SPRITE, x, y);
         default:
-            printf("Key:  does not represent a number\n");
             break;
     }
 
@@ -377,17 +342,17 @@ int drawNumber(Key key, int x, int y) {
 
 int drawCursor(){
 
-    if (mouse_pos.x < 0) mouse_pos.x = 0;
-    if (mouse_pos.x > mode_info.XResolution - CURSOR_SPRITE->width){
-        mouse_pos.x = mode_info.XResolution - CURSOR_SPRITE->width;
+    if (CURSOR_SPRITE->x < 0) CURSOR_SPRITE->x = 0;
+    if (CURSOR_SPRITE->x > mode_info.XResolution - CURSOR_SPRITE->width){
+        CURSOR_SPRITE->x = mode_info.XResolution - CURSOR_SPRITE->width;
     }
 
-    if (mouse_pos.y < 0) mouse_pos.y = 0;
-    if (mouse_pos.y > mode_info.YResolution - CURSOR_SPRITE->height){
-        mouse_pos.y = mode_info.YResolution - CURSOR_SPRITE->height;
+    if (CURSOR_SPRITE->y < 0) CURSOR_SPRITE->y = 0;
+    if (CURSOR_SPRITE->y > mode_info.YResolution - CURSOR_SPRITE->height){
+        CURSOR_SPRITE->y = mode_info.YResolution - CURSOR_SPRITE->height;
     }
 
-    return drawSpriteXPM_mouse(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
+    return drawSpriteXPM_mouse(CURSOR_SPRITE, CURSOR_SPRITE->x, CURSOR_SPRITE->y);
 }
 
 int drawText(const char* text, uint32_t color) {
@@ -538,8 +503,8 @@ int drawWords(TypingTest *test) {
 
         if (i != (test->wordCount - 1)) {
             Word *nextWord = &(test->words[i+1]);
-            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - startBoxX - 1) {
-                x_offset = startBoxX;
+            if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - x_margin - 1) {
+                x_offset = x_margin;
                 y_offset += 32;
                 current_line++;
             }else{

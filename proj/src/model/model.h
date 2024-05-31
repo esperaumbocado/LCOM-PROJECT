@@ -9,8 +9,14 @@
 #include "model/sprite.h"
 #include "xpm/letters.xpm"
 #include "xpm/cursor.xpm"
+#include "xpm/star.xpm"
+
 #include "xpm/play.xpm"
 #include "xpm/instructions.xpm"
+
+#include "xpm/timer15.xpm"
+#include "xpm/timer30.xpm"
+#include "xpm/timer60.xpm"
 
 #include "xpm/punctuation/comma.xpm"
 #include "xpm/punctuation/period.xpm"
@@ -81,10 +87,10 @@ typedef enum{
 } Key;
 
 typedef enum{
-    NONE_STATE,
     MENU,
     INSTRUCTIONS,
-    GAME
+    GAME,
+    TIMERS
 } GameState;
 
 typedef enum{
@@ -139,14 +145,9 @@ void key_handler();
 void destroy_test();
 
 /**
- * @brief Sets the recorded_time to zero and the recording to true
+* @brief Updates currentState and gameStateChange
 */
-void startRecordingTime();
-
-/**
- * @brief Sets the recording to false
-*/
-void stopRecordingTime();
+void setGameState(GameState state);
 
 /**
  * @brief Resets offset to starting of box

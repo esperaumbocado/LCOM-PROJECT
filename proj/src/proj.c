@@ -72,6 +72,8 @@ int setup(){
   initialize_sprites();
   initialize_key_maps();
 
+  setGameState(MENU);
+
   return 0;
 }
 
@@ -83,6 +85,7 @@ int end(){
 
   //destroy_test();   // SHOULD BE CALLED WHEN LEAVING THE GAME MODE, HERE TO AVOID MEMORY LEAKS DURING DEVELOPMENT
                     // LEAVING THE APPLICATION WITHOUT STARTING A GAME WILL CAUSE A CRASH BECAUSE OF THIS
+  destroy_sprites();
 
   if(keyboard_unsubscribe_int()!=0) return 1;
   if(timer_unsubscribe_int()!=0) return 1;

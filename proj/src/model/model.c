@@ -8,7 +8,7 @@
 
 extern uint8_t data;
 Key currentKey = NONE_KEY;
-GameState currentState = MENU;
+GameState currentState;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
 extern uint8_t *secondary_frame_buffer_no_mouse;
@@ -25,11 +25,10 @@ Caret caret;
 Key keyMap[256];
 char charMap[256];
 
-bool gameStateChange = 1;
+bool gameStateChange;
 
 // TIMER VARIABLES
-int recorded_time;
-bool is_recording = false;
+int timer;
 
 extern int counter;
 
@@ -43,11 +42,21 @@ extern mouse_position mouse_pos;
 GestureState gestureState = GESTURE_ZERO;
 int x_gesture = 0;
 
+int stars; // stars for swiping right
+
 //WORD
 
 Sprite *CURSOR_SPRITE;
+
+Sprite *STAR_SPRITE;
+
 Sprite *PLAY_SPRITE;
 Sprite *INSTRUCTIONS_SPRITE;
+
+Sprite *TIMER15_SPRITE;
+Sprite *TIMER30_SPRITE;
+Sprite *TIMER60_SPRITE;
+
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
 Sprite *C_SPRITE;
@@ -92,31 +101,56 @@ Sprite *SEVEN_SPRITE;
 Sprite *EIGHT_SPRITE;
 Sprite *NINE_SPRITE;
 
+// Play button dimensions
 int startPlayX;
 int startPlayY;
 int endPlayX;
 int endPlayY;
 
+// Instructions button dimensions
 int startInstructionsX;
 int startInstructionsY;
 int endInstructionsX;
 int endInstructionsY;
 
+// Timer buttons dimensions
+int startTimer15X;
+int startTimer15Y;
+int endTimer15X;
+int endTimer15Y;
+
+int startTimer30X;
+int startTimer30Y;
+int endTimer30X;
+int endTimer30Y;
+
+int startTimer60X;
+int startTimer60Y;
+int endTimer60X;
+int endTimer60Y;
+
 TypingTest *test;
 extern char* wordPool[];
 
-// Box dimensions
-extern int startBoxX;
-extern int startBoxY;
-extern int sizeBoxX;
-extern int sizeBoxY;
+// screen box dimensions
+int startBoxX = 100;
+int startBoxY = 100;
+int sizeBoxX;
+int sizeBoxY;
+
 
 void initialize_sprites() {
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
 
+    STAR_SPRITE = create_sprite_xpm((xpm_map_t)star_xpm);
+
     PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
 
     INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm);
+
+    TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm);
+    TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm);
+    TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm);
 
     startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
     startPlayY = mode_info.YResolution / 2 - PLAY_SPRITE->height / 2;
@@ -127,6 +161,21 @@ void initialize_sprites() {
     startInstructionsY = mode_info.YResolution / 2 - INSTRUCTIONS_SPRITE->height / 2 +100;
     endInstructionsX = startInstructionsX + INSTRUCTIONS_SPRITE->width;
     endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
+
+    startTimer15X = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
+    startTimer15Y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 100;
+    endTimer15X = startTimer15X + TIMER15_SPRITE->width;
+    endTimer15Y = startTimer15Y + TIMER15_SPRITE->height;
+
+    startTimer30X = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2;
+    startTimer30Y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2;
+    endTimer30X = startTimer30X + TIMER30_SPRITE->width;
+    endTimer30Y = startTimer30Y + TIMER30_SPRITE->height;
+
+    startTimer60X = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;
+    startTimer60Y = mode_info.YResolution / 2 - TIMER60_SPRITE->height / 2 + 100;
+    endTimer60X = startTimer60X + TIMER60_SPRITE->width;
+    endTimer60Y = startTimer60Y + TIMER60_SPRITE->height;
 
     A_SPRITE = create_sprite_xpm((xpm_map_t)KEY_A_xpm);
     B_SPRITE = create_sprite_xpm((xpm_map_t)KEY_B_xpm);
@@ -329,19 +378,29 @@ void update_timer() {
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
     memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
-    
-    if (counter%60==0 && is_recording)
-        recorded_time++;
+
+    switch (currentState){
+        case GAME:
+            if (timer == 0){
+                setGameState(MENU);
+            }
+
+            if (counter%60==0 && timer)
+                timer--;
+
+            break;
+        default:
+            break;
+    }
     
 }
 
-void startRecordingTime(){
-    is_recording = true;
-    recorded_time = 0;
-}
-
-void stopRecordingTime(){
-    is_recording = false;
+void setGameState(GameState state) {
+    currentState = state;
+    gameStateChange = 1;
+    if (state == GAME){
+        stars = 3;
+    }
 }
 
 void initialize_mouse_data() {
@@ -365,52 +424,66 @@ void checkActions() {
             if (mouse_pos.x >= startPlayX && mouse_pos.x <= endPlayX &&
                 mouse_pos.y >= startPlayY && mouse_pos.y <= endPlayY &&
                 pp.lb) {
-                currentState = GAME;
+                setGameState(TIMERS);
                 initializeTest(&test, wordPool, 50, 30);
-                gameStateChange = 1;
             }
             if (mouse_pos.x >= startInstructionsX && mouse_pos.x <= endInstructionsX &&
                 mouse_pos.y >= startInstructionsY && mouse_pos.y <= endInstructionsY &&
                 pp.lb) {
-                currentState = INSTRUCTIONS;
-                gameStateChange = 1;
+                setGameState(INSTRUCTIONS);
+            }
+            break;
+        case TIMERS:
+            if (mouse_pos.x >= startTimer15X && mouse_pos.x <= endTimer15X &&
+                mouse_pos.y >= startTimer15Y && mouse_pos.y <= endTimer15Y &&
+                pp.lb) {
+                timer = 15;
+                setGameState(GAME);
+            }
+            if (mouse_pos.x >= startTimer30X && mouse_pos.x <= endTimer30X &&
+                mouse_pos.y >= startTimer30Y && mouse_pos.y <= endTimer30Y &&
+                pp.lb) {
+                timer = 30;
+                setGameState(GAME);
+            }
+            if (mouse_pos.x >= startTimer60X && mouse_pos.x <= endTimer60X &&
+                mouse_pos.y >= startTimer60Y && mouse_pos.y <= endTimer60Y &&
+                pp.lb) {
+                timer = 60;
+                setGameState(GAME);
             }
             break;
         case GAME:
             checkGesture();
             break;
         case INSTRUCTIONS:
-            if (pp.lb) {
-                currentState = MENU;
-                gameStateChange = 1;
-                }
-            break;
-        case NONE_STATE:
             break;
     }
 }
 
 void checkGesture() {
-    switch (gestureState){
-        case GESTURE_ZERO:
-            if (pp.lb)
-                gestureState = GESTURE_LB;
-            break;
-        case GESTURE_LB:
-            if (!pp.lb){
-                gestureState =GESTURE_ZERO;
-                x_gesture = 0; // reset x_gesture
-            } else { // lb maintained pressed
-                if (pp.delta_x > 0){
-                    x_gesture+=pp.delta_x;
-                }
-                if (x_gesture > 100){ // TODO: discover a good value
-                    fill_current_word();
+    if (stars){
+        switch (gestureState){
+            case GESTURE_ZERO:
+                if (pp.lb)
+                    gestureState = GESTURE_LB;
+                break;
+            case GESTURE_LB:
+                if (!pp.lb){
                     gestureState =GESTURE_ZERO;
                     x_gesture = 0; // reset x_gesture
+                } else { // lb maintained pressed
+                    if (pp.delta_x > 0){
+                        x_gesture+=pp.delta_x;
+                    }
+                    if (x_gesture > 300){ 
+                        fill_current_word();
+                        gestureState =GESTURE_ZERO;
+                        x_gesture = 0; // reset x_gesture
+                    }
                 }
-            }
-            break;
+                break;
+        }
     }
 }
 
@@ -422,6 +495,8 @@ void fill_current_word() {
     }
     test->currentInputIndex = currentWord->length;  // Update the input index
     drawWords(test);  // Update words on the screen
+
+    stars--; // Decrement stars
 }
 
 
@@ -475,18 +550,28 @@ void key_handler() {
         }
     }*/
 
-    if (currentState == MENU) {
-        update_keyboard(test);
-        if (currentKey == ENTER) {
-            currentState = GAME;
-            initializeTest(&test, wordPool, 50, 30);
-            gameStateChange = 1;
-        }
-    } else if (currentState == GAME) {
-        update_keyboard(test);
-    } else if (currentState == INSTRUCTIONS) {
-        update_keyboard(test);
-        return;
+    switch (currentState) {
+        case MENU:
+            update_keyboard(test);
+            if (currentKey == ENTER) {
+                setGameState(TIMERS);
+                initializeTest(&test, wordPool, 50, 30);
+            }
+            break;
+        case GAME:
+            update_keyboard(test);
+            break;
+        case INSTRUCTIONS:
+            update_keyboard(test);
+            if (currentKey == BACK) {
+                setGameState(MENU);
+            }
+        case TIMERS:
+            update_keyboard(test);
+            if (currentKey == BACK) {
+                setGameState(MENU);
+            }
+            break;
     }
 }
 
@@ -633,11 +718,21 @@ void destroy_sprites(){
     destroy_sprite(Y_SPRITE);
     destroy_sprite(Z_SPRITE);
     destroy_sprite(CURSOR_SPRITE);
+
+    destroy_sprite(STAR_SPRITE);
+
     destroy_sprite(PLAY_SPRITE);
     destroy_sprite(INSTRUCTIONS_SPRITE);
 
+    destroy_sprite(TIMER15_SPRITE);
+    destroy_sprite(TIMER30_SPRITE);
+    destroy_sprite(TIMER60_SPRITE);
+
     destroy_sprite(COMMA_SPRITE);
     destroy_sprite(PERIOD_SPRITE);
+    destroy_sprite(EXCLAMATION_SPRITE);
+    destroy_sprite(COLON_SPRITE);
+    destroy_sprite(RIGHT_PARENTHESIS_SPRITE);
 
     destroy_sprite(ZERO_SPRITE);
     destroy_sprite(ONE_SPRITE);

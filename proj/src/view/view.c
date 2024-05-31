@@ -104,6 +104,7 @@ extern Sprite *SEVEN_SPRITE;
 extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
+extern Sprite* PANDA_SPRITE;
 extern TypingTest *test;
 
 uint32_t bg_color;
@@ -199,6 +200,7 @@ int GameDrawer(){
         case MENU:
             if (gameStateChange){
                 drawBackground(MENU);
+                drawSpriteXPM(PANDA_SPRITE, startPlayX, startPlayY-300);
                 drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
                 drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
                 gameStateChange = 0;
@@ -286,11 +288,11 @@ int drawBackground(GameState state) {
 
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
 
-    // if(state == GAME){
-    //     draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, SALMON, secondary_frame_buffer_no_mouse);
-    // }else if(state == INSTRUCTIONS){
-    //     draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, SALMON, secondary_frame_buffer_no_mouse);
-    // }
+    if(state == GAME){
+        draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, BEIGE, secondary_frame_buffer_no_mouse);
+    }else if(state == INSTRUCTIONS){
+        draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, BEIGE, secondary_frame_buffer_no_mouse);
+    }
 
     return 0;
 }
@@ -475,7 +477,7 @@ int drawLetter(Key key, uint32_t color) {
 }
 
 int deleteCaret() {
-    if (draw_rectangle(caret.x, caret.y, caret.width, caret.height, SALMON, secondary_frame_buffer_no_mouse)) return 1;
+    if (draw_rectangle(caret.x, caret.y, caret.width, caret.height, BEIGE, secondary_frame_buffer_no_mouse)) return 1;
     return 0;
 }
 
@@ -508,7 +510,7 @@ int drawWords(TypingTest *test) {
             }
 
             if (currentWord->status == 1){
-                if (drawLetter(key, 0x00FF00)) return 1;
+                if (drawLetter(key, 0x336600)) return 1;
             }else if (currentWord->status == -1){
                 if (drawLetter(key, RED)) return 1;
             }else if (currentWord->letters[j].status == -1) {

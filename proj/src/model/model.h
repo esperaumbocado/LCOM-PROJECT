@@ -35,6 +35,8 @@
 #include "xpm/numbers/eight.xpm"
 #include "xpm/numbers/nine.xpm"
 
+#include "xpm/panda.xpm"
+
 #define MAX_WORDS 30
 #define MAX_WORD_LENGTH 20
 #define POOL_SIZE 90

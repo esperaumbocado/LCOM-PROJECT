@@ -101,6 +101,16 @@ Sprite *SEVEN_SPRITE;
 Sprite *EIGHT_SPRITE;
 Sprite *NINE_SPRITE;
 
+Sprite *PANDA_SPRITE;
+
+// Panda dimensions
+
+int startPandaX;
+int startPandaY;
+int endPandaX;
+int endPandaY;
+
+
 // Play button dimensions
 int startPlayX;
 int startPlayY;
@@ -143,6 +153,9 @@ Statistics *stats;
 
 
 void initialize_sprites() {
+
+    PANDA_SPRITE = create_sprite_xpm((xpm_map_t)panda_xpm);
+
     CURSOR_SPRITE = create_sprite_xpm((xpm_map_t)cursor_xpm);
 
     STAR_SPRITE = create_sprite_xpm((xpm_map_t)star_xpm);
@@ -155,13 +168,18 @@ void initialize_sprites() {
     TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm);
     TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm);
 
+    startPandaX = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
+    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 180;
+    endPandaX = startPandaX + PANDA_SPRITE->width;
+    endPandaY = startPandaY + PANDA_SPRITE->height;
+
     startPlayX = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
-    startPlayY = mode_info.YResolution / 2 - PLAY_SPRITE->height / 2;
+    startPlayY = endPandaY + 50;
     endPlayX = startPlayX + PLAY_SPRITE->width;
     endPlayY = startPlayY + PLAY_SPRITE->height;
 
     startInstructionsX = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
-    startInstructionsY = mode_info.YResolution / 2 - INSTRUCTIONS_SPRITE->height / 2 +100;
+    startInstructionsY = endPlayY + 30;
     endInstructionsX = startInstructionsX + INSTRUCTIONS_SPRITE->width;
     endInstructionsY = startInstructionsY + INSTRUCTIONS_SPRITE->height;
 

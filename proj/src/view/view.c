@@ -121,6 +121,12 @@ extern int startBoxY;
 extern int sizeBoxX;
 extern int sizeBoxY;
 
+extern int statisticsBoxX;
+extern int statisticsBoxY;
+extern int statisticsBoxSizeX;
+extern int statisticsBoxSizeY;
+
+
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
     frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
@@ -238,7 +244,14 @@ int GameDrawer(){
         case INSTRUCTIONS:
             if (gameStateChange) {
                 drawBackground(INSTRUCTIONS);
-                drawText(game_instructions, GREY);
+                drawText(game_instructions, GREY, startBoxX, startBoxX+sizeBoxX, 100);
+                gameStateChange = 0;
+            }
+            drawCursor();
+            break;
+        case STATISTICS:
+            if (gameStateChange) {
+                draw_rectangle(statisticsBoxX, statisticsBoxY, statisticsBoxSizeX, statisticsBoxSizeY, WHITE, secondary_frame_buffer_no_mouse);
                 gameStateChange = 0;
             }
             drawCursor();
@@ -336,7 +349,7 @@ int drawStars(){
 
 int drawTimers() {
 
-    if (drawText(timer_selection, WHITE)) return 1;
+    if (drawText(timer_selection, WHITE,startBoxX,startBoxX+sizeBoxX,startBoxY)) return 1;
 
     if (drawSpriteXPM(TIMER15_SPRITE, startTimer15X, startTimer15Y)) return 1;
     if (drawSpriteXPM(TIMER30_SPRITE, startTimer30X, startTimer30Y)) return 1;
@@ -390,10 +403,10 @@ int drawCursor(){
     return drawSpriteXPM_mouse(CURSOR_SPRITE, mouse_pos.x, mouse_pos.y);
 }
 
-int drawText(const char* text, uint32_t color) {
+int drawText(const char* text, uint32_t color, int start_x, int end_x, int start_y) {
 
-    x_offset = 200;
-    y_offset = mode_info.YResolution/2 - 300;
+    x_offset = start_x;
+    y_offset = start_y;
 
     while (*text) {    
 
@@ -406,12 +419,14 @@ int drawText(const char* text, uint32_t color) {
 
         Key key = char_to_key(*text);
         if (drawLetter(key, color)) return 1;
-        offset_handler(0);
+        offset_handler(start_x, end_x);
         text++;
     }
 
     return 0;
 }
+
+
 
 int drawLetter(Key key, uint32_t color) {
     switch(key){

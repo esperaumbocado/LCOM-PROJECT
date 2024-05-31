@@ -94,6 +94,7 @@ typedef enum{
 typedef enum{
     MENU,
     INSTRUCTIONS,
+    STATISTICS,
     GAME,
     TIMERS
 } GameState;
@@ -132,6 +133,7 @@ typedef struct {
     int incorrectLetters;// Number of incorrect letters typed
     int typedLetters;    // Number of letters typed
     int typedWords;      // Number of words typed
+    int time;
 } Statistics;
 
 typedef struct {
@@ -173,7 +175,7 @@ void reset_offset();
  * @param x the offset to be handled
  * @return the new offset
 */
-int offset_handler(int x);
+int offset_handler(int x, int end_x);
 
 // MOUSE STUFF
 /**

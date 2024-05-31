@@ -150,6 +150,13 @@ int startBoxY = 200;
 int sizeBoxX;
 int sizeBoxY;
 
+
+// statistics box dimensions
+int statisticsBoxY = 220;
+int statisticsBoxX = 290;
+int statisticsBoxSizeY = 420;
+int statisticsBoxSizeX = 575;
+
 Statistics *stats;
 
 
@@ -404,12 +411,8 @@ void reset_offset() {
     y_offset = startBoxY;
 }
 
-int offset_handler(int x) {
-    if (x == 0) {
-        x_offset += 16;
-    }if (x == 1) {
-        x_offset -= 16;
-    }
+int offset_handler(int x, int endX) {
+    x_offset += 16;
     if (x_offset + 16 >= startBoxX + sizeBoxX) {
         x_offset = startBoxX;
         y_offset += 32;
@@ -425,7 +428,7 @@ void update_timer() {
     switch (currentState){
         case GAME:
             if (timer == 0){
-                setGameState(MENU);
+                setGameState(STATISTICS);
                 printf("Stats:\n");
                 printf("Correct words: %d\n", stats->correctWords);
                 printf("Incorrect words: %d\n", stats->incorrectWords);
@@ -489,18 +492,21 @@ void checkActions() {
                 mouse_pos.y >= startTimer15Y && mouse_pos.y <= endTimer15Y &&
                 pp.lb) {
                 timer = 15;
+                stats->time = timer;
                 setGameState(GAME);
             }
             if (mouse_pos.x >= startTimer30X && mouse_pos.x <= endTimer30X &&
                 mouse_pos.y >= startTimer30Y && mouse_pos.y <= endTimer30Y &&
                 pp.lb) {
                 timer = 30;
+                stats->time = timer;
                 setGameState(GAME);
             }
             if (mouse_pos.x >= startTimer60X && mouse_pos.x <= endTimer60X &&
                 mouse_pos.y >= startTimer60Y && mouse_pos.y <= endTimer60Y &&
                 pp.lb) {
                 timer = 60;
+                stats->time = timer;
                 setGameState(GAME);
             }
             break;
@@ -508,6 +514,8 @@ void checkActions() {
             checkGesture();
             break;
         case INSTRUCTIONS:
+            break;
+        case STATISTICS:
             break;
     }
 }
@@ -624,6 +632,12 @@ void key_handler() {
         case TIMERS:
             update_keyboard(test);
             if (currentKey == BACK) {
+                setGameState(MENU);
+            }
+            break;
+        case STATISTICS:
+            update_keyboard(test);
+            if (currentKey == ESC) {
                 setGameState(MENU);
             }
             break;

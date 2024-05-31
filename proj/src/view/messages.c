@@ -13,7 +13,7 @@ const char* game_instructions =
     "                               AND GOOD LUCK! \n";
 
 const char* timer_selection = 
-    "\n\n"
+    "\n"
     "                       CHOOSE THE TIMER FOR YOUR GAME :) \n\n\n"
     "                   PRESS BACKSPACE TO GO BACK TO MAIN MENU\n\n";
 

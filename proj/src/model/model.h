@@ -31,7 +31,7 @@
 
 #define MAX_WORDS 30
 #define MAX_WORD_LENGTH 20
-#define POOL_SIZE 100 
+#define POOL_SIZE 90
 
 typedef enum{
     NONE_KEY,
@@ -120,6 +120,7 @@ typedef struct {
     int currentWordIndex;    // Index of the current word
     int currentInputIndex;   // Index of the current input for the current word
     char currentInput[MAX_WORD_LENGTH];  // User's current input for the current word
+    int number_of_lines;     // Number of lines in the test
     
 } TypingTest;
 

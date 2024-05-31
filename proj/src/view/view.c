@@ -409,8 +409,9 @@ int drawCaret(int x,int y){
 int drawWords(TypingTest *test) {
 
     reset_offset();
+    int current_line = 0;
+
     for (int i = 0; i < test->wordCount; i++) {
-        int current_line = 0;
         Word *currentWord = &(test->words[i]);
         currentWord->x = x_offset;
         currentWord->y = y_offset;
@@ -431,19 +432,17 @@ int drawWords(TypingTest *test) {
             }else if (currentWord->letters[j].status == -1) {
                 if (drawLetter(key, RED)) return 1;  // Red 
             } else if (currentWord->letters[j].status == 1) {
-                if (drawLetter(key, 0xFFFFFF)) return 1;  // Green 
+                if (drawLetter(key, 0xFFFFFF)) return 1;  // WHITE
             } else {
                 if (drawLetter(key, GREY)) return 1; // Grey
             }
 
-            offset_handler(0);
+            x_offset += 13;
         }
 
         if (i == (test->wordCount - 1)) {
             break; 
         }
-
-        offset_handler(0);
 
         if (i != (test->wordCount - 1)) {
             Word *nextWord = &(test->words[i+1]);
@@ -451,10 +450,13 @@ int drawWords(TypingTest *test) {
                 x_offset = startBoxX;
                 y_offset += 30;
                 current_line++;
+            }else{
+                x_offset += 13;
             }
         }
     }
 
+    test->number_of_lines = current_line;
     return 0;
 }
 

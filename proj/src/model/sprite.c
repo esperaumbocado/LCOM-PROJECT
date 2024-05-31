@@ -14,7 +14,6 @@ Sprite *create_sprite_xpm(xpm_map_t sprite){
     free(sp);
     return NULL;
   }
-  printf("Sprite created\n");
   return sp;
 }
 

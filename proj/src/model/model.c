@@ -413,37 +413,34 @@ void update_mouse() {
     }
 }
 
-int within_bounds(Sprite *first_sprite, Sprite *second_sprite) {
-    return first_sprite->x >= second_sprite->x && first_sprite->x <= second_sprite->x + second_sprite->width &&
-           first_sprite->y >= second_sprite->y && first_sprite->y <= second_sprite->y + second_sprite->height;
+int pressed_button(Sprite *button_sprite) {
+    return CURSOR_SPRITE->x >= button_sprite->x && CURSOR_SPRITE->x <= button_sprite->x + button_sprite->width &&
+           CURSOR_SPRITE->y >= button_sprite->y && CURSOR_SPRITE->y <= button_sprite->y + button_sprite->height &&
+           pp.lb;
 }
 
 void checkActions() {
     switch (currentState) {
         case MENU:
-            if (CURSOR_SPRITE->x >= PLAY_SPRITE->x && CURSOR_SPRITE->x <= PLAY_SPRITE->x + PLAY_SPRITE->width &&
-                CURSOR_SPRITE->y >= PLAY_SPRITE->y && CURSOR_SPRITE->y <= PLAY_SPRITE->y + PLAY_SPRITE->height &&
-                pp.lb) {
+            if (pressed_button(PLAY_SPRITE)) {
                 setGameState(TIMERS);
                 initializeTest(&test, wordPool, 50, 30);
                 initializeStats(&stats);
             }
-            if (CURSOR_SPRITE->x >= INSTRUCTIONS_SPRITE->x && CURSOR_SPRITE->x <= INSTRUCTIONS_SPRITE->x + INSTRUCTIONS_SPRITE->width &&
-                CURSOR_SPRITE->y >= INSTRUCTIONS_SPRITE->y && CURSOR_SPRITE->y <= INSTRUCTIONS_SPRITE->y + INSTRUCTIONS_SPRITE->height &&
-                pp.lb) {
+            if (pressed_button(INSTRUCTIONS_SPRITE)) {
                 setGameState(INSTRUCTIONS);
             }
             break;
         case TIMERS:
-            if (within_bounds(CURSOR_SPRITE, TIMER15_SPRITE) && pp.lb) {
+            if (pressed_button(TIMER15_SPRITE)) {
                 timer = 15;
                 setGameState(GAME);
             }
-            if (within_bounds(CURSOR_SPRITE, TIMER30_SPRITE) && pp.lb) {
+            if (pressed_button(TIMER30_SPRITE)) {
                 timer = 30;
                 setGameState(GAME);
             }
-            if (within_bounds(CURSOR_SPRITE, TIMER60_SPRITE) && pp.lb) {
+            if (pressed_button(TIMER60_SPRITE)) {
                 timer = 60;
                 setGameState(GAME);
             }

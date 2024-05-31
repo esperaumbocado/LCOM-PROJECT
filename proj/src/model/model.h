@@ -182,12 +182,11 @@ void update_mouse();
 
 
 /**
- * @brief Checks if an sprite is within the bounds of another sprite
- * @param first_sprite the first sprite
- * @param second_sprite the second sprite
- * @return 1 if the first sprite is within the bounds of the second sprite, 0 otherwise
+ * @brief Checks if the mouse sprite is over a button and if left button is pressed
+ * @param button_sprite the sprite of the button
+ * @return 1 if the button was pressed, 0 otherwise
 */
-int within_bounds(Sprite *first_sprite, Sprite *second_sprite);
+int pressed_button(Sprite *button_sprite);
 
 /**
  * @brief Checks the actions to be taken based on the mouse data

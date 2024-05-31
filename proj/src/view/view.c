@@ -110,10 +110,10 @@ uint32_t bg_color;
 
 
 // screen box dimensions
-int startBoxX = 200;
-int startBoxY = 200;
-int sizeBoxX;
-int sizeBoxY;
+extern int startBoxX;
+extern int startBoxY;
+extern int sizeBoxX;
+extern int sizeBoxY;
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -198,7 +198,7 @@ int GameDrawer(){
     switch(currentState){
         case MENU:
             if (gameStateChange){
-                drawBackground();
+                drawBackground(MENU);
                 drawSpriteXPM(PLAY_SPRITE, startPlayX, startPlayY);
                 drawSpriteXPM(INSTRUCTIONS_SPRITE, startInstructionsX, startInstructionsY);
                 gameStateChange = 0;
@@ -207,7 +207,7 @@ int GameDrawer(){
             break;
         case GAME:
             if (gameStateChange){
-                drawBackground();
+                drawBackground(GAME);
                 drawRecordedTime(); 
                 gameStateChange = 0;
                 drawWords(test);
@@ -218,7 +218,7 @@ int GameDrawer(){
             break;
         case TIMERS:
             if (gameStateChange){
-                drawBackground();
+                drawBackground(TIMERS);
                 drawTimers();
                 gameStateChange = 0;
             }
@@ -226,7 +226,7 @@ int GameDrawer(){
             break;
         case INSTRUCTIONS:
             if (gameStateChange) {
-                drawBackground(currentState);
+                drawBackground(INSTRUCTIONS);
                 drawText(game_instructions, GREY);
                 gameStateChange = 0;
             }

@@ -109,6 +109,11 @@ extern TypingTest *test;
 uint32_t bg_color;
 
 
+// screen box dimensions
+int startBoxX = 200;
+int startBoxY = 200;
+int sizeBoxX;
+int sizeBoxY;
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -116,8 +121,8 @@ int setUpFrameBuffer() {
     secondary_frame_buffer = (uint8_t *) malloc(frame_size);
     secondary_frame_buffer_no_mouse = (uint8_t *) malloc(frame_size);
 
-    sizeBoxX = mode_info.XResolution - 200;
-    sizeBoxY = mode_info.YResolution - 200;
+    sizeBoxX = mode_info.XResolution - 400;
+    sizeBoxY = mode_info.YResolution - 400;
 
     return 0;
 }
@@ -221,7 +226,7 @@ int GameDrawer(){
             break;
         case INSTRUCTIONS:
             if (gameStateChange) {
-                drawBackground();
+                drawBackground(currentState);
                 drawText(game_instructions, GREY);
                 gameStateChange = 0;
             }
@@ -232,7 +237,7 @@ int GameDrawer(){
     return 0;
 }
 
-int drawBackground() {
+int drawBackground(GameState state) {
     if (rtc_read_time(&time_info) != 0) return 1;
 
     if (time_info.hours >= 6 && time_info.hours < 12) {
@@ -247,7 +252,12 @@ int drawBackground() {
 
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
 
-    draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, SALMON, secondary_frame_buffer_no_mouse);
+    if(state == GAME){
+        draw_rectangle(startBoxX, startBoxY, sizeBoxX, sizeBoxY, SALMON, secondary_frame_buffer_no_mouse);
+    }else if(state == INSTRUCTIONS){
+        draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, SALMON, secondary_frame_buffer_no_mouse);
+    }
+
     return 0;
 }
 
@@ -344,7 +354,7 @@ int drawText(const char* text, uint32_t color) {
     while (*text) {    
 
         if (*text == '\n') {
-            x_offset =startBoxX; // new line
+            x_offset = 100; // new line
             y_offset += 20;  
             text++; 
             continue;
@@ -447,11 +457,13 @@ int drawCaret(int x,int y){
 int drawWords(TypingTest *test) {
 
     reset_offset();
+    int current_line = 0;
 
     for (int i = 0; i < test->wordCount; i++) {
         Word *currentWord = &(test->words[i]);
-        
-
+        currentWord->x = x_offset;
+        currentWord->y = y_offset;
+        currentWord->line = current_line;
 
         for (int j = 0; j < currentWord->length; j++) {
             Key key = char_to_key(currentWord->letters[j].character);
@@ -468,29 +480,31 @@ int drawWords(TypingTest *test) {
             }else if (currentWord->letters[j].status == -1) {
                 if (drawLetter(key, RED)) return 1;  // Red 
             } else if (currentWord->letters[j].status == 1) {
-                if (drawLetter(key, 0xFFFFFF)) return 1;  // Green 
+                if (drawLetter(key, 0xFFFFFF)) return 1;  // WHITE
             } else {
                 if (drawLetter(key, GREY)) return 1; // Grey
             }
 
-            offset_handler(0);
+            x_offset += 13;
         }
 
         if (i == (test->wordCount - 1)) {
             break; 
         }
 
-        offset_handler(0);
-
         if (i != (test->wordCount - 1)) {
             Word *nextWord = &(test->words[i+1]);
             if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - startBoxX) {
                 x_offset = startBoxX;
                 y_offset += 30;
+                current_line++;
+            }else{
+                x_offset += 13;
             }
         }
     }
 
+    test->number_of_lines = current_line;
     return 0;
 }
 

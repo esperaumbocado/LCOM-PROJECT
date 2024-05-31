@@ -133,8 +133,8 @@ TypingTest *test;
 extern char* wordPool[];
 
 // screen box dimensions
-int startBoxX = 100;
-int startBoxY = 100;
+int startBoxX = 200;
+int startBoxY = 200;
 int sizeBoxX;
 int sizeBoxY;
 
@@ -353,6 +353,7 @@ void shift_words_up(TypingTest *test) {
         load_new_word(test, i);
     }
 
+    
     drawBackground(GAME);
 }
 

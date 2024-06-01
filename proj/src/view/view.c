@@ -38,13 +38,6 @@ extern Sprite *TIMER30_SPRITE;
 extern Sprite *TIMER60_SPRITE;
 
 
-extern int backToMenuX;
-extern int backToMenuY;
-
-extern int playAgainX;
-extern int playAgainY;
-
-
 extern Sprite *A_SPRITE;
 extern Sprite *B_SPRITE;
 extern Sprite *C_SPRITE;
@@ -233,7 +226,7 @@ int GameDrawer(){
         case INSTRUCTIONS:
             if (gameStateChange) {
                 drawBackground(INSTRUCTIONS);
-                drawText(game_instructions, GREY, startBoxX, startBoxX+sizeBoxX, 100);
+                drawText(game_instructions, GREY, x_margin, mode_info.XResolution-x_margin, 100);
                 gameStateChange = 0;
             }
             drawCursor();
@@ -243,8 +236,8 @@ int GameDrawer(){
                 draw_rectangle(statisticsBoxX, statisticsBoxY, statisticsBoxSizeX, statisticsBoxSizeY, WHITE, secondary_frame_buffer_no_mouse);
                 drawText(statistics, GREY, statisticsBoxX, statisticsBoxX+statisticsBoxSizeX, statisticsBoxY);
                 drawStatistics();
-                drawSpriteXPM(BACK_TO_MENU_SPRITE, backToMenuX, backToMenuY);
-                drawSpriteXPM(PLAY_AGAIN_SPRITE, playAgainX, playAgainY);
+                drawSpriteXPM(BACK_TO_MENU_SPRITE, BACK_TO_MENU_SPRITE->x, BACK_TO_MENU_SPRITE->y);
+                drawSpriteXPM(PLAY_AGAIN_SPRITE, PLAY_AGAIN_SPRITE->x, PLAY_AGAIN_SPRITE->y);
                 gameStateChange = 0;
             }
             drawCursor();
@@ -351,7 +344,7 @@ int drawStars(){
 
 int drawTimers() {
 
-    if (drawText(timer_selection, WHITE,startBoxX,startBoxX+sizeBoxX,startBoxY)) return 1;
+    if (drawText(timer_selection, WHITE,x_margin,mode_info.XResolution-x_margin,y_margin)) return 1;
 
     if (drawSpriteXPM(TIMER15_SPRITE, TIMER15_SPRITE->x, TIMER15_SPRITE->y)) return 1;
     if (drawSpriteXPM(TIMER30_SPRITE, TIMER30_SPRITE->x, TIMER30_SPRITE->y)) return 1;

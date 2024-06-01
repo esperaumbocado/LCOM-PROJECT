@@ -151,15 +151,6 @@ typedef struct {
     
 } TypingTest;
 
-typedef struct {
-    Sprite **frames;     // Array of sprite pointers
-    int frameCount;      // Number of frames in the animation
-    int currentFrame;    // Current frame being displayed
-    bool isActive;       // Is the animation currently active
-    int frameDuration;   // Duration each frame should be displayed
-    int frameCounter;    // Counter to track frame duration
-} Animation;
-
 
 typedef enum {
     GESTURE_ZERO,

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['typingtest_352',['TypingTest',['../structTypingTest.html',1,'']]]
+  ['typingtest_354',['TypingTest',['../structTypingTest.html',1,'']]]
 ];

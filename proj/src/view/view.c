@@ -480,23 +480,10 @@ int drawHighScores() {
 
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         char score[50];
-        int mode_time;
-        
-        // Determine the mode time based on the mode index
-        if (highScores[i].mode == 0) {
-            mode_time = 15;
-        } else if (highScores[i].mode == 1) {
-            mode_time = 30;
-        } else if (highScores[i].mode == 2) {
-            mode_time = 60;
-        } else {
-            mode_time = 0; // Default case if mode is not set correctly
-        }
-        
-        sprintf(score, "%2d. %3d WPM  MODE: %d  TIME: %02d:%02d:%02d", 
+        sprintf(score, "%2d. %3d WPM  TIME: %d secs  TIME: %02d:%02d:%02d", 
                 i + 1, 
                 highScores[i].wpm, 
-                mode_time, 
+                highScores[i].time_limit, 
                 highScores[i].achieved_time.hours, 
                 highScores[i].achieved_time.minutes, 
                 highScores[i].achieved_time.seconds);

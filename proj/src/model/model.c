@@ -492,9 +492,10 @@ void setGameState(GameState state) {
             int wpm = (stats->typedWords * 60) / stats->time; // Calculate WPM
             real_time_info current_time;
             rtc_read_time(&current_time);
-            update_high_scores(wpm, timer / 15 - 1, current_time);
+            update_high_scores(wpm, timer, current_time);
             break;
         case HIGHSCORES:
+            load_high_scores();
             break;
         default:
             break;
@@ -889,14 +890,14 @@ HighScore highScores[MAX_HIGH_SCORES];
 void initialize_high_scores() {
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         highScores[i].wpm = 0;
-        highScores[i].mode = -1;
+        highScores[i].time_limit = 0;
         highScores[i].achieved_time.hours = 0;
         highScores[i].achieved_time.minutes = 0;
         highScores[i].achieved_time.seconds = 0;
     }
 }
 
-void update_high_scores(int wpm, int mode, real_time_info achieved_time) {
+void update_high_scores(int wpm, int time_limit, real_time_info achieved_time) {
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         if (wpm > highScores[i].wpm) {
             // Shift lower scores down
@@ -905,9 +906,31 @@ void update_high_scores(int wpm, int mode, real_time_info achieved_time) {
             }
             // Insert the new high score
             highScores[i].wpm = wpm;
-            highScores[i].mode = mode;
+            highScores[i].time_limit = time_limit;
             highScores[i].achieved_time = achieved_time;
             break;
         }
+    }
+    save_high_scores();
+}
+
+void save_high_scores() {
+    FILE *file = fopen("highscores.dat", "wb");
+    if (file != NULL) {
+        fwrite(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to save high scores\n");
+    }
+}
+
+void load_high_scores() {
+    FILE *file = fopen("highscores.dat", "rb");
+    if (file != NULL) {
+        fread(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to load high scores or file does not exist\n");
+        initialize_high_scores(); // Initialize if file does not exist
     }
 }

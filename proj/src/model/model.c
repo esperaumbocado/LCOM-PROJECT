@@ -92,6 +92,11 @@ void initialize_sprites() {
     INSTRUCTIONS_SPRITE->x = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
     INSTRUCTIONS_SPRITE->y = PLAY_SPRITE->y + PLAY_SPRITE->height + 30; // 30 pixels below the play button
 
+    HIGHSCORES_SPRITE = create_sprite_xpm((xpm_map_t)highscore_xpm, 0, 0);
+    HIGHSCORES_SPRITE->x = mode_info.XResolution / 2 - HIGHSCORES_SPRITE->width / 2;
+    HIGHSCORES_SPRITE->y = INSTRUCTIONS_SPRITE->y + INSTRUCTIONS_SPRITE->height + 30; // 30 pixels below the instructions button
+
+
     TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm, 0, 0);
     TIMER15_SPRITE->x = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
     TIMER15_SPRITE->y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 50; // 50 pixels above the center of the screen
@@ -151,6 +156,42 @@ void initialize_sprites() {
     SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm,0,0);
     EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm,0,0);
     NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm,0,0);
+
+    PANDA_0_SPRITE = create_sprite_xpm((xpm_map_t)panda_0_xpm, 0, 0);
+    MAD_1_SPRITE = create_sprite_xpm((xpm_map_t)mad_1_xpm, 0, 0);
+    MAD_2_SPRITE = create_sprite_xpm((xpm_map_t)mad_2_xpm, 0, 0);
+    MAD_3_SPRITE = create_sprite_xpm((xpm_map_t)mad_3_xpm, 0, 0);
+    MAD_4_SPRITE = create_sprite_xpm((xpm_map_t)mad_4_xpm, 0, 0);
+    HAPPY_1_SPRITE = create_sprite_xpm((xpm_map_t)happy_1_xpm, 0, 0);
+    HAPPY_2_SPRITE = create_sprite_xpm((xpm_map_t)happy_2_xpm, 0, 0);
+    HAPPY_3_SPRITE = create_sprite_xpm((xpm_map_t)happy_3_xpm, 0, 0);
+    HAPPY_4_SPRITE = create_sprite_xpm((xpm_map_t)happy_4_xpm, 0, 0);
+
+    happyFrames = malloc(9 * sizeof(Sprite*)); // Allocate space for 9 Sprite pointers
+    madFrames = malloc(9 * sizeof(Sprite*));    // Allocate space for 9 Sprite pointers
+
+    happyFrames[0] = PANDA_0_SPRITE;
+    happyFrames[1] = HAPPY_1_SPRITE;
+    happyFrames[2] = HAPPY_2_SPRITE;
+    happyFrames[3] = HAPPY_3_SPRITE;
+    happyFrames[4] = HAPPY_4_SPRITE;
+    happyFrames[5] = HAPPY_3_SPRITE;
+    happyFrames[6] = HAPPY_2_SPRITE;
+    happyFrames[7] = HAPPY_1_SPRITE;
+    happyFrames[8] = PANDA_0_SPRITE;
+
+    madFrames[0] = PANDA_0_SPRITE;
+    madFrames[1] = MAD_1_SPRITE;
+    madFrames[2] = MAD_2_SPRITE;
+    madFrames[3] = MAD_3_SPRITE;
+    madFrames[4] = MAD_4_SPRITE;
+    madFrames[5] = MAD_3_SPRITE;
+    madFrames[6] = MAD_2_SPRITE;
+    madFrames[7] = MAD_1_SPRITE;
+    madFrames[8] = PANDA_0_SPRITE;
+
+    happyAnimation = (Animation){happyFrames, 9, 0, false, 3, 0};
+    madAnimation = (Animation){madFrames, 9, 0, false, 3, 0};
     
     printf("All sprites initialized. \n");
 }
@@ -296,6 +337,7 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     test->words[wordCount].letters[0].character = '\0';
     test->words[wordCount].letters[0].status = 0;
 }
+
 void initializeStats(Statistics **statsPtr) {
     *statsPtr = (Statistics*)malloc(sizeof(Statistics));
     if (*statsPtr == NULL) {
@@ -312,6 +354,27 @@ void initializeStats(Statistics **statsPtr) {
     stats->typedWords = 0;
 }
 
+void startAnimation(Animation *animation) {
+    animation->isActive = true;
+    animation->currentFrame = 0;
+    animation->frameCounter = 0;
+}
+
+void updateAnimation(Animation *animation) {
+    if (animation->isActive) {
+        animation->frameCounter++;
+        
+        if (animation->frameCounter >= animation->frameDuration) {
+            animation->frameCounter = 0;
+            animation->currentFrame++;
+            
+            if (animation->currentFrame >= animation->frameCount) {
+                animation->isActive = false;
+                animation->currentFrame = 0;
+            }
+        }
+    }
+}
 
 void load_new_word(TypingTest *test, int index){
     int wordIndex = rand() % 80;
@@ -366,7 +429,10 @@ int offset_handler(int x, int endX) {
     return 1;
 }
 
+
 void update_timer() {
+    updateAnimation(&happyAnimation);
+    updateAnimation(&madAnimation);
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
     memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
@@ -420,6 +486,14 @@ void setGameState(GameState state) {
             printf("Typed words: %d\n", stats->typedWords);
             printf("Time: %d\n", stats->time);
             destroy_test();
+
+            int wpm = (stats->typedWords * 60) / stats->time; // Calculate WPM
+            real_time_info current_time;
+            rtc_read_time(&current_time);
+            update_high_scores(wpm, timer, current_time);
+            break;
+        case HIGHSCORES:
+            load_high_scores();
             break;
         default:
             break;
@@ -452,6 +526,9 @@ void checkActions() {
             if (pressed_button(INSTRUCTIONS_SPRITE)) {
                 setGameState(INSTRUCTIONS);
             }
+            if (pressed_button(HIGHSCORES_SPRITE)) {
+                setGameState(HIGHSCORES);
+            }
             break;
         case TIMERS:
             if (pressed_button(TIMER15_SPRITE)) {
@@ -480,6 +557,11 @@ void checkActions() {
             }
             if (pressed_button(PLAY_AGAIN_SPRITE)) {
                 setGameState(TIMERS);
+            }
+            break;
+        case HIGHSCORES:
+            if (pressed_button(BACK_TO_MENU_SPRITE)) {
+                setGameState(MENU);
             }
             break;
     }
@@ -630,10 +712,12 @@ void handle_space_key(TypingTest *test) {
 
     stats->typedWords++;
     if (isCorrect) {
+        startAnimation(&happyAnimation);
         currentWord->status = 1; 
         stats->correctWords++;
         printf("Correct word\n");
     } else {
+        startAnimation(&madAnimation);
         currentWord->status = -1; 
         stats->incorrectWords++;
         printf("Incorrect word\n");
@@ -789,6 +873,18 @@ void destroy_sprites(){
     destroy_sprite(BAMBU_RIGHT_SPRITE);
     destroy_sprite(BAMBU_LEFT_SPRITE);
 
+    destroy_sprite(PANDA_0_SPRITE);
+    destroy_sprite(MAD_1_SPRITE);
+    destroy_sprite(MAD_2_SPRITE);
+    destroy_sprite(MAD_3_SPRITE);
+    destroy_sprite(MAD_4_SPRITE);
+    destroy_sprite(HAPPY_1_SPRITE);
+    destroy_sprite(HAPPY_2_SPRITE);
+    destroy_sprite(HAPPY_3_SPRITE);
+    destroy_sprite(HAPPY_4_SPRITE);
+
+    free(happyFrames);
+    free(madFrames);
 }
 
 void destroy_test(){
@@ -801,3 +897,50 @@ void destroy_stats(){
     free(stats);
 }
 
+HighScore highScores[MAX_HIGH_SCORES];
+
+void initialize_high_scores() {
+    for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+        highScores[i].wpm = 0;
+        highScores[i].achieved_time.hours = 0;
+        highScores[i].achieved_time.minutes = 0;
+        highScores[i].achieved_time.seconds = 0;
+    }
+}
+
+void update_high_scores(int wpm, int time_limit, real_time_info achieved_time) {
+    for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+        if (wpm > highScores[i].wpm) {
+            // Shift lower scores down
+            for (int j = MAX_HIGH_SCORES - 1; j > i; j--) {
+                highScores[j] = highScores[j - 1];
+            }
+            // Insert the new high score
+            highScores[i].wpm = wpm;
+            highScores[i].achieved_time = achieved_time;
+            break;
+        }
+    }
+    save_high_scores();
+}
+
+void save_high_scores() {
+    FILE *file = fopen("highscores.dat", "wb");
+    if (file != NULL) {
+        fwrite(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to save high scores\n");
+    }
+}
+
+void load_high_scores() {
+    FILE *file = fopen("highscores.dat", "rb");
+    if (file != NULL) {
+        fread(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to load high scores or file does not exist\n");
+        initialize_high_scores(); // Initialize if file does not exist
+    }
+}

@@ -443,7 +443,7 @@ int drawWords(TypingTest *test) {
             Word *nextWord = &(test->words[i+1]);
             if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - x_margin - 1) {
                 x_offset = x_margin;
-                y_offset += 32;
+                y_offset += 64;
                 current_line++;
             }else{
                 x_offset += 16;

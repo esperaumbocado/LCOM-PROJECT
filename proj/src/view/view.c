@@ -464,18 +464,10 @@ int drawHighScores() {
         drawText(score, WHITE, x_margin, mode_info.XResolution - x_margin, y);
         y += 28;
     }
+    BACK_TO_MENU_HIGHSCORE_SPRITE->x = (mode_info.XResolution - BACK_TO_MENU_HIGHSCORE_SPRITE->width) / 2  -15;
+    BACK_TO_MENU_HIGHSCORE_SPRITE->y = y + 20;
 
-
-    int original_x = BACK_TO_MENU_SPRITE->x;
-    int original_y = BACK_TO_MENU_SPRITE->y;
-
-    BACK_TO_MENU_SPRITE->x = (mode_info.XResolution - BACK_TO_MENU_SPRITE->width) / 2;
-    BACK_TO_MENU_SPRITE->y = y + 20;
-
-    drawStatic(BACK_TO_MENU_SPRITE);
-
-    BACK_TO_MENU_SPRITE->x = original_x;
-    BACK_TO_MENU_SPRITE->y = original_y;
+    drawStatic(BACK_TO_MENU_HIGHSCORE_SPRITE);
 
     return 0;
 }

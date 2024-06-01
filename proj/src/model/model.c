@@ -84,6 +84,10 @@ void initialize_sprites() {
     BACK_TO_MENU_SPRITE->x = statisticsBoxX + 90;
     BACK_TO_MENU_SPRITE->y = statisticsBoxY + statisticsBoxSizeY - BACK_TO_MENU_SPRITE->height - 50;
 
+    BACK_TO_MENU_HIGHSCORE_SPRITE = create_sprite_xpm((xpm_map_t)back_to_menu_xpm,0,0);
+    BACK_TO_MENU_HIGHSCORE_SPRITE->x = statisticsBoxX + 90;
+    BACK_TO_MENU_HIGHSCORE_SPRITE->y = statisticsBoxY + statisticsBoxSizeY - BACK_TO_MENU_HIGHSCORE_SPRITE->height - 50;
+
     PLAY_AGAIN_SPRITE = create_sprite_xpm((xpm_map_t)play_again_xpm,0,0);
     PLAY_AGAIN_SPRITE->x = statisticsBoxX + statisticsBoxSizeX - PLAY_AGAIN_SPRITE->width - 90;
     PLAY_AGAIN_SPRITE->y = statisticsBoxY + statisticsBoxSizeY - PLAY_AGAIN_SPRITE->height - 50;
@@ -560,7 +564,7 @@ void checkActions() {
             }
             break;
         case HIGHSCORES:
-            if (pressed_button(BACK_TO_MENU_SPRITE)) {
+            if (pressed_button(BACK_TO_MENU_HIGHSCORE_SPRITE)) {
                 setGameState(MENU);
             }
             break;
@@ -835,6 +839,7 @@ void destroy_sprites(){
     destroy_sprite(PLAY_SPRITE);
     destroy_sprite(INSTRUCTIONS_SPRITE);
     destroy_sprite(BACK_TO_MENU_SPRITE);
+    destroy_sprite(BACK_TO_MENU_HIGHSCORE_SPRITE);
     destroy_sprite(PLAY_AGAIN_SPRITE);
 
     destroy_sprite(TIMER15_SPRITE);

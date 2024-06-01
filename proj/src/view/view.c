@@ -300,6 +300,7 @@ int drawInt(int number, int x, int y) {
 int drawCursor(){
 
     if (CURSOR_SPRITE->x < 0) CURSOR_SPRITE->x = 0;
+    
     if (CURSOR_SPRITE->x > mode_info.XResolution - CURSOR_SPRITE->width){
         CURSOR_SPRITE->x = mode_info.XResolution - CURSOR_SPRITE->width;
     }

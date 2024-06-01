@@ -2,13 +2,13 @@
 #include "video.h"
 #include <math.h>
 
-int (set_graphic_mode)(uint16_t submode) {
+int (set_graphic_mode)(uint16_t mode) {
     reg86_t reg86;
     memset(&reg86, 0, sizeof(reg86));
     reg86.intno = 0x10;
     reg86.ah = 0x4F;  
     reg86.al = 0x02;                
-    reg86.bx = submode | BIT(14);
+    reg86.bx = mode | BIT(14);
     if (sys_int86(&reg86) != 0) {   
         printf("Error setting graphic mode\n");
         return 1;

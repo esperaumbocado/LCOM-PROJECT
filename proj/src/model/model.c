@@ -918,6 +918,8 @@ void update_high_scores(int wpm, real_time_info achieved_time) {
             // Insert the new high score
             highScores[i].wpm = wpm;
             highScores[i].achieved_time = achieved_time;
+            highScores[i].day = achieved_time.day;      // Set the day
+            highScores[i].month = achieved_time.month;
             break;
         }
     }
@@ -928,11 +930,13 @@ void save_high_scores() {
     FILE *file = fopen("/home/lcom/labs/proj/src/model/highscores.txt", "w");
     if (file != NULL) {
         for (int i = 0; i < MAX_HIGH_SCORES; i++) {
-            fprintf(file, "%d %02d:%02d:%02d\n",
+            fprintf(file, "%d %02d:%02d:%02d %02d/%02d\n",
                     highScores[i].wpm,
                     highScores[i].achieved_time.hours,
                     highScores[i].achieved_time.minutes,
-                    highScores[i].achieved_time.seconds);
+                    highScores[i].achieved_time.seconds,
+                    highScores[i].day,
+                    highScores[i].month);
         }
         fclose(file);
     } else {
@@ -944,11 +948,13 @@ void load_high_scores() {
     FILE *file = fopen("/home/lcom/labs/proj/src/model/highscores.txt", "r");
     if (file != NULL) {
         for (int i = 0; i < MAX_HIGH_SCORES; i++) {
-            if (fscanf(file, "%d %hhu:%hhu:%hhu",
+            if (fscanf(file, "%d %hhu:%hhu:%hhu %hhu/%hhu", 
                        &highScores[i].wpm,
                        &highScores[i].achieved_time.hours,
                        &highScores[i].achieved_time.minutes,
-                       &highScores[i].achieved_time.seconds) != 4) {
+                       &highScores[i].achieved_time.seconds,
+                       &highScores[i].day,
+                       &highScores[i].month) != 6) {
                 break; // Stop reading if the format doesn't match
             }
         }

@@ -441,25 +441,41 @@ int word_length_in_pixels(Word *word) {
 int drawHighScores() {
     drawBackground(HIGHSCORES);
 
-    int x = x_margin;
+    int x_center = mode_info.XResolution / 2;
     int y = y_margin;
 
-    drawText("   HIGHSCORES", WHITE, x, x + 200, y);
+    const char *title = "HIGHSCORES";
+    int title_length = strlen(title);
+    int title_width = title_length * 20;
+
+    drawText(title, WHITE, x_center - title_width / 2, x_center + title_width / 2, y);
     y += 40;
 
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         char score[50];
-        sprintf(score, "%2d. %10d WPM         TIME: %02d:%02d:%02d", 
+        sprintf(score, "%2d. %4d WPM   TIME: %02d:%02d:%02d  DATE: %02d %02d", 
                 i + 1, 
                 highScores[i].wpm, 
                 highScores[i].achieved_time.hours, 
                 highScores[i].achieved_time.minutes, 
-                highScores[i].achieved_time.seconds);
-        drawText(score, WHITE, x, mode_info.XResolution - x_margin, y);
+                highScores[i].achieved_time.seconds,
+                highScores[i].day,
+                highScores[i].month);
+        drawText(score, WHITE, x_margin, mode_info.XResolution - x_margin, y);
         y += 28;
     }
 
+
+    int original_x = BACK_TO_MENU_SPRITE->x;
+    int original_y = BACK_TO_MENU_SPRITE->y;
+
+    BACK_TO_MENU_SPRITE->x = (mode_info.XResolution - BACK_TO_MENU_SPRITE->width) / 2;
+    BACK_TO_MENU_SPRITE->y = y + 20;
+
     drawStatic(BACK_TO_MENU_SPRITE);
+
+    BACK_TO_MENU_SPRITE->x = original_x;
+    BACK_TO_MENU_SPRITE->y = original_y;
 
     return 0;
 }

@@ -302,6 +302,8 @@ Sprite **madFrames;
 typedef struct {
     int wpm;
     real_time_info achieved_time; // RTC time info when the score was achieved
+    uint8_t day;    // Add day field
+    uint8_t month;
 } HighScore;
 
 extern HighScore highScores[MAX_HIGH_SCORES];

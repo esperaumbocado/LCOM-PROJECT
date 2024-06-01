@@ -399,6 +399,8 @@ void setGameState(GameState state) {
     gameStateChange = 1;
     if (state == GAME){
         stars = 3;
+        initializeTest(&test, wordPool, 160, 40);
+        initializeStats(&stats);
     }
 }
 
@@ -424,8 +426,6 @@ void checkActions() {
         case MENU:
             if (pressed_button(PLAY_SPRITE)) {
                 setGameState(TIMERS);
-                initializeTest(&test, wordPool, 50, 30);
-                initializeStats(&stats);
             }
             if (pressed_button(INSTRUCTIONS_SPRITE)) {
                 setGameState(INSTRUCTIONS);
@@ -469,7 +469,7 @@ void checkGesture() {
                     if (pp.delta_x > 0){
                         x_gesture+=pp.delta_x;
                     }
-                    if (x_gesture > 300){ 
+                    if (x_gesture > 400){ 
                         fill_current_word();
                         gestureState =GESTURE_ZERO;
                         x_gesture = 0; // reset x_gesture
@@ -548,7 +548,6 @@ void key_handler() {
             update_keyboard(test);
             if (currentKey == ENTER) {
                 setGameState(TIMERS);
-                initializeTest(&test, wordPool, 50, 30);
             }
             break;
         case GAME:

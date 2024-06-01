@@ -39,7 +39,7 @@
 #include "xpm/bambu_right.xpm"
 #include "xpm/bambu_left.xpm"
 
-#define MAX_WORDS 30
+#define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
 #define POOL_SIZE 90
 

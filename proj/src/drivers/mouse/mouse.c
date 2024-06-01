@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "mouse.h"
+#include "../../model/sprite.h"
 
 static int mouse_hook_id = 3; 
 uint8_t byte_received;
@@ -12,7 +13,7 @@ enum state state = STATE_ZERO;
 uint8_t abs_x_len = 0;
 uint8_t abs_y_len = 0;
 
-mouse_position mouse_pos;
+extern Sprite *CURSOR_SPRITE;
     
 int (mouse_subscribe_int)() {
 
@@ -90,8 +91,8 @@ void (parse)(){
   pp.x_ov = pp_bytes[0] & BIT(6);
   pp.y_ov = pp_bytes[0] & BIT(7);
   
-  mouse_pos.x = mouse_pos.x + pp.delta_x;
-  mouse_pos.y = mouse_pos.y - pp.delta_y;
+  CURSOR_SPRITE->x = CURSOR_SPRITE->x + pp.delta_x;
+  CURSOR_SPRITE->y = CURSOR_SPRITE->y - pp.delta_y;
 
 }
 

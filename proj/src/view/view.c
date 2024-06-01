@@ -89,6 +89,19 @@ extern Sprite* BAMBU_RIGHT_SPRITE;
 extern TypingTest *test;
 extern Statistics *stats;
 
+extern Sprite* PANDA_0_SPRITE;
+extern Sprite* MAD_1_SPRITE;
+extern Sprite* MAD_2_SPRITE;
+extern Sprite* MAD_3_SPRITE;
+extern Sprite* MAD_4_SPRITE;
+extern Sprite* HAPPY_1_SPRITE;
+extern Sprite* HAPPY_2_SPRITE;
+extern Sprite* HAPPY_3_SPRITE;
+extern Sprite* HAPPY_4_SPRITE;
+
+extern Animation madAnimation;
+extern Animation happyAnimation;
+
 uint32_t bg_color;
 
 // screen box dimensions
@@ -113,7 +126,10 @@ int setUpFrameBuffer() {
 
 
 int drawSpriteXPM(Sprite *sprite, int x, int y, bool single_color, uint32_t color, bool moving){
-    if (sprite == NULL) return 1;
+    if (sprite == NULL) {
+        printf("Error: Null sprite pointer\n");
+        return 1;
+    }
 
     uint16_t width = sprite->width;
     uint16_t height = sprite->height;
@@ -166,6 +182,7 @@ int GameDrawer(){
             drawRecordedTime();
             drawStars();
             drawCursor();
+            drawAnimationBoth();
             break;
         case TIMERS:
             if (gameStateChange){
@@ -453,6 +470,32 @@ int drawWords(TypingTest *test) {
 
     test->number_of_lines = current_line;
     return 0;
+}
+
+
+void drawAnimationBoth() {
+    if (happyAnimation.isActive) {
+        drawAnimation(&happyAnimation, mode_info.XResolution - x_margin, y_margin - PANDA_0_SPRITE->height); 
+    } else if (madAnimation.isActive) {
+        drawAnimation(&madAnimation, mode_info.XResolution - x_margin, y_margin - PANDA_0_SPRITE->height); 
+    } else {
+        drawSpriteXPM(PANDA_0_SPRITE, mode_info.XResolution - x_margin, y_margin - PANDA_0_SPRITE->height, false, 0, false);
+    }
+}
+
+void drawAnimation(Animation *animation, int x, int y) {
+
+    if (!animation->isActive || animation->frames == NULL) {
+        drawSpriteXPM(PANDA_0_SPRITE, x, y, false, 0, false);
+        return;
+    }
+
+    if (animation->currentFrame < 0 || animation->currentFrame >= animation->frameCount) {
+        return; 
+    }
+
+    Sprite *sprite = animation->frames[animation->currentFrame];
+    drawSpriteXPM(sprite, x, y, false, 0, false);
 }
 
 

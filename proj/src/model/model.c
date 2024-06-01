@@ -87,6 +87,29 @@ Sprite *Z_SPRITE;
 Sprite *COMMA_SPRITE;
 Sprite *PERIOD_SPRITE;
 
+
+// ANIMATION
+Sprite *PANDA_0_SPRITE;
+Sprite *MAD_1_SPRITE;
+Sprite *MAD_2_SPRITE;
+Sprite *MAD_3_SPRITE;
+Sprite *MAD_4_SPRITE;
+Sprite *HAPPY_1_SPRITE;
+Sprite *HAPPY_2_SPRITE;
+Sprite *HAPPY_3_SPRITE;
+Sprite *HAPPY_4_SPRITE;
+
+
+Animation happyAnimation;
+Animation madAnimation;
+
+Sprite **happyFrames;
+Sprite **madFrames;
+
+// END OF ANIMATION
+
+
+
 Sprite *EXCLAMATION_SPRITE;
 Sprite *COLON_SPRITE;
 Sprite *RIGHT_PARENTHESIS_SPRITE;
@@ -213,6 +236,42 @@ void initialize_sprites() {
     SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm,0,0);
     EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm,0,0);
     NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm,0,0);
+
+    PANDA_0_SPRITE = create_sprite_xpm((xpm_map_t)panda_0_xpm, 0, 0);
+    MAD_1_SPRITE = create_sprite_xpm((xpm_map_t)mad_1_xpm, 0, 0);
+    MAD_2_SPRITE = create_sprite_xpm((xpm_map_t)mad_2_xpm, 0, 0);
+    MAD_3_SPRITE = create_sprite_xpm((xpm_map_t)mad_3_xpm, 0, 0);
+    MAD_4_SPRITE = create_sprite_xpm((xpm_map_t)mad_4_xpm, 0, 0);
+    HAPPY_1_SPRITE = create_sprite_xpm((xpm_map_t)happy_1_xpm, 0, 0);
+    HAPPY_2_SPRITE = create_sprite_xpm((xpm_map_t)happy_2_xpm, 0, 0);
+    HAPPY_3_SPRITE = create_sprite_xpm((xpm_map_t)happy_3_xpm, 0, 0);
+    HAPPY_4_SPRITE = create_sprite_xpm((xpm_map_t)happy_4_xpm, 0, 0);
+
+    happyFrames = malloc(9 * sizeof(Sprite*)); // Allocate space for 9 Sprite pointers
+    madFrames = malloc(9 * sizeof(Sprite*));    // Allocate space for 9 Sprite pointers
+
+    happyFrames[0] = PANDA_0_SPRITE;
+    happyFrames[1] = HAPPY_1_SPRITE;
+    happyFrames[2] = HAPPY_2_SPRITE;
+    happyFrames[3] = HAPPY_3_SPRITE;
+    happyFrames[4] = HAPPY_4_SPRITE;
+    happyFrames[5] = HAPPY_3_SPRITE;
+    happyFrames[6] = HAPPY_2_SPRITE;
+    happyFrames[7] = HAPPY_1_SPRITE;
+    happyFrames[8] = PANDA_0_SPRITE;
+
+    madFrames[0] = PANDA_0_SPRITE;
+    madFrames[1] = MAD_1_SPRITE;
+    madFrames[2] = MAD_2_SPRITE;
+    madFrames[3] = MAD_3_SPRITE;
+    madFrames[4] = MAD_4_SPRITE;
+    madFrames[5] = MAD_3_SPRITE;
+    madFrames[6] = MAD_2_SPRITE;
+    madFrames[7] = MAD_1_SPRITE;
+    madFrames[8] = PANDA_0_SPRITE;
+
+    happyAnimation = (Animation){happyFrames, 9, 0, false, 3, 0};
+    madAnimation = (Animation){madFrames, 9, 0, false, 3, 0};
     
     printf("All sprites initialized. \n");
 }
@@ -358,6 +417,7 @@ void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wo
     test->words[wordCount].letters[0].character = '\0';
     test->words[wordCount].letters[0].status = 0;
 }
+
 void initializeStats(Statistics **statsPtr) {
     *statsPtr = (Statistics*)malloc(sizeof(Statistics));
     if (*statsPtr == NULL) {
@@ -374,6 +434,27 @@ void initializeStats(Statistics **statsPtr) {
     stats->typedWords = 0;
 }
 
+void startAnimation(Animation *animation) {
+    animation->isActive = true;
+    animation->currentFrame = 0;
+    animation->frameCounter = 0;
+}
+
+void updateAnimation(Animation *animation) {
+    if (animation->isActive) {
+        animation->frameCounter++;
+        
+        if (animation->frameCounter >= animation->frameDuration) {
+            animation->frameCounter = 0;
+            animation->currentFrame++;
+            
+            if (animation->currentFrame >= animation->frameCount) {
+                animation->isActive = false;
+                animation->currentFrame = 0;
+            }
+        }
+    }
+}
 
 void load_new_word(TypingTest *test, int index){
     int wordIndex = rand() % 80;
@@ -428,7 +509,10 @@ int offset_handler(int x, int endX) {
     return 1;
 }
 
+
 void update_timer() {
+    updateAnimation(&happyAnimation);
+    updateAnimation(&madAnimation);
     memcpy(main_frame_buffer, secondary_frame_buffer, frame_size);
     memcpy(secondary_frame_buffer, secondary_frame_buffer_no_mouse, frame_size);
     (timer_int_handler)();
@@ -692,10 +776,12 @@ void handle_space_key(TypingTest *test) {
 
     stats->typedWords++;
     if (isCorrect) {
+        startAnimation(&happyAnimation);
         currentWord->status = 1; 
         stats->correctWords++;
         printf("Correct word\n");
     } else {
+        startAnimation(&madAnimation);
         currentWord->status = -1; 
         stats->incorrectWords++;
         printf("Incorrect word\n");
@@ -851,6 +937,18 @@ void destroy_sprites(){
     destroy_sprite(BAMBU_RIGHT_SPRITE);
     destroy_sprite(BAMBU_LEFT_SPRITE);
 
+    destroy_sprite(PANDA_0_SPRITE);
+    destroy_sprite(MAD_1_SPRITE);
+    destroy_sprite(MAD_2_SPRITE);
+    destroy_sprite(MAD_3_SPRITE);
+    destroy_sprite(MAD_4_SPRITE);
+    destroy_sprite(HAPPY_1_SPRITE);
+    destroy_sprite(HAPPY_2_SPRITE);
+    destroy_sprite(HAPPY_3_SPRITE);
+    destroy_sprite(HAPPY_4_SPRITE);
+
+    free(happyFrames);
+    free(madFrames);
 }
 
 void destroy_test(){

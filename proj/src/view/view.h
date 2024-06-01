@@ -85,4 +85,8 @@ int drawCaret(int x,int y);
 
 int drawInt(int number, int x, int y);
 
+void drawAnimation(Animation *animation, int x, int y);
+
+void drawAnimationBoth();
+
 #endif

@@ -23,6 +23,13 @@ int mainDraw();
 */
 int drawSpriteXPM(Sprite *sprite, int x, int y, bool single_color, uint32_t color, bool moving);
 
+/**
+ * @brief Draws a static sprite on the screen
+ * @param sprite the sprite to be drawn
+ * @return 0 if successful, 1 otherwise
+*/
+int drawStatic(Sprite *sprite);
+
 int drawBackground(GameState state);
 
 
@@ -51,15 +58,7 @@ int drawTimers();
 int drawRealTime();
 
 
-/**
- * @brief Draws a number on the screen
- * @param key the key to be drawn
- * @param x the x position of the number
- * @param y the y position of the number
- * @param color the color of the number
- * @return 0 if successful, 1 otherwise
-*/
-int drawNumber(Key key, int x, int y, uint32_t color);
+int drawStatistics();
 
 /**
  * @brief Draws the cursor on the screen
@@ -74,7 +73,7 @@ int GameDrawer();
  * @param color the color of the text
  * @return 0 if successful, 1 otherwise
 */
-int drawText(const char* text, uint32_t color);
+int drawText(const char* text, uint32_t color, int start_x, int end_x, int y);
 
 /**
  * @brief Draws a letter on the screen
@@ -90,5 +89,7 @@ int word_length_in_pixels(Word *word);
 int deleteCaret();
 
 int drawCaret(int x,int y);
+
+int drawInt(int number, int x, int y);
 
 #endif

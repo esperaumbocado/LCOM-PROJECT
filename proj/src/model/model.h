@@ -24,23 +24,19 @@
 #include "../view/xpm/punctuation/exclamation.xpm"
 #include "../view/xpm/punctuation/right_parenthesis.xpm"
 
-#include "../view/xpm/numbers/zero.xpm"
-#include "../view/xpm/numbers/one.xpm"
-#include "../view/xpm/numbers/two.xpm"
-#include "../view/xpm/numbers/three.xpm"
-#include "../view/xpm/numbers/four.xpm"
-#include "../view/xpm/numbers/five.xpm"
-#include "../view/xpm/numbers/six.xpm"
-#include "../view/xpm/numbers/seven.xpm"
-#include "../view/xpm/numbers/eight.xpm"
-#include "../view/xpm/numbers/nine.xpm"
+#include "../view/xpm/numbers.xpm"
 
 #include "../view/xpm/panda.xpm"
 #include "../view/xpm/bambu_right.xpm"
 #include "../view/xpm/bambu_left.xpm"
 
+#include "../view/xpm/back_to_menu.xpm"
+#include "../view/xpm/play_again.xpm"
+
 #define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
+
+#define KEY_SPRITE_MAP_SIZE 43
 
 typedef enum{
     NONE_KEY,
@@ -93,6 +89,7 @@ typedef enum{
 typedef enum{
     MENU,
     INSTRUCTIONS,
+    STATISTICS,
     GAME,
     TIMERS
 } GameState;
@@ -131,6 +128,7 @@ typedef struct {
     int incorrectLetters;// Number of incorrect letters typed
     int typedLetters;    // Number of letters typed
     int typedWords;      // Number of words typed
+    int time;
 } Statistics;
 
 typedef struct {
@@ -151,11 +149,18 @@ typedef enum {
 
 void initialize_key_maps();
 void initialize_sprites();
+
+/**
+ * @brief Initializes the key sprite map
+*/
+void initialize_key_sprite_map();
+
 void destroy_sprites();
 void update_keyboard();
 void update_timer();
 void key_handler();
 void destroy_test();
+void destroy_stats();
 
 /**
 * @brief Updates currentState and gameStateChange
@@ -172,7 +177,7 @@ void reset_offset();
  * @param x the offset to be handled
  * @return the new offset
 */
-int offset_handler(int x);
+int offset_handler(int x, int end_x);
 
 /**
  * @brief Sync mouse bytes and calls update_mouse_date

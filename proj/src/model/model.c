@@ -925,7 +925,7 @@ void update_high_scores(int wpm, real_time_info achieved_time) {
 }
 
 void save_high_scores() {
-    FILE *file = fopen("highscores.txt", "w");
+    FILE *file = fopen("/home/lcom/labs/proj/src/model/highscores.txt", "w");
     if (file != NULL) {
         for (int i = 0; i < MAX_HIGH_SCORES; i++) {
             fprintf(file, "%d %02d:%02d:%02d\n",
@@ -936,12 +936,12 @@ void save_high_scores() {
         }
         fclose(file);
     } else {
-        fprintf(stderr, "Failed to save high scores\n");
+        printf("Failed to save high scores\n");
     }
 }
 
 void load_high_scores() {
-    FILE *file = fopen("highscores.txt", "r");
+    FILE *file = fopen("/home/lcom/labs/proj/src/model/highscores.txt", "r");
     if (file != NULL) {
         for (int i = 0; i < MAX_HIGH_SCORES; i++) {
             if (fscanf(file, "%d %hhu:%hhu:%hhu",
@@ -954,7 +954,7 @@ void load_high_scores() {
         }
         fclose(file);
     } else {
-        fprintf(stderr, "Failed to load high scores or file does not exist\n");
+        printf("Failed to load high scores or file does not exist\n");
         initialize_high_scores(); // Initialize if file does not exist
     }
 }

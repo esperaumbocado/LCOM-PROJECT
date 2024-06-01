@@ -10,8 +10,19 @@
 
 int setUpFrameBuffer();
 int mainDraw();
-int drawSpriteXPM(Sprite *sprite, int x, int y);
-int drawSpriteXPM_single_color(Sprite *sprite, int x, int y, uint32_t color);
+
+/**
+ * @brief Draws a sprite on the screen, secondary_frame_buffer_no_mouse
+ * @param sprite the sprite to be drawn
+ * @param x the x position of the sprite
+ * @param y the y position of the sprite
+ * @param single_color if the sprite is a single color
+ * @param color the color of the sprite
+ * @param moving if the sprite will be moving
+ * @return 0 if successful, 1 otherwise
+*/
+int drawSpriteXPM(Sprite *sprite, int x, int y, bool single_color, uint32_t color, bool moving);
+
 int drawBackground(GameState state);
 
 
@@ -45,9 +56,10 @@ int drawRealTime();
  * @param key the key to be drawn
  * @param x the x position of the number
  * @param y the y position of the number
+ * @param color the color of the number
  * @return 0 if successful, 1 otherwise
 */
-int drawNumber(Key key, int x, int y);
+int drawNumber(Key key, int x, int y, uint32_t color);
 
 /**
  * @brief Draws the cursor on the screen

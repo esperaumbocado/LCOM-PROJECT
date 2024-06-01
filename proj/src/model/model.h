@@ -44,9 +44,8 @@
 #include "xpm/back_to_menu.xpm"
 #include "xpm/play_again.xpm"
 
-#define MAX_WORDS 30
+#define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
-#define POOL_SIZE 90
 
 typedef enum{
     NONE_KEY,
@@ -183,16 +182,18 @@ void reset_offset();
 */
 int offset_handler(int x, int end_x);
 
-// MOUSE STUFF
-/**
- * @brief Initializes the mouse data
-*/
-void initialize_mouse_data();
-
 /**
  * @brief Sync mouse bytes and calls update_mouse_date
 */
 void update_mouse();
+
+
+/**
+ * @brief Checks if the mouse sprite is over a button and if left button is pressed
+ * @param button_sprite the sprite of the button
+ * @return 1 if the button was pressed, 0 otherwise
+*/
+int pressed_button(Sprite *button_sprite);
 
 /**
  * @brief Checks the actions to be taken based on the mouse data

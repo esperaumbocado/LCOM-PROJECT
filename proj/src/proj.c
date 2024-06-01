@@ -51,7 +51,6 @@ int setup(){
   // mouse stuff
   if (mouse_command(0xF4)) return 1; // enable mouse data reporting
   if (mouse_subscribe_int()) return 1;
-  initialize_mouse_data();
 
   if(timer_set_frequency(0,60)!=0) return 1;
   if(setUpFrameBuffer()!=0) return 1;
@@ -125,7 +124,7 @@ int (proj_main_loop)(int argc, char **argv) {
     }
   }
 
-  if (end()!=0) return 1;
+  if (end()) return 1;
 
   return 0;
 }

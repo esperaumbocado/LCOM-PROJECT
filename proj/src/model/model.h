@@ -6,6 +6,7 @@
 #include "../drivers/graphics/video.h"
 #include "../drivers/keyboard/keyboard.h"
 #include "../drivers/mouse/mouse.h"
+#include "../drivers/rtc/rtc.h"
 #include "model/sprite.h"
 #include "../view/xpm/letters.xpm"
 #include "../view/xpm/cursor.xpm"
@@ -13,6 +14,7 @@
 
 #include "../view/xpm/play.xpm"
 #include "../view/xpm/instructions.xpm"
+#include "../view/xpm/highscore.xpm"
 
 #include "../view/xpm/timer15.xpm"
 #include "../view/xpm/timer30.xpm"
@@ -47,6 +49,10 @@
 #define MAX_WORD_LENGTH 20
 
 #define KEY_SPRITE_MAP_SIZE 43
+
+#define MAX_HIGH_SCORES 10
+
+#define MAX_HIGH_SCORES 10
 
 /**
  * @brief Enumerates the Keyboard keys
@@ -107,7 +113,8 @@ typedef enum{
     INSTRUCTIONS,
     STATISTICS,
     GAME,
-    TIMERS
+    TIMERS,
+    HIGHSCORES
 } GameState;
 
 /**
@@ -213,6 +220,12 @@ typedef enum {
     GESTURE_LB
 } GestureState;
 
+typedef struct {
+    int wpm;
+    real_time_info achieved_time; // RTC time info when the score was achieved
+} HighScore;
+
+extern HighScore highScores[MAX_HIGH_SCORES];
 
 /**
  * @brief Initializes the key maps
@@ -324,6 +337,14 @@ void process_key(char c, Key key, TypingTest *test, GameState state);
 */
 void handle_space_key(TypingTest *test);
 
+void initialize_high_scores();
+
+void update_high_scores(int wpm, int time_limit, real_time_info achieved_time);
+
+void save_high_scores();
+
+void load_high_scores();
+
 /**
  * @brief Goes back to the previous letter and resets the current letter status
  * @param test the typing test
@@ -342,7 +363,7 @@ void updateAnimation(Animation *animation);
 /**
  * @brief Checks if the gesture to fill the current word is correct
 */
-void checkGesture();g
+void checkGesture();
 
 
 /**

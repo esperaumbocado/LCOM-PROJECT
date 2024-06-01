@@ -50,6 +50,7 @@ Sprite *STAR_SPRITE;
 
 Sprite *PLAY_SPRITE;
 Sprite *INSTRUCTIONS_SPRITE;
+Sprite *HIGHSCORES_SPRITE;
 
 Sprite *TIMER15_SPRITE;
 Sprite *TIMER30_SPRITE;
@@ -176,6 +177,11 @@ void initialize_sprites() {
     INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm, 0, 0);
     INSTRUCTIONS_SPRITE->x = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
     INSTRUCTIONS_SPRITE->y = PLAY_SPRITE->y + PLAY_SPRITE->height + 30; // 30 pixels below the play button
+
+    HIGHSCORES_SPRITE = create_sprite_xpm((xpm_map_t)highscore_xpm, 0, 0);
+    HIGHSCORES_SPRITE->x = mode_info.XResolution / 2 - HIGHSCORES_SPRITE->width / 2;
+    HIGHSCORES_SPRITE->y = INSTRUCTIONS_SPRITE->y + INSTRUCTIONS_SPRITE->height + 30; // 30 pixels below the instructions button
+
 
     TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm, 0, 0);
     TIMER15_SPRITE->x = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
@@ -566,6 +572,14 @@ void setGameState(GameState state) {
             printf("Typed words: %d\n", stats->typedWords);
             printf("Time: %d\n", stats->time);
             destroy_test();
+
+            int wpm = (stats->typedWords * 60) / stats->time; // Calculate WPM
+            real_time_info current_time;
+            rtc_read_time(&current_time);
+            update_high_scores(wpm, timer, current_time);
+            break;
+        case HIGHSCORES:
+            load_high_scores();
             break;
         default:
             break;
@@ -598,6 +612,9 @@ void checkActions() {
             if (pressed_button(INSTRUCTIONS_SPRITE)) {
                 setGameState(INSTRUCTIONS);
             }
+            if (pressed_button(HIGHSCORES_SPRITE)) {
+                setGameState(HIGHSCORES);
+            }
             break;
         case TIMERS:
             if (pressed_button(TIMER15_SPRITE)) {
@@ -626,6 +643,11 @@ void checkActions() {
             }
             if (pressed_button(PLAY_AGAIN_SPRITE)) {
                 setGameState(TIMERS);
+            }
+            break;
+        case HIGHSCORES:
+            if (pressed_button(BACK_TO_MENU_SPRITE)) {
+                setGameState(MENU);
             }
             break;
     }
@@ -961,3 +983,50 @@ void destroy_stats(){
     free(stats);
 }
 
+HighScore highScores[MAX_HIGH_SCORES];
+
+void initialize_high_scores() {
+    for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+        highScores[i].wpm = 0;
+        highScores[i].achieved_time.hours = 0;
+        highScores[i].achieved_time.minutes = 0;
+        highScores[i].achieved_time.seconds = 0;
+    }
+}
+
+void update_high_scores(int wpm, int time_limit, real_time_info achieved_time) {
+    for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+        if (wpm > highScores[i].wpm) {
+            // Shift lower scores down
+            for (int j = MAX_HIGH_SCORES - 1; j > i; j--) {
+                highScores[j] = highScores[j - 1];
+            }
+            // Insert the new high score
+            highScores[i].wpm = wpm;
+            highScores[i].achieved_time = achieved_time;
+            break;
+        }
+    }
+    save_high_scores();
+}
+
+void save_high_scores() {
+    FILE *file = fopen("highscores.dat", "wb");
+    if (file != NULL) {
+        fwrite(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to save high scores\n");
+    }
+}
+
+void load_high_scores() {
+    FILE *file = fopen("highscores.dat", "rb");
+    if (file != NULL) {
+        fread(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        fclose(file);
+    } else {
+        fprintf(stderr, "Failed to load high scores or file does not exist\n");
+        initialize_high_scores(); // Initialize if file does not exist
+    }
+}

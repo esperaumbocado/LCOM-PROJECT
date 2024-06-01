@@ -30,6 +30,7 @@ extern Sprite *STAR_SPRITE;
 
 extern Sprite *PLAY_SPRITE;
 extern Sprite *INSTRUCTIONS_SPRITE;
+extern Sprite *HIGHSCORES_SPRITE;
 extern Sprite *BACK_TO_MENU_SPRITE;
 extern Sprite *PLAY_AGAIN_SPRITE;
 
@@ -115,6 +116,8 @@ extern int statisticsBoxSizeY;
 
 extern Sprite *key_sprite_map[KEY_SPRITE_MAP_SIZE]; 
 
+//extern HighScore highScores[MAX_HIGH_SCORES];
+
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
     frame_size = mode_info.XResolution * mode_info.YResolution * ((mode_info.BitsPerPixel + 7) / 8);
@@ -165,6 +168,7 @@ int GameDrawer(){
                 drawStatic(BAMBU_RIGHT_SPRITE);
                 drawStatic(PLAY_SPRITE);
                 drawStatic(INSTRUCTIONS_SPRITE);
+                drawStatic(HIGHSCORES_SPRITE);
 
                 gameStateChange = 0;
             }
@@ -207,6 +211,13 @@ int GameDrawer(){
                 drawStatistics();
                 drawStatic(BACK_TO_MENU_SPRITE);
                 drawStatic(PLAY_AGAIN_SPRITE);
+                gameStateChange = 0;
+            }
+            drawCursor();
+            break;
+        case HIGHSCORES:
+            if (gameStateChange) {
+                drawHighScores();
                 gameStateChange = 0;
             }
             drawCursor();
@@ -501,4 +512,30 @@ void drawAnimation(Animation *animation, int x, int y) {
 
 int word_length_in_pixels(Word *word) {
     return word->length*16;
+}
+
+int drawHighScores() {
+    drawBackground(HIGHSCORES);
+
+    int x = x_margin;
+    int y = y_margin;
+
+    drawText("   HIGHSCORES", WHITE, x, x + 200, y);
+    y += 40;
+
+    for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+        char score[50];
+        sprintf(score, "%2d. %10d WPM         TIME: %02d:%02d:%02d", 
+                i + 1, 
+                highScores[i].wpm, 
+                highScores[i].achieved_time.hours, 
+                highScores[i].achieved_time.minutes, 
+                highScores[i].achieved_time.seconds);
+        drawText(score, WHITE, x, mode_info.XResolution - x_margin, y);
+        y += 28;
+    }
+
+    drawStatic(BACK_TO_MENU_SPRITE);
+
+    return 0;
 }

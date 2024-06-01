@@ -140,5 +140,6 @@ void drawAnimation(Animation *animation, int x, int y);
  * @brief Decides which animation to draw depending on their states
 */
 void drawAnimationBoth();
+int drawHighScores();
 
 #endif

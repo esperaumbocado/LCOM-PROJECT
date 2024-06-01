@@ -220,6 +220,85 @@ typedef enum {
     GESTURE_LB
 } GestureState;
 
+Sprite *CURSOR_SPRITE;
+
+Sprite *STAR_SPRITE;
+
+Sprite *PLAY_SPRITE;
+Sprite *INSTRUCTIONS_SPRITE;
+Sprite *HIGHSCORES_SPRITE;
+
+Sprite *TIMER15_SPRITE;
+Sprite *TIMER30_SPRITE;
+Sprite *TIMER60_SPRITE;
+
+Sprite *BACK_TO_MENU_SPRITE;
+Sprite *PLAY_AGAIN_SPRITE;
+
+Sprite *A_SPRITE;
+Sprite *B_SPRITE;
+Sprite *C_SPRITE;
+Sprite *D_SPRITE;
+Sprite *E_SPRITE;
+Sprite *F_SPRITE;
+Sprite *G_SPRITE;
+Sprite *H_SPRITE;
+Sprite *I_SPRITE;
+Sprite *J_SPRITE;
+Sprite *K_SPRITE;
+Sprite *L_SPRITE;
+Sprite *M_SPRITE;
+Sprite *N_SPRITE;
+Sprite *O_SPRITE;
+Sprite *P_SPRITE;
+Sprite *Q_SPRITE;
+Sprite *R_SPRITE;
+Sprite *S_SPRITE;
+Sprite *T_SPRITE;
+Sprite *U_SPRITE;
+Sprite *V_SPRITE;
+Sprite *W_SPRITE;
+Sprite *X_SPRITE;
+Sprite *Y_SPRITE;
+Sprite *Z_SPRITE;
+Sprite *COMMA_SPRITE;
+Sprite *PERIOD_SPRITE;
+
+Sprite *EXCLAMATION_SPRITE;
+Sprite *COLON_SPRITE;
+Sprite *RIGHT_PARENTHESIS_SPRITE;
+
+Sprite *ZERO_SPRITE;
+Sprite *ONE_SPRITE;
+Sprite *TWO_SPRITE;
+Sprite *THREE_SPRITE;
+Sprite *FOUR_SPRITE;
+Sprite *FIVE_SPRITE;
+Sprite *SIX_SPRITE;
+Sprite *SEVEN_SPRITE;
+Sprite *EIGHT_SPRITE;
+Sprite *NINE_SPRITE;
+
+Sprite *PANDA_SPRITE;
+Sprite *BAMBU_RIGHT_SPRITE;
+Sprite *BAMBU_LEFT_SPRITE;
+
+Sprite* PANDA_0_SPRITE;
+Sprite* MAD_1_SPRITE;
+Sprite* MAD_2_SPRITE;
+Sprite* MAD_3_SPRITE;
+Sprite* MAD_4_SPRITE;
+Sprite* HAPPY_1_SPRITE;
+Sprite* HAPPY_2_SPRITE;
+Sprite* HAPPY_3_SPRITE;
+Sprite* HAPPY_4_SPRITE;
+
+Animation happyAnimation;
+Animation madAnimation;
+
+Sprite **happyFrames;
+Sprite **madFrames;
+
 typedef struct {
     int wpm;
     real_time_info achieved_time; // RTC time info when the score was achieved

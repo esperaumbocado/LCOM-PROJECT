@@ -24,84 +24,8 @@ extern int timer;
 
 extern int stars;
 
-extern Sprite *CURSOR_SPRITE;
-
-extern Sprite *STAR_SPRITE;
-
-extern Sprite *PLAY_SPRITE;
-extern Sprite *INSTRUCTIONS_SPRITE;
-extern Sprite *HIGHSCORES_SPRITE;
-extern Sprite *BACK_TO_MENU_SPRITE;
-extern Sprite *PLAY_AGAIN_SPRITE;
-
-extern Sprite *TIMER15_SPRITE;
-extern Sprite *TIMER30_SPRITE;
-extern Sprite *TIMER60_SPRITE;
-
-
-extern Sprite *A_SPRITE;
-extern Sprite *B_SPRITE;
-extern Sprite *C_SPRITE;
-extern Sprite *D_SPRITE;
-extern Sprite *E_SPRITE;
-extern Sprite *F_SPRITE;
-extern Sprite *G_SPRITE;
-extern Sprite *H_SPRITE;
-extern Sprite *I_SPRITE;
-extern Sprite *J_SPRITE;
-extern Sprite *K_SPRITE;
-extern Sprite *L_SPRITE;
-extern Sprite *M_SPRITE;
-extern Sprite *N_SPRITE;
-extern Sprite *O_SPRITE;
-extern Sprite *P_SPRITE;
-extern Sprite *Q_SPRITE;
-extern Sprite *R_SPRITE;
-extern Sprite *S_SPRITE;
-extern Sprite *T_SPRITE;
-extern Sprite *U_SPRITE;
-extern Sprite *V_SPRITE;
-extern Sprite *W_SPRITE;
-extern Sprite *X_SPRITE;
-extern Sprite *Y_SPRITE;
-extern Sprite *Z_SPRITE;
-
-extern Sprite *COMMA_SPRITE;
-extern Sprite *PERIOD_SPRITE;
-
-extern Sprite *EXCLAMATION_SPRITE;
-extern Sprite *COLON_SPRITE;
-extern Sprite *RIGHT_PARENTHESIS_SPRITE;
-
-extern Sprite *ZERO_SPRITE;
-extern Sprite *ONE_SPRITE;
-extern Sprite *TWO_SPRITE;
-extern Sprite *THREE_SPRITE;
-extern Sprite *FOUR_SPRITE;
-extern Sprite *FIVE_SPRITE;
-extern Sprite *SIX_SPRITE;
-extern Sprite *SEVEN_SPRITE;
-extern Sprite *EIGHT_SPRITE;
-extern Sprite *NINE_SPRITE;
-
-extern Sprite* PANDA_SPRITE;
-extern Sprite* BAMBU_LEFT_SPRITE;
-extern Sprite* BAMBU_RIGHT_SPRITE;
 extern TypingTest *test;
 extern Statistics *stats;
-
-extern Sprite* PANDA_0_SPRITE;
-extern Sprite* MAD_1_SPRITE;
-extern Sprite* MAD_2_SPRITE;
-extern Sprite* MAD_3_SPRITE;
-extern Sprite* MAD_4_SPRITE;
-extern Sprite* HAPPY_1_SPRITE;
-extern Sprite* HAPPY_2_SPRITE;
-extern Sprite* HAPPY_3_SPRITE;
-extern Sprite* HAPPY_4_SPRITE;
-
-extern Animation madAnimation;
-extern Animation happyAnimation;
 
 uint32_t bg_color;
 

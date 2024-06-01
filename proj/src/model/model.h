@@ -363,7 +363,7 @@ void updateAnimation(Animation *animation);
 /**
  * @brief Checks if the gesture to fill the current word is correct
 */
-void checkGesture();g
+void checkGesture();
 
 
 /**

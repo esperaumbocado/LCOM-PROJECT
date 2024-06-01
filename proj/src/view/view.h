@@ -85,4 +85,6 @@ int drawCaret(int x,int y);
 
 int drawInt(int number, int x, int y);
 
+int drawHighScores();
+
 #endif

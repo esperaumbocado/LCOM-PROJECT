@@ -6,6 +6,7 @@
 #include "../drivers/graphics/video.h"
 #include "../drivers/keyboard/keyboard.h"
 #include "../drivers/mouse/mouse.h"
+#include "../drivers/rtc/rtc.h"
 #include "model/sprite.h"
 #include "../view/xpm/letters.xpm"
 #include "../view/xpm/cursor.xpm"
@@ -13,6 +14,7 @@
 
 #include "../view/xpm/play.xpm"
 #include "../view/xpm/instructions.xpm"
+#include "../view/xpm/highscore.xpm"
 
 #include "../view/xpm/timer15.xpm"
 #include "../view/xpm/timer30.xpm"
@@ -37,6 +39,8 @@
 #define MAX_WORD_LENGTH 20
 
 #define KEY_SPRITE_MAP_SIZE 43
+
+#define MAX_HIGH_SCORES 10
 
 typedef enum{
     NONE_KEY,
@@ -91,7 +95,8 @@ typedef enum{
     INSTRUCTIONS,
     STATISTICS,
     GAME,
-    TIMERS
+    TIMERS,
+    HIGHSCORES
 } GameState;
 
 typedef enum{
@@ -146,6 +151,13 @@ typedef enum {
     GESTURE_LB
 } GestureState;
 
+typedef struct {
+    int wpm;
+    int mode; // 0 for 15 seconds, 1 for 30 seconds, 2 for 60 seconds
+    real_time_info achieved_time; // RTC time info when the score was achieved
+} HighScore;
+
+extern HighScore highScores[MAX_HIGH_SCORES];
 
 void initialize_key_maps();
 void initialize_sprites();
@@ -213,6 +225,10 @@ void checkGesture();
 void fill_current_word();
 
 void handle_space_key(TypingTest *test);
+
+void initialize_high_scores();
+
+void update_high_scores(int wpm, int mode, real_time_info achieved_time);
 
 #endif
 

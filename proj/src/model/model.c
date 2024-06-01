@@ -455,14 +455,22 @@ void setGameState(GameState state) {
     gameStateChange = 1;
 
     switch (state){
+        case MENU:
+            currentKey = NONE_KEY;
+            break;
         case GAME:
             stars = 3;
             initializeTest(&test, wordPool, 100, 40);
+
+            initializeStats(&stats);
+            stats->time = timer;
+
             printf("Test initialized\n");
             break;
         case TIMERS:
-            initializeTest(&test, wordPool, 50, 30);
-            initializeStats(&stats);
+            // do we need these lines in timers state?
+            // initializeTest(&test, wordPool, 50, 30);
+            //initializeStats(&stats);
             break;
         case STATISTICS:
             printf("Stats:\n");
@@ -510,20 +518,14 @@ void checkActions() {
         case TIMERS:
             if (pressed_button(TIMER15_SPRITE)) {
                 timer = 15;
-                initializeStats(&stats);
-                stats->time = timer;
                 setGameState(GAME);
             }
             if (pressed_button(TIMER30_SPRITE)) {
                 timer = 30;
-                initializeStats(&stats);
-                stats->time = timer;
                 setGameState(GAME);
             }
             if (pressed_button(TIMER60_SPRITE)) {
                 timer = 60;
-                initializeStats(&stats);
-                stats->time = timer;
                 setGameState(GAME);
             }
             
@@ -641,31 +643,14 @@ void key_handler() {
                 setGameState(TIMERS);
             }
             break;
-        case GAME:
+        default:
             update_keyboard(test);
             if (currentKey == ESC) {
                 setGameState(MENU);
                 currentKey = NONE_KEY;
             }
             break;
-        case INSTRUCTIONS:
-            update_keyboard(test);
-            if (currentKey == BACK) {
-                setGameState(MENU);
-            }
-        case TIMERS:
-            update_keyboard(test);
-            if (currentKey == BACK) {
-                setGameState(MENU);
-            }
-            break;
-        case STATISTICS:
-            update_keyboard(test);
-            if (currentKey == ESC) {
-                setGameState(MENU);
-            }
-            break;
-    }
+    }    
 }
 
 void process_key(char c, Key key, TypingTest *test, GameState state) {

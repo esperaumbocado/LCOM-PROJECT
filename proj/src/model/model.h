@@ -55,6 +55,13 @@
 #define MAX_HIGH_SCORES 10
 
 /**
+ * @defgroup model
+ * @{
+ * Functions related to the game model and its respective logic
+*/
+
+
+/**
  * @brief Enumerates the Keyboard keys
 */
 typedef enum{
@@ -234,6 +241,7 @@ Sprite *TIMER60_SPRITE;
 
 Sprite *BACK_TO_MENU_SPRITE;
 Sprite *PLAY_AGAIN_SPRITE;
+Sprite *BACK_TO_MENU_HIGHSCORE_SPRITE;
 
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
@@ -302,6 +310,8 @@ Sprite **madFrames;
 typedef struct {
     int wpm;
     real_time_info achieved_time; // RTC time info when the score was achieved
+    uint8_t day;    // Add day field
+    uint8_t month;
 } HighScore;
 
 extern HighScore highScores[MAX_HIGH_SCORES];
@@ -418,7 +428,7 @@ void handle_space_key(TypingTest *test);
 
 void initialize_high_scores();
 
-void update_high_scores(int wpm, int time_limit, real_time_info achieved_time);
+void update_high_scores(int wpm, real_time_info achieved_time);
 
 void save_high_scores();
 

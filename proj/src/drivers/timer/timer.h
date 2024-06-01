@@ -5,6 +5,11 @@
 
 #include "i8254.h"
 
+/** @defgroup timer
+ * @{
+ * Functions for using the i8254 Timer
+ */ 
+
 
 int (timer_set_frequency)(uint8_t timer, uint32_t freq);
 

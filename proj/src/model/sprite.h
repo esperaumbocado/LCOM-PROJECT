@@ -6,6 +6,12 @@
 
 
 /**
+ * @defgroup sprite
+ * @{
+ * Functions related to sprites and animations, visual representation of the items in the game
+*/
+
+/**
  * @brief Struct that represents a sprite
  * @param height the height of the sprite
  * @param width the width of the sprite

@@ -8,6 +8,14 @@
 #include "../model/sprite.h"
 #include "../model/model.h"
 
+
+/**
+ * @defgroup view
+ * @{
+ * Functions related to the displaying of the game
+*/
+
+
 int setUpFrameBuffer();
 
 /**

@@ -4,6 +4,12 @@
 #include <lcom/lcf.h>
 #include "VBE.h"
 
+/** @defgroup video
+ * @{
+ * Functions for using the video card
+ */ 
+
+
 vbe_mode_info_t mode_info;
 
 uint8_t *main_frame_buffer;

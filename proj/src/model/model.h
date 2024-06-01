@@ -41,7 +41,6 @@
 
 #define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
-#define POOL_SIZE 90
 
 typedef enum{
     NONE_KEY,

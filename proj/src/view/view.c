@@ -261,11 +261,9 @@ int drawBackground(GameState state) {
 
     draw_rectangle(0, 0, mode_info.XResolution, mode_info.YResolution, bg_color, secondary_frame_buffer_no_mouse);
 
-    if(state == GAME){
-       draw_rectangle(x_margin, y_margin, mode_info.XResolution - 2*x_margin, mode_info.YResolution-2*y_margin, BEIGE, secondary_frame_buffer_no_mouse);
-    }else if(state == INSTRUCTIONS){
-        draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, BEIGE, secondary_frame_buffer_no_mouse);
-    }
+    if(state == GAME || state == INSTRUCTIONS)
+       draw_rectangle(100, 100, mode_info.XResolution - 200, mode_info.YResolution - 200, BEIGE, secondary_frame_buffer_no_mouse);
+    
 
     return 0;
 }

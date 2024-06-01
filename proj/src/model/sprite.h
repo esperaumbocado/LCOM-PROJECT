@@ -7,8 +7,8 @@
 typedef struct {
     uint16_t height;
     uint16_t width;
-    uint16_t x; // initial x
-    uint16_t y; // initial y
+    uint16_t x;
+    uint16_t y;
     uint32_t *colors;
     uint32_t color;
 } Sprite; 

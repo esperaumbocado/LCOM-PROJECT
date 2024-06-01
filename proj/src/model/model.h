@@ -342,20 +342,7 @@ void updateAnimation(Animation *animation);
 /**
  * @brief Checks if the gesture to fill the current word is correct
 */
-void checkGesture();
-
-
-/**
- * @brief Handles the button press
-*/
-void checkActions():
-
-
-/**
- * @brief Checks if the buttons in respective sprites are pressed
- * @param button_sprite the sprite of the button
-*/
-int pressed_button(Sprite *button_sprite);
+void checkGesture();g
 
 
 /**

@@ -4,6 +4,13 @@
 #include <minix/sysutil.h>
 #include <lcom/lcf.h>
 
+
+/** @defgroup rtc
+ * @{
+ * Functions for using the RTC
+ */ 
+
+
 // Macros
 #define RTC_MASK            5
 #define IRQ_RTC             8

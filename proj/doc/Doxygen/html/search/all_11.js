@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['r_218',['R',['../model_8h.html#ab3c7af4820830f9166ede9e5623c4e73a1784b1a3d7cbd43c45ff82c72d05e4ae',1,'model.h']]],
+  ['r_5fsprite_219',['R_SPRITE',['../model_8h.html#a0daa33e78bc92dd25e6bbcbba8c04230',1,'model.h']]],
+  ['real_5ftime_5finfo_220',['real_time_info',['../structreal__time__info.html',1,'']]],
+  ['register_5fcounting_221',['REGISTER_COUNTING',['../group__rtc.html#gac261047d18c2505db97b38b7b157f1fd',1,'rtc.h']]],
+  ['register_5finput_222',['REGISTER_INPUT',['../group__rtc.html#gac7ccdd8e98d8f7fdad8dfe99c467d5d8',1,'rtc.h']]],
+  ['register_5foutput_223',['REGISTER_OUTPUT',['../group__rtc.html#ga5e3f3a35c56673c2a54d9f4eadb759a9',1,'rtc.h']]],
+  ['register_5fupdating_224',['REGISTER_UPDATING',['../group__rtc.html#ga79c0bb250ad248af29b370b20dd1fb29',1,'rtc.h']]],
+  ['reset_5foffset_225',['reset_offset',['../model_8h.html#ac32ae0a5328c6612261ec59de33d922e',1,'reset_offset():&#160;model.c'],['../model_8c.html#ac32ae0a5328c6612261ec59de33d922e',1,'reset_offset():&#160;model.c']]],
+  ['right_5fparenthesis_226',['RIGHT_PARENTHESIS',['../model_8h.html#ab3c7af4820830f9166ede9e5623c4e73a6069687c1576cf9757e02f44e9060ed2',1,'model.h']]],
+  ['right_5fparenthesis_5fsprite_227',['RIGHT_PARENTHESIS_SPRITE',['../model_8h.html#a4c21d981ef841b43cb0e716aca2b0715',1,'model.h']]],
+  ['rtc_228',['Rtc',['../group__rtc.html',1,'']]],
+  ['rtc_2eh_229',['rtc.h',['../rtc_8h.html',1,'']]],
+  ['rtc_5fmask_230',['RTC_MASK',['../group__rtc.html#gab54f2d18b47b47a59f718e16099446e8',1,'rtc.h']]],
+  ['rtc_5fread_5ftime_231',['rtc_read_time',['../group__rtc.html#ga13b766098356ee1c32b4348a999ca4b4',1,'rtc.h']]],
+  ['rtc_5fsubscribe_5finterrupts_232',['rtc_subscribe_interrupts',['../group__rtc.html#gabb90a7b2307300874b2529d94aafacca',1,'rtc.h']]],
+  ['rtc_5funsubscribe_5finterrupts_233',['rtc_unsubscribe_interrupts',['../group__rtc.html#gae0e5cb47db8832528abb7dc48255cd3a',1,'rtc.h']]],
+  ['running_234',['RUNNING',['../model_8h.html#a736a770455f42dc69910e2687d533b55a1061be6c3fb88d32829cba6f6b2be304',1,'model.h']]]
+];

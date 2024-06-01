@@ -48,6 +48,9 @@
 
 #define KEY_SPRITE_MAP_SIZE 43
 
+/**
+ * @brief Enumerates the Keyboard keys
+*/
 typedef enum{
     NONE_KEY,
     ENTER,
@@ -96,6 +99,9 @@ typedef enum{
     ESC
 } Key;
 
+/**
+ * @brief Enumerates the possible states of game states
+*/
 typedef enum{
     MENU,
     INSTRUCTIONS,
@@ -104,11 +110,21 @@ typedef enum{
     TIMERS
 } GameState;
 
+/**
+ * @brief Enumerates the possible states of the application
+*/
 typedef enum{
     RUNNING,
     EXIT
 } GeneralState;
 
+/**
+ * @brief Structure that represents the caret (Line under the current letter)
+ * @param x the x position of the caret
+ * @param y the y position of the caret
+ * @param width the width of the caret
+ * @param height the height of the caret
+*/
 typedef struct{
     int x;
     int y;
@@ -117,48 +133,95 @@ typedef struct{
 } Caret;
 
 
+/**
+ * @brief Structure that represents a letter
+ * @param character the character itself
+ * @param status the status of the letter: 0 for not typed, 1 for typed, -1 for incorrect
+*/
 typedef struct {
     char character;  // The character itself
     int status;      // Status of the letter: 0 for not typed, 1 for typed, -1 for incorrect
 } Letter;
 
+
+
+/**
+ * @brief Structure that represents a word
+ * @param letters the array of letters for the current word
+ * @param length the length of the word
+ * @param status the status of the word: 0 for not typed, 1 for correct, -1 for incorrect
+ * @param x the x position of the word
+ * @param y the y position of the word
+ * @param line the line of the word
+*/
 typedef struct {
-    Letter letters[MAX_WORD_LENGTH];  // Array of letters for the current word
-    int length;                        // Length of the word
-    int status;                        // Status of the word: 0 for not typed, 1 for correct, -1 for incorrect
-    int x;                             // X position of the word
-    int y;                             // Y position of the word
-    int line;                          // Line of the word
+    Letter letters[MAX_WORD_LENGTH];
+    int length;
+    int status;
+    int x;
+    int y;
+    int line;
 } Word;
 
+
+
+/**
+ * @brief Has the structures to save the statistics of the game
+ * @param correctWords the number of correct words typed
+ * @param incorrectWords the number of incorrect words typed
+ * @param correctLetters the number of correct letters typed
+ * @param incorrectLetters the number of incorrect letters typed
+ * @param typedLetters the number of letters typed
+ * @param typedWords the number of words typed
+ * @param time the time taken to type the words
+*/
 typedef struct {
-    int correctWords;    // Number of correct words typed
-    int incorrectWords;  // Number of incorrect words typed
-    int correctLetters;  // Number of correct letters typed
-    int incorrectLetters;// Number of incorrect letters typed
-    int typedLetters;    // Number of letters typed
-    int typedWords;      // Number of words typed
+    int correctWords;
+    int incorrectWords;
+    int correctLetters;
+    int incorrectLetters;
+    int typedLetters;
+    int typedWords;
     int time;
 } Statistics;
 
+
+/**
+ * @brief Has the structures to save the words and user input
+ * @param words the words to be typed
+ * @param wordCount the number of words
+ * @param currentWordIndex the index of the current word
+ * @param currentInputIndex the index of the current input
+ * @param currentInput the current input
+ * @param number_of_lines the number of lines in the test
+*/
 typedef struct {
-    Word *words;             // Dynamic array of words for the current test
-    int wordCount;           // Number of words in the current test
-    int currentWordIndex;    // Index of the current word
-    int currentInputIndex;   // Index of the current input for the current word
-    char currentInput[MAX_WORD_LENGTH];  // User's current input for the current word
-    int number_of_lines;     // Number of lines in the test
-    
+    Word *words;
+    int wordCount;
+    int currentWordIndex;
+    int currentInputIndex;
+    char currentInput[MAX_WORD_LENGTH];
+    int number_of_lines;
 } TypingTest;
 
 
+/**
+    * @brief Enumerates the possible states of the swipe-right gesture
+*/
 typedef enum {
     GESTURE_ZERO,
     GESTURE_LB
 } GestureState;
 
 
+/**
+ * @brief Initializes the key maps
+*/
 void initialize_key_maps();
+
+/**
+ * @brief Initializes the sprites
+*/
 void initialize_sprites();
 
 /**
@@ -166,11 +229,34 @@ void initialize_sprites();
 */
 void initialize_key_sprite_map();
 
+/**
+ * @brief Free the memory allocated for the sprites
+*/
 void destroy_sprites();
+
+/**
+ * @brief Assigns tasks to the respective keys
+*/
 void update_keyboard();
+
+/**
+ * @brief handles the timer interrupts
+*/
 void update_timer();
+
+/**
+ * @brief Handles the keyboard interrupts
+*/
 void key_handler();
+
+/**
+ * @brief Frees the memory allocated for the typing test
+*/
 void destroy_test();
+
+/**
+ * @brief Frees the memory allocated for the statistics
+*/
 void destroy_stats();
 
 /**
@@ -223,10 +309,72 @@ void checkGesture();
 */
 void fill_current_word();
 
+
+/**
+ * @brief Processes the key pressed, updating the letter status and the current input, and also the statistics
+ * @param c the character pressed
+ * @param key the key pressed
+ * @param test the typing test
+*/
+void process_key(char c, Key key, TypingTest *test, GameState state);
+
+/**
+ * @brief Checks if the current word is correct and advances to the next word, also updates the statistics
+ * @param test the typing test
+*/
 void handle_space_key(TypingTest *test);
 
+/**
+ * @brief Goes back to the previous letter and resets the current letter status
+ * @param test the typing test
+ */
+void handle_delete_key(TypingTest *test);
 
+
+/**
+ * @brief Updates the frame of the animation and respective active status
+ * @param animation the animation to be updated
+ */
 void updateAnimation(Animation *animation);
+
+
+
+/**
+ * @brief Checks if the gesture to fill the current word is correct
+*/
+void checkGesture();g
+
+
+/**
+ * @brief Moves the penultimate line to first line, last line to second and loads new words
+ * @param test the typing test
+*/
+void shift_words_up(TypingTest *test);
+
+
+/**
+ * @brief Loads new words to the test
+ * @param test the typing test
+ * @param index the index where to load the word
+*/
+void load_new_word(TypingTest *test, int index);
+
+
+/**
+ * @brief Starts the animation
+ * @param animation the animation to be started
+*/
+void startAnimation(Animation *animation);
+
+
+/**
+ * @brief Initializes the test
+ * @param testPtr the pointer to the test
+ * @param wordPool the pool of words
+ * @param poolSize the size of the pool
+ * @param wordCount the number of words
+*/
+void initializeTest(TypingTest **testPtr, char *wordPool[], int poolSize, int wordCount);
 
 #endif
 

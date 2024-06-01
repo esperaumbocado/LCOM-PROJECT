@@ -12,7 +12,6 @@
 #include "view/view.h"
 
 extern Key currentKey;
-GeneralState generalState = RUNNING;
 extern uint8_t *main_frame_buffer;
 extern uint8_t *secondary_frame_buffer;
 extern uint32_t frame_size;

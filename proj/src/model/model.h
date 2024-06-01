@@ -124,13 +124,6 @@ typedef enum{
     HIGHSCORES
 } GameState;
 
-/**
- * @brief Enumerates the possible states of the application
-*/
-typedef enum{
-    RUNNING,
-    EXIT
-} GeneralState;
 
 /**
  * @brief Structure that represents the caret (Line under the current letter)

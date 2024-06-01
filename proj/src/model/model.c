@@ -200,23 +200,18 @@ void initialize_sprites() {
     PLAY_SPRITE->x = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
     PLAY_SPRITE->y = PANDA_SPRITE->y + PANDA_SPRITE->height + 30; // 30 pixels below the panda
 
-<<<<<<< HEAD
     BACK_TO_MENU_SPRITE = create_sprite_xpm((xpm_map_t)back_to_menu_xpm);
 
     PLAY_AGAIN_SPRITE = create_sprite_xpm((xpm_map_t)play_again_xpm);
 
-    INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm);
-=======
     INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm, 0, 0);
     INSTRUCTIONS_SPRITE->x = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
     INSTRUCTIONS_SPRITE->y = PLAY_SPRITE->y + PLAY_SPRITE->height + 30; // 30 pixels below the play button
->>>>>>> main
 
     TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm, 0, 0);
     TIMER15_SPRITE->x = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
     TIMER15_SPRITE->y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 50; // 50 pixels above the center of the screen
 
-<<<<<<< HEAD
     backToMenuX = statisticsBoxX + 90;
     backToMenuY = statisticsBoxY + statisticsBoxSizeY - BACK_TO_MENU_SPRITE->height - 50;
     backToMenuEndX = backToMenuX + BACK_TO_MENU_SPRITE->width;
@@ -231,11 +226,9 @@ void initialize_sprites() {
     startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
     endPandaX = startPandaX + PANDA_SPRITE->width;
     endPandaY = startPandaY + PANDA_SPRITE->height;
-=======
     TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm, 0, 0);
     TIMER30_SPRITE->x = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2; 
     TIMER30_SPRITE->y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 50; // 50 pixels below the center of the screen
->>>>>>> main
 
     TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm, 0, 0);
     TIMER60_SPRITE->x = mode_info.XResolution / 2 - TIMER60_SPRITE->width / 2;

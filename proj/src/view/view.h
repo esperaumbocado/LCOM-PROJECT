@@ -75,13 +75,6 @@ int GameDrawer();
 */
 int drawText(const char* text, uint32_t color, int start_x, int end_x, int y);
 
-/**
- * @brief Draws a letter on the screen
- * @param key the key to be drawn
- * @return 0 if successful, 1 otherwise
-*/
-int drawLetter(Key key, uint32_t color);
-
 int drawWords(TypingTest *test);
 
 int word_length_in_pixels(Word *word);

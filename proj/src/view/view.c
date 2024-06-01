@@ -373,82 +373,13 @@ int drawText(const char* text, uint32_t color, int start_x, int end_x, int start
         }
 
         Key key = char_to_key(*text);
-        if (drawLetter(key, color)) return 1;
+        
+        if (key_sprite_map[key])
+            if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, color, false)) 
+                return 1;
+
         offset_handler(start_x, end_x);
         text++;
-    }
-
-    return 0;
-}
-
-
-
-int drawLetter(Key key, uint32_t color) {
-    switch(key){
-        case A:
-            return drawSpriteXPM(A_SPRITE, x_offset, y_offset, true, color, false);
-        case B:
-            return drawSpriteXPM(B_SPRITE, x_offset, y_offset, true, color, false);
-        case C:
-            return drawSpriteXPM(C_SPRITE, x_offset, y_offset, true, color, false);
-        case D:
-            return drawSpriteXPM(D_SPRITE, x_offset, y_offset, true, color, false);
-        case E:
-            return drawSpriteXPM(E_SPRITE, x_offset, y_offset, true, color, false);
-        case F:
-            return drawSpriteXPM(F_SPRITE, x_offset, y_offset, true, color, false);
-        case G:
-            return drawSpriteXPM(G_SPRITE, x_offset, y_offset, true, color, false);
-        case H:
-            return drawSpriteXPM(H_SPRITE, x_offset, y_offset, true, color, false);
-        case I:
-            return drawSpriteXPM(I_SPRITE, x_offset, y_offset, true, color, false);
-        case J:
-            return drawSpriteXPM(J_SPRITE, x_offset, y_offset, true, color, false);
-        case K:
-            return drawSpriteXPM(K_SPRITE, x_offset, y_offset, true, color, false);
-        case L:
-            return drawSpriteXPM(L_SPRITE, x_offset, y_offset, true, color, false);
-        case M:
-            return drawSpriteXPM(M_SPRITE, x_offset, y_offset, true, color, false);
-        case N:
-            return drawSpriteXPM(N_SPRITE, x_offset, y_offset, true, color, false);
-        case O:
-            return drawSpriteXPM(O_SPRITE, x_offset, y_offset, true, color, false);
-        case P:
-            return drawSpriteXPM(P_SPRITE, x_offset, y_offset, true, color, false);
-        case Q:
-            return drawSpriteXPM(Q_SPRITE, x_offset, y_offset, true, color, false);
-        case R:
-            return drawSpriteXPM(R_SPRITE, x_offset, y_offset, true, color, false);
-        case S:
-            return drawSpriteXPM(S_SPRITE, x_offset, y_offset, true, color, false);
-        case T:
-            return drawSpriteXPM(T_SPRITE, x_offset, y_offset, true, color, false);
-        case U:
-            return drawSpriteXPM(U_SPRITE, x_offset, y_offset, true, color, false);
-        case V:
-            return drawSpriteXPM(V_SPRITE, x_offset, y_offset, true, color, false);
-        case W:
-            return drawSpriteXPM(W_SPRITE, x_offset, y_offset, true, color, false);
-        case X:
-            return drawSpriteXPM(X_SPRITE, x_offset, y_offset, true, color, false);
-        case Y:
-            return drawSpriteXPM(Y_SPRITE, x_offset, y_offset, true, color, false);
-        case Z:
-            return drawSpriteXPM(Z_SPRITE, x_offset, y_offset, true, color, false);
-        case COMMA:
-            return drawSpriteXPM(COMMA_SPRITE, x_offset, y_offset, true, color, false);
-        case PERIOD:
-            return drawSpriteXPM(PERIOD_SPRITE, x_offset, y_offset, true, color, false);
-        case EXCLAMATION:
-            return drawSpriteXPM(EXCLAMATION_SPRITE, x_offset, y_offset, true, color, false);
-        case COLON:
-            return drawSpriteXPM(COLON_SPRITE, x_offset, y_offset, true, color, false);
-        case RIGHT_PARENTHESIS:
-            return drawSpriteXPM(RIGHT_PARENTHESIS_SPRITE, x_offset, y_offset, true, color, false);
-        default:
-            break;
     }
 
     return 0;
@@ -488,15 +419,15 @@ int drawWords(TypingTest *test) {
             }
 
             if (currentWord->status == 1){
-                if (drawLetter(key, 0x336600)) return 1;
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, 0x336600, false)) return 1;
             }else if (currentWord->status == -1){
-                if (drawLetter(key, RED)) return 1;
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, RED, false)) return 1;
             }else if (currentWord->letters[j].status == -1) {
-                if (drawLetter(key, RED)) return 1;  
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, RED, false)) return 1;
             } else if (currentWord->letters[j].status == 1) {
-                if (drawLetter(key, WHITE)) return 1; 
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, WHITE, false)) return 1;
             } else {
-                if (drawLetter(key, GREY)) return 1; 
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, GREY, false)) return 1;
             }
 
             x_offset += 16;

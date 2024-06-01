@@ -890,7 +890,6 @@ HighScore highScores[MAX_HIGH_SCORES];
 void initialize_high_scores() {
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         highScores[i].wpm = 0;
-        highScores[i].time_limit = 0;
         highScores[i].achieved_time.hours = 0;
         highScores[i].achieved_time.minutes = 0;
         highScores[i].achieved_time.seconds = 0;
@@ -906,7 +905,6 @@ void update_high_scores(int wpm, int time_limit, real_time_info achieved_time) {
             }
             // Insert the new high score
             highScores[i].wpm = wpm;
-            highScores[i].time_limit = time_limit;
             highScores[i].achieved_time = achieved_time;
             break;
         }

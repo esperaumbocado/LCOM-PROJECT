@@ -475,20 +475,19 @@ int drawHighScores() {
     int x = x_margin;
     int y = y_margin;
 
-    drawText("HIGHSCORES", WHITE, x, x + 200, y);
+    drawText("   HIGHSCORES", WHITE, x, x + 200, y);
     y += 40;
 
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         char score[50];
-        sprintf(score, "%2d. %3d WPM  TIME: %d secs  TIME: %02d:%02d:%02d", 
+        sprintf(score, "%2d. %10d WPM         TIME: %02d:%02d:%02d", 
                 i + 1, 
                 highScores[i].wpm, 
-                highScores[i].time_limit, 
                 highScores[i].achieved_time.hours, 
                 highScores[i].achieved_time.minutes, 
                 highScores[i].achieved_time.seconds);
         drawText(score, WHITE, x, mode_info.XResolution - x_margin, y);
-        y += 20;
+        y += 28;
     }
 
     drawStatic(BACK_TO_MENU_SPRITE);

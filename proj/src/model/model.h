@@ -153,7 +153,6 @@ typedef enum {
 
 typedef struct {
     int wpm;
-    int time_limit; // The time limit for the test (15, 30, or 60 seconds)
     real_time_info achieved_time; // RTC time info when the score was achieved
 } HighScore;
 

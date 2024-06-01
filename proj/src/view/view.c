@@ -34,6 +34,8 @@ extern Sprite *STAR_SPRITE;
 
 extern Sprite *PLAY_SPRITE;
 extern Sprite *INSTRUCTIONS_SPRITE;
+extern Sprite *BACK_TO_MENU_SPRITE;
+extern Sprite *PLAY_AGAIN_SPRITE;
 
 extern Sprite *TIMER15_SPRITE;
 extern Sprite *TIMER30_SPRITE;
@@ -56,6 +58,12 @@ extern int startTimer30Y;
 
 extern int startTimer60X;
 extern int startTimer60Y;
+
+extern int backToMenuX;
+extern int backToMenuY;
+
+extern int playAgainX;
+extern int playAgainY;
 
 // Box dimensions
 extern int startBoxX;
@@ -267,6 +275,8 @@ int GameDrawer(){
                 draw_rectangle(statisticsBoxX, statisticsBoxY, statisticsBoxSizeX, statisticsBoxSizeY, WHITE, secondary_frame_buffer_no_mouse);
                 drawText(statistics, GREY, statisticsBoxX, statisticsBoxX+statisticsBoxSizeX, statisticsBoxY);
                 drawStatistics();
+                drawSpriteXPM(BACK_TO_MENU_SPRITE, backToMenuX, backToMenuY);
+                drawSpriteXPM(PLAY_AGAIN_SPRITE, playAgainX, playAgainY);
                 gameStateChange = 0;
             }
             drawCursor();

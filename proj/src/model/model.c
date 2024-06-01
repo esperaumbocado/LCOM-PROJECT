@@ -57,6 +57,9 @@ Sprite *TIMER15_SPRITE;
 Sprite *TIMER30_SPRITE;
 Sprite *TIMER60_SPRITE;
 
+Sprite *BACK_TO_MENU_SPRITE;
+Sprite *PLAY_AGAIN_SPRITE;
+
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
 Sprite *C_SPRITE;
@@ -152,6 +155,16 @@ int startTimer60Y;
 int endTimer60X;
 int endTimer60Y;
 
+int backToMenuX;
+int backToMenuY;
+int backToMenuEndX;
+int backToMenuEndY;
+
+int playAgainX;
+int playAgainY;
+int playAgainEndX;
+int playAgainEndY;
+
 TypingTest *test;
 extern char* wordPool[];
 
@@ -167,6 +180,7 @@ int statisticsBoxY = 220;
 int statisticsBoxX = 290;
 int statisticsBoxSizeY = 420;
 int statisticsBoxSizeX = 575;
+
 
 Statistics *stats;
 
@@ -184,11 +198,25 @@ void initialize_sprites() {
 
     PLAY_SPRITE = create_sprite_xpm((xpm_map_t)play_xpm);
 
+    BACK_TO_MENU_SPRITE = create_sprite_xpm((xpm_map_t)back_to_menu_xpm);
+
+    PLAY_AGAIN_SPRITE = create_sprite_xpm((xpm_map_t)play_again_xpm);
+
     INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm);
 
     TIMER15_SPRITE = create_sprite_xpm((xpm_map_t)timer15_xpm);
     TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm);
     TIMER60_SPRITE = create_sprite_xpm((xpm_map_t)timer60_xpm);
+
+    backToMenuX = statisticsBoxX + 90;
+    backToMenuY = statisticsBoxY + statisticsBoxSizeY - BACK_TO_MENU_SPRITE->height - 50;
+    backToMenuEndX = backToMenuX + BACK_TO_MENU_SPRITE->width;
+    backToMenuEndY = backToMenuY + BACK_TO_MENU_SPRITE->height;
+
+    playAgainX = statisticsBoxX + statisticsBoxSizeX - PLAY_AGAIN_SPRITE->width - 90;
+    playAgainY = statisticsBoxY + statisticsBoxSizeY - PLAY_AGAIN_SPRITE->height - 50;
+    playAgainEndX = playAgainX + PLAY_AGAIN_SPRITE->width;
+    playAgainEndY = playAgainY + PLAY_AGAIN_SPRITE->height;
 
     startPandaX = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
     startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
@@ -460,6 +488,7 @@ void update_timer() {
                 printf("Typed letters: %d\n", stats->typedLetters);
                 printf("Typed words: %d\n", stats->typedWords);
                 printf("Time: %d\n", stats->time);
+                destroy_test();
             }
 
             if (counter%60==0 && timer)
@@ -540,6 +569,19 @@ void checkActions() {
         case INSTRUCTIONS:
             break;
         case STATISTICS:
+            if (mouse_pos.x >= backToMenuX && mouse_pos.x <= backToMenuEndX &&
+                mouse_pos.y >= backToMenuY && mouse_pos.y <= backToMenuEndY &&
+                pp.lb) {
+                setGameState(MENU);
+                destroy_stats();
+            }
+            if (mouse_pos.x >= playAgainX && mouse_pos.x <= playAgainEndX &&
+                mouse_pos.y >= playAgainY && mouse_pos.y <= playAgainEndY &&
+                pp.lb) {
+                setGameState(TIMERS);
+                initializeTest(&test, wordPool, 50, 30);
+                initializeStats(&stats);
+            }
             break;
     }
 }
@@ -827,6 +869,8 @@ void destroy_sprites(){
 
     destroy_sprite(PLAY_SPRITE);
     destroy_sprite(INSTRUCTIONS_SPRITE);
+    destroy_sprite(BACK_TO_MENU_SPRITE);
+    destroy_sprite(PLAY_AGAIN_SPRITE);
 
     destroy_sprite(TIMER15_SPRITE);
     destroy_sprite(TIMER30_SPRITE);

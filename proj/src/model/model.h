@@ -41,6 +41,9 @@
 
 #include "xpm/numbers.xpm"
 
+#include "xpm/back_to_menu.xpm"
+#include "xpm/play_again.xpm"
+
 #define MAX_WORDS 30
 #define MAX_WORD_LENGTH 20
 #define POOL_SIZE 90
@@ -161,6 +164,7 @@ void update_keyboard();
 void update_timer();
 void key_handler();
 void destroy_test();
+void destroy_stats();
 
 /**
 * @brief Updates currentState and gameStateChange

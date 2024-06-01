@@ -8,7 +8,7 @@ var indexSectionsWithContent =
   5: "gks",
   6: "abcdefghijklmnopqrstuvwxyz",
   7: "kmp",
-  8: "kmrtv"
+  8: "kmrstv"
 };
 
 var indexSectionNames =

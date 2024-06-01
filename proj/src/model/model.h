@@ -55,6 +55,13 @@
 #define MAX_HIGH_SCORES 10
 
 /**
+ * @defgroup model
+ * @{
+ * Functions related to the game model and its respective logic
+*/
+
+
+/**
  * @brief Enumerates the Keyboard keys
 */
 typedef enum{

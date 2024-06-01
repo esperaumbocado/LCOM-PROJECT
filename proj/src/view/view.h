@@ -10,8 +10,26 @@
 
 int setUpFrameBuffer();
 int mainDraw();
-int drawSpriteXPM(Sprite *sprite, int x, int y);
-int drawSpriteXPM_single_color(Sprite *sprite, int x, int y, uint32_t color);
+
+/**
+ * @brief Draws a sprite on the screen, secondary_frame_buffer_no_mouse
+ * @param sprite the sprite to be drawn
+ * @param x the x position of the sprite
+ * @param y the y position of the sprite
+ * @param single_color if the sprite is a single color
+ * @param color the color of the sprite
+ * @param moving if the sprite will be moving
+ * @return 0 if successful, 1 otherwise
+*/
+int drawSpriteXPM(Sprite *sprite, int x, int y, bool single_color, uint32_t color, bool moving);
+
+/**
+ * @brief Draws a static sprite on the screen
+ * @param sprite the sprite to be drawn
+ * @return 0 if successful, 1 otherwise
+*/
+int drawStatic(Sprite *sprite);
+
 int drawBackground(GameState state);
 
 
@@ -42,16 +60,6 @@ int drawRealTime();
 
 int drawStatistics();
 
-
-/**
- * @brief Draws a number on the screen
- * @param key the key to be drawn
- * @param x the x position of the number
- * @param y the y position of the number
- * @return 0 if successful, 1 otherwise
-*/
-int drawNumber(Key key, int x, int y);
-
 /**
  * @brief Draws the cursor on the screen
  * @return 0 if successful, 1 otherwise
@@ -66,13 +74,6 @@ int GameDrawer();
  * @return 0 if successful, 1 otherwise
 */
 int drawText(const char* text, uint32_t color, int start_x, int end_x, int y);
-
-/**
- * @brief Draws a letter on the screen
- * @param key the key to be drawn
- * @return 0 if successful, 1 otherwise
-*/
-int drawLetter(Key key, uint32_t color);
 
 int drawWords(TypingTest *test);
 

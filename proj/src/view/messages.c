@@ -9,13 +9,13 @@ const char* game_instructions =
     "     USE BACKSPACE TO UNDO THE LAST LETTER. \n\n"
     "     PRESS THE LEFT BUTTON AND SWIPE RIGHT \n"
     "          TO AUTOCOMPLETE THE WORD. \n\n\n"
-    "     PRESS BACKSPACE TO GO BACK TO MAIN MENU \n"
-    "                 AND GOOD LUCK! \n";
+    "       PRESS ESC TO GO BACK TO MAIN MENU \n"
+    "                AND GOOD LUCK! \n";
 
 const char* timer_selection = 
     "\n\n"
     "       CHOOSE THE TIMER FOR YOUR GAME :) \n\n\n"
-    "   PRESS BACKSPACE TO GO BACK TO MAIN MENU\n\n";
+    "       PRESS ESC TO GO BACK TO MAIN MENU\n\n";
 
 
 

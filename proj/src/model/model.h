@@ -7,45 +7,36 @@
 #include "../drivers/keyboard/keyboard.h"
 #include "../drivers/mouse/mouse.h"
 #include "model/sprite.h"
-#include "xpm/letters.xpm"
-#include "xpm/cursor.xpm"
-#include "xpm/star.xpm"
+#include "../view/xpm/letters.xpm"
+#include "../view/xpm/cursor.xpm"
+#include "../view/xpm/star.xpm"
 
-#include "xpm/play.xpm"
-#include "xpm/instructions.xpm"
+#include "../view/xpm/play.xpm"
+#include "../view/xpm/instructions.xpm"
 
-#include "xpm/timer15.xpm"
-#include "xpm/timer30.xpm"
-#include "xpm/timer60.xpm"
+#include "../view/xpm/timer15.xpm"
+#include "../view/xpm/timer30.xpm"
+#include "../view/xpm/timer60.xpm"
 
-#include "xpm/punctuation/comma.xpm"
-#include "xpm/punctuation/period.xpm"
-#include "xpm/punctuation/colon.xpm"
-#include "xpm/punctuation/exclamation.xpm"
-#include "xpm/punctuation/right_parenthesis.xpm"
+#include "../view/xpm/punctuation/comma.xpm"
+#include "../view/xpm/punctuation/period.xpm"
+#include "../view/xpm/punctuation/colon.xpm"
+#include "../view/xpm/punctuation/exclamation.xpm"
+#include "../view/xpm/punctuation/right_parenthesis.xpm"
 
-#include "xpm/numbers/zero.xpm"
-#include "xpm/numbers/one.xpm"
-#include "xpm/numbers/two.xpm"
-#include "xpm/numbers/three.xpm"
-#include "xpm/numbers/four.xpm"
-#include "xpm/numbers/five.xpm"
-#include "xpm/numbers/six.xpm"
-#include "xpm/numbers/seven.xpm"
-#include "xpm/numbers/eight.xpm"
-#include "xpm/numbers/nine.xpm"
+#include "../view/xpm/numbers.xpm"
 
-#include "xpm/panda.xpm"
-#include "xpm/bambu_right.xpm"
-#include "xpm/bambu_left.xpm"
+#include "../view/xpm/panda.xpm"
+#include "../view/xpm/bambu_right.xpm"
+#include "../view/xpm/bambu_left.xpm"
 
-#include "xpm/numbers.xpm"
-
-#include "xpm/back_to_menu.xpm"
-#include "xpm/play_again.xpm"
+#include "../view/xpm/back_to_menu.xpm"
+#include "../view/xpm/play_again.xpm"
 
 #define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
+
+#define KEY_SPRITE_MAP_SIZE 43
 
 typedef enum{
     NONE_KEY,
@@ -158,6 +149,12 @@ typedef enum {
 
 void initialize_key_maps();
 void initialize_sprites();
+
+/**
+ * @brief Initializes the key sprite map
+*/
+void initialize_key_sprite_map();
+
 void destroy_sprites();
 void update_keyboard();
 void update_timer();

@@ -1,4 +1,4 @@
-static char *big_one_xpm[] = {
+static char *one_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -31,10 +31,10 @@ static char *big_one_xpm[] = {
 };
 
 
-static char *big_two_xpm[] = {
+static char *two_xpm[] = {
 "16 26 2 1",
 "! c #000000",
-"# c #ffffff",
+"# c #fffffe",
 "################",
 "################",
 "################",
@@ -63,7 +63,7 @@ static char *big_two_xpm[] = {
 "################"
 };
 
-static char *big_three_xpm[] = {
+static char *three_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -96,7 +96,7 @@ static char *big_three_xpm[] = {
 };
 
 
-static char *big_four_xpm[] = {
+static char *four_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -128,7 +128,7 @@ static char *big_four_xpm[] = {
 "################"
 };
 
-static char *big_five_xpm[] = {
+static char *five_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -160,7 +160,7 @@ static char *big_five_xpm[] = {
 "################"
 };
 
-static char *big_six_xpm[] = {
+static char *six_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -193,7 +193,7 @@ static char *big_six_xpm[] = {
 };
 
 
-static char *big_seven_xpm[] = {
+static char *seven_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -225,7 +225,7 @@ static char *big_seven_xpm[] = {
 "################"
 };
 
-static char *big_eight_xpm[] = {
+static char *eight_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -257,7 +257,7 @@ static char *big_eight_xpm[] = {
 "################"
 };
 
-static char *big_nine_xpm[] = {
+static char *nine_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",
@@ -289,7 +289,7 @@ static char *big_nine_xpm[] = {
 "################"
 };
 
-static char *big_zero_xpm[] = {
+static char *zero_xpm[] = {
 "16 26 2 1",
 "! c #000000",
 "# c #FFFFFE",

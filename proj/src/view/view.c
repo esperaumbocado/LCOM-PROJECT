@@ -83,17 +83,6 @@ extern Sprite *SEVEN_SPRITE;
 extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
-extern Sprite *BIG_ZERO_SPRITE;
-extern Sprite *BIG_ONE_SPRITE;
-extern Sprite *BIG_TWO_SPRITE;
-extern Sprite *BIG_THREE_SPRITE;
-extern Sprite *BIG_FOUR_SPRITE;
-extern Sprite *BIG_FIVE_SPRITE;
-extern Sprite *BIG_SIX_SPRITE;
-extern Sprite *BIG_SEVEN_SPRITE;
-extern Sprite *BIG_EIGHT_SPRITE;
-extern Sprite *BIG_NINE_SPRITE;
-
 extern Sprite* PANDA_SPRITE;
 extern Sprite* BAMBU_LEFT_SPRITE;
 extern Sprite* BAMBU_RIGHT_SPRITE;
@@ -111,6 +100,7 @@ extern int statisticsBoxY;
 extern int statisticsBoxSizeX;
 extern int statisticsBoxSizeY;
 
+extern Sprite *key_sprite_map[KEY_SPRITE_MAP_SIZE]; 
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -122,7 +112,7 @@ int setUpFrameBuffer() {
 }
 
 
-int drawSpriteXPM(Sprite *sprite, int x, int y) {
+int drawSpriteXPM(Sprite *sprite, int x, int y, bool single_color, uint32_t color, bool moving){
     if (sprite == NULL) return 1;
 
     uint16_t width = sprite->width;
@@ -130,57 +120,17 @@ int drawSpriteXPM(Sprite *sprite, int x, int y) {
 
     for (int row = 0; row < height; ++row) {
         for (int col = 0; col < width; ++col) {
-            uint32_t color = sprite->colors[col + row * width];
+            
+            uint32_t sprite_color = sprite->colors[col + row * width];
 
-            if (color == TRANSPARENT) {
-                continue;
-            }
+            if (sprite_color != TRANSPARENT) {
+                if (!single_color) color = sprite_color; // reassign color to the sprite color
+                
+                if (moving) 
+                    draw_pixel(x + col, y + row, color, secondary_frame_buffer);
+                else 
+                    draw_pixel(x + col, y + row, color, secondary_frame_buffer_no_mouse);
 
-            if (draw_pixel(x + col, y + row, color, secondary_frame_buffer_no_mouse) != 0) {
-                return 1;
-            }
-        }
-    }
-    
-    return 0;
-}
-
-int drawSpriteXPM_single_color(Sprite *sprite, int x, int y, uint32_t color) {
-    if (sprite == NULL) return 1;
-
-    uint16_t width = sprite->width;
-    uint16_t height = sprite->height;
-
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
-            if (sprite->colors[col + row * width] != TRANSPARENT) {
-                if (draw_pixel(x + col, y + row, color, secondary_frame_buffer_no_mouse) != 0) {
-                    return 1;
-                }
-            }
-        }
-    }
-    
-    return 0;
-}
-
-
-int drawSpriteXPM_mouse(Sprite *sprite, int x, int y) {
-    if (sprite == NULL) return 1;
-
-    uint16_t width = sprite->width;
-    uint16_t height = sprite->height;
-
-    for (int row = 0; row < height; ++row) {
-        for (int col = 0; col < width; ++col) {
-            uint32_t color = sprite->colors[col + row * width];
-
-            if (color == TRANSPARENT) {
-                continue;
-            }
-
-            if (draw_pixel(x + col, y + row, color, secondary_frame_buffer) != 0) {
-                return 1;
             }
         }
     }
@@ -193,11 +143,13 @@ int GameDrawer(){
         case MENU:
             if (gameStateChange){
                 drawBackground(MENU);
-                drawSpriteXPM(PANDA_SPRITE, PANDA_SPRITE->x, PANDA_SPRITE->y);
-                drawSpriteXPM(BAMBU_RIGHT_SPRITE, BAMBU_RIGHT_SPRITE->x, BAMBU_RIGHT_SPRITE->y);
-                drawSpriteXPM(BAMBU_LEFT_SPRITE, BAMBU_LEFT_SPRITE->x, BAMBU_LEFT_SPRITE->y);
-                drawSpriteXPM(PLAY_SPRITE, PLAY_SPRITE->x, PLAY_SPRITE->y);
-                drawSpriteXPM(INSTRUCTIONS_SPRITE, INSTRUCTIONS_SPRITE->x, INSTRUCTIONS_SPRITE->y);
+
+                drawStatic(PANDA_SPRITE);
+                drawStatic(BAMBU_LEFT_SPRITE);
+                drawStatic(BAMBU_RIGHT_SPRITE);
+                drawStatic(PLAY_SPRITE);
+                drawStatic(INSTRUCTIONS_SPRITE);
+
                 gameStateChange = 0;
             }
             drawCursor();
@@ -236,8 +188,8 @@ int GameDrawer(){
                 draw_rectangle(statisticsBoxX, statisticsBoxY, statisticsBoxSizeX, statisticsBoxSizeY, WHITE, secondary_frame_buffer_no_mouse);
                 drawText(statistics, GREY, statisticsBoxX, statisticsBoxX+statisticsBoxSizeX, statisticsBoxY);
                 drawStatistics();
-                drawSpriteXPM(BACK_TO_MENU_SPRITE, BACK_TO_MENU_SPRITE->x, BACK_TO_MENU_SPRITE->y);
-                drawSpriteXPM(PLAY_AGAIN_SPRITE, PLAY_AGAIN_SPRITE->x, PLAY_AGAIN_SPRITE->y);
+                drawStatic(BACK_TO_MENU_SPRITE);
+                drawStatic(PLAY_AGAIN_SPRITE);
                 gameStateChange = 0;
             }
             drawCursor();
@@ -245,6 +197,10 @@ int GameDrawer(){
     }
 
     return 0;
+}
+
+int drawStatic(Sprite *sprite){
+    return drawSpriteXPM(sprite, sprite->x, sprite->y, false, 0, false);
 }
 
 int drawStatistics() {
@@ -264,7 +220,7 @@ int drawRealTime() {
         printf("Failed to read RTC time\n");
         return 1;
     } else {
-        int x = mode_info.XResolution - 13 * 8; // 8 characters (HH:MM:SS) * 13 pixels per character
+        int x = mode_info.XResolution - 13 * 8 - 10; // 8 characters (HH:MM:SS) * 13 pixels per character
         int y = mode_info.YResolution - 40; // 40 pixels from the bottom
 
         char time_string[9]; // HH:MM:SS
@@ -274,9 +230,10 @@ int drawRealTime() {
 
         while (*time_string_ptr) {
             Key key = char_to_key(*time_string_ptr);
-            if (drawNumber(key, x, y)) {
-                if(drawSpriteXPM_single_color(COLON_SPRITE, x, y, GREY)) return 1;
-            }
+
+            if (drawSpriteXPM(key_sprite_map[key], x, y, false, 0, true)) 
+                return 1;
+            
             
             time_string_ptr++;
             x += 13; // Move to the next position
@@ -325,8 +282,8 @@ int drawRecordedTime(){
     while (*timer_string_ptr) { 
 
         Key key = char_to_key(*timer_string_ptr);
-        if (drawNumber(key, x, y)) return 1;
-
+        if (drawSpriteXPM(key_sprite_map[key], x, y, false, 0, true)) return 1;
+        
         timer_string_ptr++;
         x+=13;
     }
@@ -337,7 +294,7 @@ int drawRecordedTime(){
 int drawStars(){
 
     for (int i = 0; i < stars; i++) 
-        if (drawSpriteXPM_mouse(STAR_SPRITE, STAR_SPRITE->x + i*30, STAR_SPRITE->y)) return 1;
+        if (drawSpriteXPM(STAR_SPRITE, STAR_SPRITE->x + i*30, STAR_SPRITE->y, false, 0, true)) return 1;
     
     return 0;
 }
@@ -346,73 +303,13 @@ int drawTimers() {
 
     if (drawText(timer_selection, WHITE,x_margin,mode_info.XResolution-x_margin,y_margin)) return 1;
 
-    if (drawSpriteXPM(TIMER15_SPRITE, TIMER15_SPRITE->x, TIMER15_SPRITE->y)) return 1;
-    if (drawSpriteXPM(TIMER30_SPRITE, TIMER30_SPRITE->x, TIMER30_SPRITE->y)) return 1;
-    if (drawSpriteXPM(TIMER60_SPRITE, TIMER60_SPRITE->x, TIMER60_SPRITE->y)) return 1;
+    if (drawSpriteXPM(TIMER15_SPRITE, TIMER15_SPRITE->x, TIMER15_SPRITE->y, false, 0, false)) return 1;
+    if (drawSpriteXPM(TIMER30_SPRITE, TIMER30_SPRITE->x, TIMER30_SPRITE->y, false, 0, false)) return 1;
+    if (drawSpriteXPM(TIMER60_SPRITE, TIMER60_SPRITE->x, TIMER60_SPRITE->y, false, 0, false)) return 1;
 
     return 0;
 }
 
-int drawNumber(Key key, int x, int y) {
-    switch(key){
-        case ZERO:
-            return drawSpriteXPM_mouse(ZERO_SPRITE, x, y);
-        case ONE:
-            return drawSpriteXPM_mouse(ONE_SPRITE, x, y);
-        case TWO:
-            return drawSpriteXPM_mouse(TWO_SPRITE, x, y);
-        case THREE:
-            return drawSpriteXPM_mouse(THREE_SPRITE, x, y);
-        case FOUR:
-            return drawSpriteXPM_mouse(FOUR_SPRITE, x, y);
-        case FIVE:
-            return drawSpriteXPM_mouse(FIVE_SPRITE, x, y);
-        case SIX:
-            return drawSpriteXPM_mouse(SIX_SPRITE, x, y);
-        case SEVEN:
-            return drawSpriteXPM_mouse(SEVEN_SPRITE, x, y);
-        case EIGHT: 
-            return drawSpriteXPM_mouse(EIGHT_SPRITE, x, y);
-        case NINE:
-            return drawSpriteXPM_mouse(NINE_SPRITE, x, y);
-        default:
-            break;
-    }
-
-    return 1;
-}
-
-
-int drawBigNumber(Key key, int x, int y) {
-    printf("Drawing big number %d\n", key);
-    switch(key){
-        case ZERO:
-            return drawSpriteXPM(BIG_ZERO_SPRITE, x, y);
-        case ONE:
-            return drawSpriteXPM(BIG_ONE_SPRITE, x, y);
-        case TWO:
-            return drawSpriteXPM(BIG_TWO_SPRITE, x, y);
-        case THREE:
-            return drawSpriteXPM(BIG_THREE_SPRITE, x, y);
-        case FOUR:
-            return drawSpriteXPM(BIG_FOUR_SPRITE, x, y);
-        case FIVE:
-            return drawSpriteXPM(BIG_FIVE_SPRITE, x, y);
-        case SIX:
-            return drawSpriteXPM(BIG_SIX_SPRITE, x, y);
-        case SEVEN:
-            return drawSpriteXPM(BIG_SEVEN_SPRITE, x, y);
-        case EIGHT: 
-            return drawSpriteXPM(BIG_EIGHT_SPRITE, x, y);
-        case NINE:
-            return drawSpriteXPM(BIG_NINE_SPRITE, x, y);
-        default:
-            printf("Key:  does not represent a number\n");
-            break;
-    }
-
-    return 1;
-}
 
 int drawInt(int number, int x, int y) {
     printf("Entering drawInt with number: %d\n", number);
@@ -433,7 +330,8 @@ int drawInt(int number, int x, int y) {
             return 1;
         }
 
-        if (drawBigNumber(key, x, y)) return 1;
+        if (drawSpriteXPM(key_sprite_map[key], x, y, false, 0, false))
+            return 1;
 
         number_string_ptr++;
         x += 16;
@@ -457,7 +355,7 @@ int drawCursor(){
         CURSOR_SPRITE->y = mode_info.YResolution - CURSOR_SPRITE->height;
     }
 
-    return drawSpriteXPM_mouse(CURSOR_SPRITE, CURSOR_SPRITE->x, CURSOR_SPRITE->y);
+    return drawSpriteXPM(CURSOR_SPRITE, CURSOR_SPRITE->x, CURSOR_SPRITE->y, false, 0, true);
 }
 
 int drawText(const char* text, uint32_t color, int start_x, int end_x, int start_y) {
@@ -475,82 +373,13 @@ int drawText(const char* text, uint32_t color, int start_x, int end_x, int start
         }
 
         Key key = char_to_key(*text);
-        if (drawLetter(key, color)) return 1;
+        
+        if (key_sprite_map[key])
+            if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, color, false)) 
+                return 1;
+
         offset_handler(start_x, end_x);
         text++;
-    }
-
-    return 0;
-}
-
-
-
-int drawLetter(Key key, uint32_t color) {
-    switch(key){
-        case A:
-            return drawSpriteXPM_single_color(A_SPRITE, x_offset, y_offset, color);
-        case B:
-            return drawSpriteXPM_single_color(B_SPRITE, x_offset, y_offset, color);
-        case C:
-            return drawSpriteXPM_single_color(C_SPRITE, x_offset, y_offset, color);
-        case D:
-            return drawSpriteXPM_single_color(D_SPRITE, x_offset, y_offset, color);
-        case E:
-            return drawSpriteXPM_single_color(E_SPRITE, x_offset, y_offset, color);
-        case F:
-            return drawSpriteXPM_single_color(F_SPRITE, x_offset, y_offset, color);
-        case G:
-            return drawSpriteXPM_single_color(G_SPRITE, x_offset, y_offset, color);
-        case H:
-            return drawSpriteXPM_single_color(H_SPRITE, x_offset, y_offset, color);
-        case I:
-            return drawSpriteXPM_single_color(I_SPRITE, x_offset, y_offset, color);
-        case J:
-            return drawSpriteXPM_single_color(J_SPRITE, x_offset, y_offset, color);
-        case K:
-            return drawSpriteXPM_single_color(K_SPRITE, x_offset, y_offset, color);
-        case L:
-            return drawSpriteXPM_single_color(L_SPRITE, x_offset, y_offset, color);
-        case M:
-            return drawSpriteXPM_single_color(M_SPRITE, x_offset, y_offset, color);
-        case N:
-            return drawSpriteXPM_single_color(N_SPRITE, x_offset, y_offset, color);
-        case O:
-            return drawSpriteXPM_single_color(O_SPRITE, x_offset, y_offset, color);
-        case P:
-            return drawSpriteXPM_single_color(P_SPRITE, x_offset, y_offset, color);
-        case Q:
-            return drawSpriteXPM_single_color(Q_SPRITE, x_offset, y_offset, color);
-        case R:
-            return drawSpriteXPM_single_color(R_SPRITE, x_offset, y_offset, color);
-        case S:
-            return drawSpriteXPM_single_color(S_SPRITE, x_offset, y_offset, color);
-        case T:
-            return drawSpriteXPM_single_color(T_SPRITE, x_offset, y_offset, color);
-        case U:
-            return drawSpriteXPM_single_color(U_SPRITE, x_offset, y_offset, color);
-        case V:
-            return drawSpriteXPM_single_color(V_SPRITE, x_offset, y_offset, color);
-        case W:
-            return drawSpriteXPM_single_color(W_SPRITE, x_offset, y_offset, color);
-        case X:
-            return drawSpriteXPM_single_color(X_SPRITE, x_offset, y_offset, color);
-        case Y:
-            return drawSpriteXPM_single_color(Y_SPRITE, x_offset, y_offset, color);
-        case Z:
-            return drawSpriteXPM_single_color(Z_SPRITE, x_offset, y_offset, color);
-        case COMMA:
-            return drawSpriteXPM_single_color(COMMA_SPRITE, x_offset, y_offset, color);
-        case PERIOD:
-            return drawSpriteXPM_single_color(PERIOD_SPRITE, x_offset, y_offset, color);
-        case EXCLAMATION:
-            return drawSpriteXPM_single_color(EXCLAMATION_SPRITE, x_offset, y_offset, color);
-        case COLON:
-            return drawSpriteXPM_single_color(COLON_SPRITE, x_offset, y_offset, color);
-        case RIGHT_PARENTHESIS:
-            return drawSpriteXPM_single_color(RIGHT_PARENTHESIS_SPRITE, x_offset, y_offset, color);
-        default:
-            break;
     }
 
     return 0;
@@ -590,15 +419,15 @@ int drawWords(TypingTest *test) {
             }
 
             if (currentWord->status == 1){
-                if (drawLetter(key, 0x336600)) return 1;
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, 0x336600, false)) return 1;
             }else if (currentWord->status == -1){
-                if (drawLetter(key, RED)) return 1;
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, RED, false)) return 1;
             }else if (currentWord->letters[j].status == -1) {
-                if (drawLetter(key, RED)) return 1;  // Red 
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, RED, false)) return 1;
             } else if (currentWord->letters[j].status == 1) {
-                if (drawLetter(key, 0xFFFFFF)) return 1;  // WHITE
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, WHITE, false)) return 1;
             } else {
-                if (drawLetter(key, GREY)) return 1; // Grey
+                if (drawSpriteXPM(key_sprite_map[key], x_offset, y_offset, true, GREY, false)) return 1;
             }
 
             x_offset += 16;

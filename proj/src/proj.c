@@ -63,6 +63,7 @@ int setup(){
   
   initialize_sprites();
   initialize_key_maps();
+  initialize_key_sprite_map();
 
   setGameState(MENU);
 

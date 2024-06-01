@@ -102,17 +102,6 @@ Sprite *SEVEN_SPRITE;
 Sprite *EIGHT_SPRITE;
 Sprite *NINE_SPRITE;
 
-Sprite *BIG_ZERO_SPRITE;
-Sprite *BIG_ONE_SPRITE;
-Sprite *BIG_TWO_SPRITE;
-Sprite *BIG_THREE_SPRITE;
-Sprite *BIG_FOUR_SPRITE;
-Sprite *BIG_FIVE_SPRITE;
-Sprite *BIG_SIX_SPRITE;
-Sprite *BIG_SEVEN_SPRITE;
-Sprite *BIG_EIGHT_SPRITE;
-Sprite *BIG_NINE_SPRITE;
-
 Sprite *PANDA_SPRITE;
 Sprite *BAMBU_RIGHT_SPRITE;
 Sprite *BAMBU_LEFT_SPRITE;
@@ -131,6 +120,8 @@ int statisticsBoxX = 290;
 int statisticsBoxSizeY = 420;
 int statisticsBoxSizeX = 575;
 
+
+Sprite *key_sprite_map[KEY_SPRITE_MAP_SIZE]; 
 
 Statistics *stats;
 
@@ -212,23 +203,6 @@ void initialize_sprites() {
     COLON_SPRITE = create_sprite_xpm((xpm_map_t)colon_xpm, 0, 0);
     RIGHT_PARENTHESIS_SPRITE = create_sprite_xpm((xpm_map_t)right_parenthesis_xpm, 0, 0);
 
-    ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm, 0, 0);
-    ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm, 0, 0);
-    TWO_SPRITE = create_sprite_xpm((xpm_map_t)two_xpm, 0, 0);
-    THREE_SPRITE = create_sprite_xpm((xpm_map_t)three_xpm, 0, 0);
-    FOUR_SPRITE = create_sprite_xpm((xpm_map_t)four_xpm, 0, 0);
-    FIVE_SPRITE = create_sprite_xpm((xpm_map_t)five_xpm, 0, 0);
-    SIX_SPRITE = create_sprite_xpm((xpm_map_t)six_xpm, 0, 0);
-    SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm, 0, 0);
-    EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm, 0, 0);
-    NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm, 0, 0);
-
-    printf("All sprites initialized. \n");
-
-    EXCLAMATION_SPRITE = create_sprite_xpm((xpm_map_t)exclamation_xpm,0,0);
-    COLON_SPRITE = create_sprite_xpm((xpm_map_t)colon_xpm,0,0);
-    RIGHT_PARENTHESIS_SPRITE = create_sprite_xpm((xpm_map_t)right_parenthesis_xpm,0,0);
-
     ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm,0,0);
     ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm,0,0);
     TWO_SPRITE = create_sprite_xpm((xpm_map_t)two_xpm,0,0);
@@ -239,19 +213,54 @@ void initialize_sprites() {
     SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm,0,0);
     EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm,0,0);
     NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm,0,0);
-
-    BIG_ZERO_SPRITE = create_sprite_xpm((xpm_map_t)big_zero_xpm,0,0);
-    BIG_ONE_SPRITE = create_sprite_xpm((xpm_map_t)big_one_xpm,0,0);
-    BIG_TWO_SPRITE = create_sprite_xpm((xpm_map_t)big_two_xpm,0,0);
-    BIG_THREE_SPRITE = create_sprite_xpm((xpm_map_t)big_three_xpm,0,0);
-    BIG_FOUR_SPRITE = create_sprite_xpm((xpm_map_t)big_four_xpm,0,0);
-    BIG_FIVE_SPRITE = create_sprite_xpm((xpm_map_t)big_five_xpm,0,0);
-    BIG_SIX_SPRITE = create_sprite_xpm((xpm_map_t)big_six_xpm,0,0);
-    BIG_SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)big_seven_xpm,0,0);
-    BIG_EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)big_eight_xpm,0,0);
-    BIG_NINE_SPRITE = create_sprite_xpm((xpm_map_t)big_nine_xpm,0,0);
+    
+    printf("All sprites initialized. \n");
 }
 
+
+void initialize_key_sprite_map() {
+    key_sprite_map[ZERO] = ZERO_SPRITE;
+    key_sprite_map[ONE] = ONE_SPRITE;
+    key_sprite_map[TWO] = TWO_SPRITE;
+    key_sprite_map[THREE] = THREE_SPRITE;
+    key_sprite_map[FOUR] = FOUR_SPRITE;
+    key_sprite_map[FIVE] = FIVE_SPRITE;
+    key_sprite_map[SIX] = SIX_SPRITE;
+    key_sprite_map[SEVEN] = SEVEN_SPRITE;
+    key_sprite_map[EIGHT] = EIGHT_SPRITE;
+    key_sprite_map[NINE] = NINE_SPRITE;
+    key_sprite_map[A] = A_SPRITE;
+    key_sprite_map[B] = B_SPRITE;
+    key_sprite_map[C] = C_SPRITE;
+    key_sprite_map[D] = D_SPRITE;
+    key_sprite_map[E] = E_SPRITE;
+    key_sprite_map[F] = F_SPRITE;
+    key_sprite_map[G] = G_SPRITE;
+    key_sprite_map[H] = H_SPRITE;
+    key_sprite_map[I] = I_SPRITE;
+    key_sprite_map[J] = J_SPRITE;
+    key_sprite_map[K] = K_SPRITE;
+    key_sprite_map[L] = L_SPRITE;
+    key_sprite_map[M] = M_SPRITE;
+    key_sprite_map[N] = N_SPRITE;
+    key_sprite_map[O] = O_SPRITE;
+    key_sprite_map[P] = P_SPRITE;
+    key_sprite_map[Q] = Q_SPRITE;
+    key_sprite_map[R] = R_SPRITE;
+    key_sprite_map[S] = S_SPRITE;
+    key_sprite_map[T] = T_SPRITE;
+    key_sprite_map[U] = U_SPRITE;
+    key_sprite_map[V] = V_SPRITE;
+    key_sprite_map[W] = W_SPRITE;
+    key_sprite_map[X] = X_SPRITE;
+    key_sprite_map[Y] = Y_SPRITE;
+    key_sprite_map[Z] = Z_SPRITE;
+    key_sprite_map[COMMA] = COMMA_SPRITE;
+    key_sprite_map[PERIOD] = PERIOD_SPRITE;
+    key_sprite_map[EXCLAMATION] = EXCLAMATION_SPRITE;
+    key_sprite_map[COLON] = COLON_SPRITE;
+    key_sprite_map[RIGHT_PARENTHESIS] = RIGHT_PARENTHESIS_SPRITE;
+}
 
 void initialize_key_maps() {
     for (int i = 0; i < 256; i++) {
@@ -428,15 +437,6 @@ void update_timer() {
         case GAME:
             if (timer == 0){
                 setGameState(STATISTICS);
-                printf("Stats:\n");
-                printf("Correct words: %d\n", stats->correctWords);
-                printf("Incorrect words: %d\n", stats->incorrectWords);
-                printf("Correct letters: %d\n", stats->correctLetters);
-                printf("Incorrect letters: %d\n", stats->incorrectLetters);
-                printf("Typed letters: %d\n", stats->typedLetters);
-                printf("Typed words: %d\n", stats->typedWords);
-                printf("Time: %d\n", stats->time);
-                destroy_test();
             }
 
             if (counter%60==0 && timer)
@@ -453,10 +453,38 @@ void setGameState(GameState state) {
     printf("Setting game state to %d\n", state);
     currentState = state;
     gameStateChange = 1;
-    if (state == GAME){
-        stars = 3;
-        initializeTest(&test, wordPool, 100, 40);
-        printf("Test initialized\n");
+
+    switch (state){
+        case MENU:
+            currentKey = NONE_KEY;
+            break;
+        case GAME:
+            stars = 3;
+            initializeTest(&test, wordPool, 100, 40);
+
+            initializeStats(&stats);
+            stats->time = timer;
+
+            printf("Test initialized\n");
+            break;
+        case TIMERS:
+            // do we need these lines in timers state?
+            // initializeTest(&test, wordPool, 50, 30);
+            //initializeStats(&stats);
+            break;
+        case STATISTICS:
+            printf("Stats:\n");
+            printf("Correct words: %d\n", stats->correctWords);
+            printf("Incorrect words: %d\n", stats->incorrectWords);
+            printf("Correct letters: %d\n", stats->correctLetters);
+            printf("Incorrect letters: %d\n", stats->incorrectLetters);
+            printf("Typed letters: %d\n", stats->typedLetters);
+            printf("Typed words: %d\n", stats->typedWords);
+            printf("Time: %d\n", stats->time);
+            destroy_test();
+            break;
+        default:
+            break;
     }
 }
 
@@ -490,20 +518,14 @@ void checkActions() {
         case TIMERS:
             if (pressed_button(TIMER15_SPRITE)) {
                 timer = 15;
-                initializeStats(&stats);
-                stats->time = timer;
                 setGameState(GAME);
             }
             if (pressed_button(TIMER30_SPRITE)) {
                 timer = 30;
-                initializeStats(&stats);
-                stats->time = timer;
                 setGameState(GAME);
             }
             if (pressed_button(TIMER60_SPRITE)) {
                 timer = 60;
-                initializeStats(&stats);
-                stats->time = timer;
                 setGameState(GAME);
             }
             
@@ -520,8 +542,6 @@ void checkActions() {
             }
             if (pressed_button(PLAY_AGAIN_SPRITE)) {
                 setGameState(TIMERS);
-                initializeTest(&test, wordPool, 50, 30);
-                initializeStats(&stats);
             }
             break;
     }
@@ -623,31 +643,14 @@ void key_handler() {
                 setGameState(TIMERS);
             }
             break;
-        case GAME:
+        default:
             update_keyboard(test);
             if (currentKey == ESC) {
                 setGameState(MENU);
                 currentKey = NONE_KEY;
             }
             break;
-        case INSTRUCTIONS:
-            update_keyboard(test);
-            if (currentKey == BACK) {
-                setGameState(MENU);
-            }
-        case TIMERS:
-            update_keyboard(test);
-            if (currentKey == BACK) {
-                setGameState(MENU);
-            }
-            break;
-        case STATISTICS:
-            update_keyboard(test);
-            if (currentKey == ESC) {
-                setGameState(MENU);
-            }
-            break;
-    }
+    }    
 }
 
 void process_key(char c, Key key, TypingTest *test, GameState state) {
@@ -833,16 +836,16 @@ void destroy_sprites(){
     destroy_sprite(EIGHT_SPRITE);
     destroy_sprite(NINE_SPRITE);
 
-    destroy_sprite(BIG_ZERO_SPRITE);
-    destroy_sprite(BIG_ONE_SPRITE);
-    destroy_sprite(BIG_TWO_SPRITE);
-    destroy_sprite(BIG_THREE_SPRITE);
-    destroy_sprite(BIG_FOUR_SPRITE);
-    destroy_sprite(BIG_FIVE_SPRITE);
-    destroy_sprite(BIG_SIX_SPRITE);
-    destroy_sprite(BIG_SEVEN_SPRITE);
-    destroy_sprite(BIG_EIGHT_SPRITE);
-    destroy_sprite(BIG_NINE_SPRITE);
+    destroy_sprite(ZERO_SPRITE);
+    destroy_sprite(ONE_SPRITE);
+    destroy_sprite(TWO_SPRITE);
+    destroy_sprite(THREE_SPRITE);
+    destroy_sprite(FOUR_SPRITE);
+    destroy_sprite(FIVE_SPRITE);
+    destroy_sprite(SIX_SPRITE);
+    destroy_sprite(SEVEN_SPRITE);
+    destroy_sprite(EIGHT_SPRITE);
+    destroy_sprite(NINE_SPRITE);
 
     destroy_sprite(PANDA_SPRITE);
     destroy_sprite(BAMBU_RIGHT_SPRITE);

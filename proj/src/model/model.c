@@ -490,7 +490,7 @@ void setGameState(GameState state) {
             int wpm = (stats->typedWords * 60) / stats->time; // Calculate WPM
             real_time_info current_time;
             rtc_read_time(&current_time);
-            update_high_scores(wpm, timer, current_time);
+            update_high_scores(wpm, current_time);
             break;
         case HIGHSCORES:
             load_high_scores();
@@ -908,7 +908,7 @@ void initialize_high_scores() {
     }
 }
 
-void update_high_scores(int wpm, int time_limit, real_time_info achieved_time) {
+void update_high_scores(int wpm, real_time_info achieved_time) {
     for (int i = 0; i < MAX_HIGH_SCORES; i++) {
         if (wpm > highScores[i].wpm) {
             // Shift lower scores down
@@ -925,9 +925,15 @@ void update_high_scores(int wpm, int time_limit, real_time_info achieved_time) {
 }
 
 void save_high_scores() {
-    FILE *file = fopen("highscores.dat", "wb");
+    FILE *file = fopen("highscores.txt", "w");
     if (file != NULL) {
-        fwrite(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+            fprintf(file, "%d %02d:%02d:%02d\n",
+                    highScores[i].wpm,
+                    highScores[i].achieved_time.hours,
+                    highScores[i].achieved_time.minutes,
+                    highScores[i].achieved_time.seconds);
+        }
         fclose(file);
     } else {
         fprintf(stderr, "Failed to save high scores\n");
@@ -935,9 +941,17 @@ void save_high_scores() {
 }
 
 void load_high_scores() {
-    FILE *file = fopen("highscores.dat", "rb");
+    FILE *file = fopen("highscores.txt", "r");
     if (file != NULL) {
-        fread(highScores, sizeof(HighScore), MAX_HIGH_SCORES, file);
+        for (int i = 0; i < MAX_HIGH_SCORES; i++) {
+            if (fscanf(file, "%d %hhu:%hhu:%hhu",
+                       &highScores[i].wpm,
+                       &highScores[i].achieved_time.hours,
+                       &highScores[i].achieved_time.minutes,
+                       &highScores[i].achieved_time.seconds) != 4) {
+                break; // Stop reading if the format doesn't match
+            }
+        }
         fclose(file);
     } else {
         fprintf(stderr, "Failed to load high scores or file does not exist\n");

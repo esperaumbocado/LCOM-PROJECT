@@ -418,7 +418,7 @@ void handle_space_key(TypingTest *test);
 
 void initialize_high_scores();
 
-void update_high_scores(int wpm, int time_limit, real_time_info achieved_time);
+void update_high_scores(int wpm, real_time_info achieved_time);
 
 void save_high_scores();
 

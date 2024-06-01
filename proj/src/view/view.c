@@ -204,14 +204,16 @@ int drawStatic(Sprite *sprite){
 }
 
 int drawStatistics() {
-    int accuracy = round(((double)stats->correctWords / stats->typedWords) * 100);
-    printf("Accuracy: %d\n", accuracy);
+    int accuracy = 0;
+    if (stats->typedWords != 0){
+        accuracy = round(((double)stats->correctWords / stats->typedWords) * 100);
+    }
     int speed = round((double)stats->typedWords / (stats->time / 60.0));
-    printf("Speed: %d\n", speed);
     if (drawInt(accuracy, statisticsBoxX + 368, statisticsBoxY + 110)) return 1;
-    printf("Drawn accuracy\n");
     if (drawInt(speed, statisticsBoxX + 322, statisticsBoxY + 132)) return 1;
-    printf("Drawn speed\n");
+    if (drawInt(stats->typedWords,statisticsBoxX + 258, statisticsBoxY + 154)) return 1;
+    if (drawInt(stats->incorrectLetters, statisticsBoxX + 238, statisticsBoxY + 176)) return 1;
+
     return 0;
 }
 
@@ -441,7 +443,7 @@ int drawWords(TypingTest *test) {
             Word *nextWord = &(test->words[i+1]);
             if (x_offset + word_length_in_pixels(nextWord) > mode_info.XResolution - x_margin - 1) {
                 x_offset = x_margin;
-                y_offset += 32;
+                y_offset += 64;
                 current_line++;
             }else{
                 x_offset += 16;

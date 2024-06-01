@@ -24,4 +24,5 @@ const char* statistics =
     "          YOUR STATISTICS :) \n\n\n"
     "      YOUR ACCURACY IS: %d%% \n"
     "      YOUR SPEED IS: %d WPM \n"
-    "      YOUR WPM IS: %d WPM \n\n";
+    "      YOU TYPED %d  WORDS \n"
+    "      YOU MADE %d MISTAKES \n\n\n";

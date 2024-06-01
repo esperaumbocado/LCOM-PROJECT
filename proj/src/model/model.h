@@ -33,6 +33,16 @@
 #include "../view/xpm/back_to_menu.xpm"
 #include "../view/xpm/play_again.xpm"
 
+#include "../view/xpm/animation/panda0.xpm"
+#include "../view/xpm/animation/mad1.xpm"
+#include "../view/xpm/animation/mad2.xpm"
+#include "../view/xpm/animation/mad3.xpm"
+#include "../view/xpm/animation/mad4.xpm"
+#include "../view/xpm/animation/happy1.xpm"
+#include "../view/xpm/animation/happy2.xpm"
+#include "../view/xpm/animation/happy3.xpm"
+#include "../view/xpm/animation/happy4.xpm"
+
 #define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
 
@@ -141,6 +151,16 @@ typedef struct {
     
 } TypingTest;
 
+typedef struct {
+    Sprite **frames;     // Array of sprite pointers
+    int frameCount;      // Number of frames in the animation
+    int currentFrame;    // Current frame being displayed
+    bool isActive;       // Is the animation currently active
+    int frameDuration;   // Duration each frame should be displayed
+    int frameCounter;    // Counter to track frame duration
+} Animation;
+
+
 typedef enum {
     GESTURE_ZERO,
     GESTURE_LB
@@ -213,6 +233,9 @@ void checkGesture();
 void fill_current_word();
 
 void handle_space_key(TypingTest *test);
+
+
+void updateAnimation(Animation *animation);
 
 #endif
 

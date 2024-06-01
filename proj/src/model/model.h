@@ -39,6 +39,11 @@
 #include "xpm/bambu_right.xpm"
 #include "xpm/bambu_left.xpm"
 
+#include "xpm/numbers.xpm"
+
+#include "xpm/back_to_menu.xpm"
+#include "xpm/play_again.xpm"
+
 #define MAX_WORDS 40
 #define MAX_WORD_LENGTH 20
 
@@ -93,6 +98,7 @@ typedef enum{
 typedef enum{
     MENU,
     INSTRUCTIONS,
+    STATISTICS,
     GAME,
     TIMERS
 } GameState;
@@ -131,6 +137,7 @@ typedef struct {
     int incorrectLetters;// Number of incorrect letters typed
     int typedLetters;    // Number of letters typed
     int typedWords;      // Number of words typed
+    int time;
 } Statistics;
 
 typedef struct {
@@ -156,6 +163,7 @@ void update_keyboard();
 void update_timer();
 void key_handler();
 void destroy_test();
+void destroy_stats();
 
 /**
 * @brief Updates currentState and gameStateChange
@@ -172,7 +180,7 @@ void reset_offset();
  * @param x the offset to be handled
  * @return the new offset
 */
-int offset_handler(int x);
+int offset_handler(int x, int end_x);
 
 /**
  * @brief Sync mouse bytes and calls update_mouse_date

@@ -1,4 +1,5 @@
 #include "view.h"
+#include <math.h>
 #include "messages.h"
 #include "../drivers/rtc/rtc.h"
 
@@ -29,10 +30,19 @@ extern Sprite *STAR_SPRITE;
 
 extern Sprite *PLAY_SPRITE;
 extern Sprite *INSTRUCTIONS_SPRITE;
+extern Sprite *BACK_TO_MENU_SPRITE;
+extern Sprite *PLAY_AGAIN_SPRITE;
 
 extern Sprite *TIMER15_SPRITE;
 extern Sprite *TIMER30_SPRITE;
 extern Sprite *TIMER60_SPRITE;
+
+
+extern int backToMenuX;
+extern int backToMenuY;
+
+extern int playAgainX;
+extern int playAgainY;
 
 
 extern Sprite *A_SPRITE;
@@ -80,16 +90,34 @@ extern Sprite *SEVEN_SPRITE;
 extern Sprite *EIGHT_SPRITE;
 extern Sprite *NINE_SPRITE;
 
+extern Sprite *BIG_ZERO_SPRITE;
+extern Sprite *BIG_ONE_SPRITE;
+extern Sprite *BIG_TWO_SPRITE;
+extern Sprite *BIG_THREE_SPRITE;
+extern Sprite *BIG_FOUR_SPRITE;
+extern Sprite *BIG_FIVE_SPRITE;
+extern Sprite *BIG_SIX_SPRITE;
+extern Sprite *BIG_SEVEN_SPRITE;
+extern Sprite *BIG_EIGHT_SPRITE;
+extern Sprite *BIG_NINE_SPRITE;
+
 extern Sprite* PANDA_SPRITE;
 extern Sprite* BAMBU_LEFT_SPRITE;
 extern Sprite* BAMBU_RIGHT_SPRITE;
 extern TypingTest *test;
+extern Statistics *stats;
 
 uint32_t bg_color;
 
 // screen box dimensions
 extern int x_margin;
 extern int y_margin;
+
+extern int statisticsBoxX;
+extern int statisticsBoxY;
+extern int statisticsBoxSizeX;
+extern int statisticsBoxSizeY;
+
 
 int setUpFrameBuffer() {
     if (set_frame_buffer(0x14C) != 0) return 1;
@@ -205,13 +233,36 @@ int GameDrawer(){
         case INSTRUCTIONS:
             if (gameStateChange) {
                 drawBackground(INSTRUCTIONS);
-                drawText(game_instructions, GREY);
+                drawText(game_instructions, GREY, startBoxX, startBoxX+sizeBoxX, 100);
+                gameStateChange = 0;
+            }
+            drawCursor();
+            break;
+        case STATISTICS:
+            if (gameStateChange) {
+                draw_rectangle(statisticsBoxX, statisticsBoxY, statisticsBoxSizeX, statisticsBoxSizeY, WHITE, secondary_frame_buffer_no_mouse);
+                drawText(statistics, GREY, statisticsBoxX, statisticsBoxX+statisticsBoxSizeX, statisticsBoxY);
+                drawStatistics();
+                drawSpriteXPM(BACK_TO_MENU_SPRITE, backToMenuX, backToMenuY);
+                drawSpriteXPM(PLAY_AGAIN_SPRITE, playAgainX, playAgainY);
                 gameStateChange = 0;
             }
             drawCursor();
             break;
     }
 
+    return 0;
+}
+
+int drawStatistics() {
+    int accuracy = round(((double)stats->correctWords / stats->typedWords) * 100);
+    printf("Accuracy: %d\n", accuracy);
+    int speed = round((double)stats->typedWords / (stats->time / 60.0));
+    printf("Speed: %d\n", speed);
+    if (drawInt(accuracy, statisticsBoxX + 368, statisticsBoxY + 110)) return 1;
+    printf("Drawn accuracy\n");
+    if (drawInt(speed, statisticsBoxX + 322, statisticsBoxY + 132)) return 1;
+    printf("Drawn speed\n");
     return 0;
 }
 
@@ -300,7 +351,7 @@ int drawStars(){
 
 int drawTimers() {
 
-    if (drawText(timer_selection, WHITE)) return 1;
+    if (drawText(timer_selection, WHITE,startBoxX,startBoxX+sizeBoxX,startBoxY)) return 1;
 
     if (drawSpriteXPM(TIMER15_SPRITE, TIMER15_SPRITE->x, TIMER15_SPRITE->y)) return 1;
     if (drawSpriteXPM(TIMER30_SPRITE, TIMER30_SPRITE->x, TIMER30_SPRITE->y)) return 1;
@@ -338,6 +389,69 @@ int drawNumber(Key key, int x, int y) {
     return 1;
 }
 
+
+int drawBigNumber(Key key, int x, int y) {
+    printf("Drawing big number %d\n", key);
+    switch(key){
+        case ZERO:
+            return drawSpriteXPM(BIG_ZERO_SPRITE, x, y);
+        case ONE:
+            return drawSpriteXPM(BIG_ONE_SPRITE, x, y);
+        case TWO:
+            return drawSpriteXPM(BIG_TWO_SPRITE, x, y);
+        case THREE:
+            return drawSpriteXPM(BIG_THREE_SPRITE, x, y);
+        case FOUR:
+            return drawSpriteXPM(BIG_FOUR_SPRITE, x, y);
+        case FIVE:
+            return drawSpriteXPM(BIG_FIVE_SPRITE, x, y);
+        case SIX:
+            return drawSpriteXPM(BIG_SIX_SPRITE, x, y);
+        case SEVEN:
+            return drawSpriteXPM(BIG_SEVEN_SPRITE, x, y);
+        case EIGHT: 
+            return drawSpriteXPM(BIG_EIGHT_SPRITE, x, y);
+        case NINE:
+            return drawSpriteXPM(BIG_NINE_SPRITE, x, y);
+        default:
+            printf("Key:  does not represent a number\n");
+            break;
+    }
+
+    return 1;
+}
+
+int drawInt(int number, int x, int y) {
+    printf("Entering drawInt with number: %d\n", number);
+    
+    char number_string[12];
+    sprintf(number_string, "%d", number);
+    printf("Number string: %s\n", number_string);
+
+    char *number_string_ptr = number_string;
+    printf("Drawing number %d at (%d, %d)\n", number, x, y);
+
+    while (*number_string_ptr) {
+        printf("Processing character: %c\n", *number_string_ptr);
+        Key key = char_to_key(*number_string_ptr);
+        printf("Character '%c' converted to key %d\n", *number_string_ptr, key);
+        if (key == NONE_KEY) {
+            printf("Invalid key for character '%c'\n", *number_string_ptr);
+            return 1;
+        }
+
+        if (drawBigNumber(key, x, y)) return 1;
+
+        number_string_ptr++;
+        x += 16;
+    }
+
+    printf("Exiting drawInt successfully\n");
+    return 0;
+}
+
+
+
 int drawCursor(){
 
     if (CURSOR_SPRITE->x < 0) CURSOR_SPRITE->x = 0;
@@ -353,15 +467,15 @@ int drawCursor(){
     return drawSpriteXPM_mouse(CURSOR_SPRITE, CURSOR_SPRITE->x, CURSOR_SPRITE->y);
 }
 
-int drawText(const char* text, uint32_t color) {
+int drawText(const char* text, uint32_t color, int start_x, int end_x, int start_y) {
 
-    x_offset = 200;
-    y_offset = mode_info.YResolution/2 - 300;
+    x_offset = start_x;
+    y_offset = start_y;
 
     while (*text) {    
 
         if (*text == '\n') {
-            x_offset = 100; // new line
+            x_offset = start_x; // new line
             y_offset += 22;  
             text++; 
             continue;
@@ -369,12 +483,14 @@ int drawText(const char* text, uint32_t color) {
 
         Key key = char_to_key(*text);
         if (drawLetter(key, color)) return 1;
-        offset_handler(0);
+        offset_handler(start_x, end_x);
         text++;
     }
 
     return 0;
 }
+
+
 
 int drawLetter(Key key, uint32_t color) {
     switch(key){

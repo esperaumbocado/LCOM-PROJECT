@@ -55,6 +55,9 @@ Sprite *TIMER15_SPRITE;
 Sprite *TIMER30_SPRITE;
 Sprite *TIMER60_SPRITE;
 
+Sprite *BACK_TO_MENU_SPRITE;
+Sprite *PLAY_AGAIN_SPRITE;
+
 Sprite *A_SPRITE;
 Sprite *B_SPRITE;
 Sprite *C_SPRITE;
@@ -99,16 +102,84 @@ Sprite *SEVEN_SPRITE;
 Sprite *EIGHT_SPRITE;
 Sprite *NINE_SPRITE;
 
+Sprite *BIG_ZERO_SPRITE;
+Sprite *BIG_ONE_SPRITE;
+Sprite *BIG_TWO_SPRITE;
+Sprite *BIG_THREE_SPRITE;
+Sprite *BIG_FOUR_SPRITE;
+Sprite *BIG_FIVE_SPRITE;
+Sprite *BIG_SIX_SPRITE;
+Sprite *BIG_SEVEN_SPRITE;
+Sprite *BIG_EIGHT_SPRITE;
+Sprite *BIG_NINE_SPRITE;
+
 Sprite *PANDA_SPRITE;
 Sprite *BAMBU_RIGHT_SPRITE;
 Sprite *BAMBU_LEFT_SPRITE;
 
+<<<<<<< HEAD
+// Panda dimensions
+
+int startPandaX;
+int startPandaY;
+int endPandaX;
+int endPandaY;
+
+
+// Play button dimensions
+int startPlayX;
+int startPlayY;
+int endPlayX;
+int endPlayY;
+
+// Instructions button dimensions
+int startInstructionsX;
+int startInstructionsY;
+int endInstructionsX;
+int endInstructionsY;
+
+// Timer buttons dimensions
+int startTimer15X;
+int startTimer15Y;
+int endTimer15X;
+int endTimer15Y;
+
+int startTimer30X;
+int startTimer30Y;
+int endTimer30X;
+int endTimer30Y;
+
+int startTimer60X;
+int startTimer60Y;
+int endTimer60X;
+int endTimer60Y;
+
+int backToMenuX;
+int backToMenuY;
+int backToMenuEndX;
+int backToMenuEndY;
+
+int playAgainX;
+int playAgainY;
+int playAgainEndX;
+int playAgainEndY;
+
+=======
+>>>>>>> main
 TypingTest *test;
 extern char* wordPool[];
 
 // screen box dimensions
 int x_margin = 200;
 int y_margin = 200;
+
+
+// statistics box dimensions
+int statisticsBoxY = 220;
+int statisticsBoxX = 290;
+int statisticsBoxSizeY = 420;
+int statisticsBoxSizeX = 575;
+
 
 Statistics *stats;
 
@@ -129,6 +200,10 @@ void initialize_sprites() {
     PLAY_SPRITE->x = mode_info.XResolution / 2 - PLAY_SPRITE->width / 2;
     PLAY_SPRITE->y = PANDA_SPRITE->y + PANDA_SPRITE->height + 30; // 30 pixels below the panda
 
+    BACK_TO_MENU_SPRITE = create_sprite_xpm((xpm_map_t)back_to_menu_xpm);
+
+    PLAY_AGAIN_SPRITE = create_sprite_xpm((xpm_map_t)play_again_xpm);
+
     INSTRUCTIONS_SPRITE = create_sprite_xpm((xpm_map_t)instructions_xpm, 0, 0);
     INSTRUCTIONS_SPRITE->x = mode_info.XResolution / 2 - INSTRUCTIONS_SPRITE->width / 2;
     INSTRUCTIONS_SPRITE->y = PLAY_SPRITE->y + PLAY_SPRITE->height + 30; // 30 pixels below the play button
@@ -137,6 +212,20 @@ void initialize_sprites() {
     TIMER15_SPRITE->x = mode_info.XResolution / 2 - TIMER15_SPRITE->width / 2;
     TIMER15_SPRITE->y = mode_info.YResolution / 2 - TIMER15_SPRITE->height / 2 - 50; // 50 pixels above the center of the screen
 
+    backToMenuX = statisticsBoxX + 90;
+    backToMenuY = statisticsBoxY + statisticsBoxSizeY - BACK_TO_MENU_SPRITE->height - 50;
+    backToMenuEndX = backToMenuX + BACK_TO_MENU_SPRITE->width;
+    backToMenuEndY = backToMenuY + BACK_TO_MENU_SPRITE->height;
+
+    playAgainX = statisticsBoxX + statisticsBoxSizeX - PLAY_AGAIN_SPRITE->width - 90;
+    playAgainY = statisticsBoxY + statisticsBoxSizeY - PLAY_AGAIN_SPRITE->height - 50;
+    playAgainEndX = playAgainX + PLAY_AGAIN_SPRITE->width;
+    playAgainEndY = playAgainY + PLAY_AGAIN_SPRITE->height;
+
+    startPandaX = mode_info.XResolution / 2 - PANDA_SPRITE->width / 2;
+    startPandaY = mode_info.YResolution / 2 - PANDA_SPRITE->height / 2 - 100;
+    endPandaX = startPandaX + PANDA_SPRITE->width;
+    endPandaY = startPandaY + PANDA_SPRITE->height;
     TIMER30_SPRITE = create_sprite_xpm((xpm_map_t)timer30_xpm, 0, 0);
     TIMER30_SPRITE->x = mode_info.XResolution / 2 - TIMER30_SPRITE->width / 2; 
     TIMER30_SPRITE->y = mode_info.YResolution / 2 - TIMER30_SPRITE->height / 2 + 50; // 50 pixels below the center of the screen
@@ -195,6 +284,34 @@ void initialize_sprites() {
 
     printf("All sprites initialized. \n");
 
+<<<<<<< HEAD
+    EXCLAMATION_SPRITE = create_sprite_xpm((xpm_map_t)exclamation_xpm);
+    COLON_SPRITE = create_sprite_xpm((xpm_map_t)colon_xpm);
+    RIGHT_PARENTHESIS_SPRITE = create_sprite_xpm((xpm_map_t)right_parenthesis_xpm);
+
+    ZERO_SPRITE = create_sprite_xpm((xpm_map_t)zero_xpm);
+    ONE_SPRITE = create_sprite_xpm((xpm_map_t)one_xpm);
+    TWO_SPRITE = create_sprite_xpm((xpm_map_t)two_xpm);
+    THREE_SPRITE = create_sprite_xpm((xpm_map_t)three_xpm);
+    FOUR_SPRITE = create_sprite_xpm((xpm_map_t)four_xpm);
+    FIVE_SPRITE = create_sprite_xpm((xpm_map_t)five_xpm);
+    SIX_SPRITE = create_sprite_xpm((xpm_map_t)six_xpm);
+    SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)seven_xpm);
+    EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)eight_xpm);
+    NINE_SPRITE = create_sprite_xpm((xpm_map_t)nine_xpm);
+
+    BIG_ZERO_SPRITE = create_sprite_xpm((xpm_map_t)big_zero_xpm);
+    BIG_ONE_SPRITE = create_sprite_xpm((xpm_map_t)big_one_xpm);
+    BIG_TWO_SPRITE = create_sprite_xpm((xpm_map_t)big_two_xpm);
+    BIG_THREE_SPRITE = create_sprite_xpm((xpm_map_t)big_three_xpm);
+    BIG_FOUR_SPRITE = create_sprite_xpm((xpm_map_t)big_four_xpm);
+    BIG_FIVE_SPRITE = create_sprite_xpm((xpm_map_t)big_five_xpm);
+    BIG_SIX_SPRITE = create_sprite_xpm((xpm_map_t)big_six_xpm);
+    BIG_SEVEN_SPRITE = create_sprite_xpm((xpm_map_t)big_seven_xpm);
+    BIG_EIGHT_SPRITE = create_sprite_xpm((xpm_map_t)big_eight_xpm);
+    BIG_NINE_SPRITE = create_sprite_xpm((xpm_map_t)big_nine_xpm);
+=======
+>>>>>>> main
 }
 
 
@@ -362,6 +479,8 @@ int offset_handler(int x) {
     if (x_offset + 16 >= mode_info.XResolution - x_margin) {
         x_offset = x_margin;
         y_offset += 32;
+    }else{
+        x_offset += 16;
     }
     return 1;
 }
@@ -374,7 +493,7 @@ void update_timer() {
     switch (currentState){
         case GAME:
             if (timer == 0){
-                setGameState(MENU);
+                setGameState(STATISTICS);
                 printf("Stats:\n");
                 printf("Correct words: %d\n", stats->correctWords);
                 printf("Incorrect words: %d\n", stats->incorrectWords);
@@ -382,6 +501,8 @@ void update_timer() {
                 printf("Incorrect letters: %d\n", stats->incorrectLetters);
                 printf("Typed letters: %d\n", stats->typedLetters);
                 printf("Typed words: %d\n", stats->typedWords);
+                printf("Time: %d\n", stats->time);
+                destroy_test();
             }
 
             if (counter%60==0 && timer)
@@ -434,14 +555,17 @@ void checkActions() {
         case TIMERS:
             if (pressed_button(TIMER15_SPRITE)) {
                 timer = 15;
+                stats->time = timer;
                 setGameState(GAME);
             }
             if (pressed_button(TIMER30_SPRITE)) {
                 timer = 30;
+                stats->time = timer;
                 setGameState(GAME);
             }
             if (pressed_button(TIMER60_SPRITE)) {
                 timer = 60;
+                stats->time = timer;
                 setGameState(GAME);
             }
             
@@ -450,6 +574,21 @@ void checkActions() {
             checkGesture();
             break;
         case INSTRUCTIONS:
+            break;
+        case STATISTICS:
+            if (mouse_pos.x >= backToMenuX && mouse_pos.x <= backToMenuEndX &&
+                mouse_pos.y >= backToMenuY && mouse_pos.y <= backToMenuEndY &&
+                pp.lb) {
+                setGameState(MENU);
+                destroy_stats();
+            }
+            if (mouse_pos.x >= playAgainX && mouse_pos.x <= playAgainEndX &&
+                mouse_pos.y >= playAgainY && mouse_pos.y <= playAgainEndY &&
+                pp.lb) {
+                setGameState(TIMERS);
+                initializeTest(&test, wordPool, 50, 30);
+                initializeStats(&stats);
+            }
             break;
     }
 }
@@ -565,6 +704,12 @@ void key_handler() {
         case TIMERS:
             update_keyboard(test);
             if (currentKey == BACK) {
+                setGameState(MENU);
+            }
+            break;
+        case STATISTICS:
+            update_keyboard(test);
+            if (currentKey == ESC) {
                 setGameState(MENU);
             }
             break;
@@ -730,6 +875,8 @@ void destroy_sprites(){
 
     destroy_sprite(PLAY_SPRITE);
     destroy_sprite(INSTRUCTIONS_SPRITE);
+    destroy_sprite(BACK_TO_MENU_SPRITE);
+    destroy_sprite(PLAY_AGAIN_SPRITE);
 
     destroy_sprite(TIMER15_SPRITE);
     destroy_sprite(TIMER30_SPRITE);
@@ -751,6 +898,22 @@ void destroy_sprites(){
     destroy_sprite(SEVEN_SPRITE);
     destroy_sprite(EIGHT_SPRITE);
     destroy_sprite(NINE_SPRITE);
+
+    destroy_sprite(BIG_ZERO_SPRITE);
+    destroy_sprite(BIG_ONE_SPRITE);
+    destroy_sprite(BIG_TWO_SPRITE);
+    destroy_sprite(BIG_THREE_SPRITE);
+    destroy_sprite(BIG_FOUR_SPRITE);
+    destroy_sprite(BIG_FIVE_SPRITE);
+    destroy_sprite(BIG_SIX_SPRITE);
+    destroy_sprite(BIG_SEVEN_SPRITE);
+    destroy_sprite(BIG_EIGHT_SPRITE);
+    destroy_sprite(BIG_NINE_SPRITE);
+
+    destroy_sprite(PANDA_SPRITE);
+    destroy_sprite(BAMBU_RIGHT_SPRITE);
+    destroy_sprite(BAMBU_LEFT_SPRITE);
+
 }
 
 void destroy_test(){

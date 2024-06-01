@@ -40,6 +40,9 @@ int drawTimers();
 int drawRealTime();
 
 
+int drawStatistics();
+
+
 /**
  * @brief Draws a number on the screen
  * @param key the key to be drawn
@@ -62,7 +65,7 @@ int GameDrawer();
  * @param color the color of the text
  * @return 0 if successful, 1 otherwise
 */
-int drawText(const char* text, uint32_t color);
+int drawText(const char* text, uint32_t color, int start_x, int end_x, int y);
 
 /**
  * @brief Draws a letter on the screen
@@ -78,5 +81,7 @@ int word_length_in_pixels(Word *word);
 int deleteCaret();
 
 int drawCaret(int x,int y);
+
+int drawInt(int number, int x, int y);
 
 #endif

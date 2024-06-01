@@ -44,68 +44,6 @@ int stars; // stars for swiping right
 
 //WORD
 
-Sprite *CURSOR_SPRITE;
-
-Sprite *STAR_SPRITE;
-
-Sprite *PLAY_SPRITE;
-Sprite *INSTRUCTIONS_SPRITE;
-
-Sprite *TIMER15_SPRITE;
-Sprite *TIMER30_SPRITE;
-Sprite *TIMER60_SPRITE;
-
-Sprite *BACK_TO_MENU_SPRITE;
-Sprite *PLAY_AGAIN_SPRITE;
-
-Sprite *A_SPRITE;
-Sprite *B_SPRITE;
-Sprite *C_SPRITE;
-Sprite *D_SPRITE;
-Sprite *E_SPRITE;
-Sprite *F_SPRITE;
-Sprite *G_SPRITE;
-Sprite *H_SPRITE;
-Sprite *I_SPRITE;
-Sprite *J_SPRITE;
-Sprite *K_SPRITE;
-Sprite *L_SPRITE;
-Sprite *M_SPRITE;
-Sprite *N_SPRITE;
-Sprite *O_SPRITE;
-Sprite *P_SPRITE;
-Sprite *Q_SPRITE;
-Sprite *R_SPRITE;
-Sprite *S_SPRITE;
-Sprite *T_SPRITE;
-Sprite *U_SPRITE;
-Sprite *V_SPRITE;
-Sprite *W_SPRITE;
-Sprite *X_SPRITE;
-Sprite *Y_SPRITE;
-Sprite *Z_SPRITE;
-Sprite *COMMA_SPRITE;
-Sprite *PERIOD_SPRITE;
-
-Sprite *EXCLAMATION_SPRITE;
-Sprite *COLON_SPRITE;
-Sprite *RIGHT_PARENTHESIS_SPRITE;
-
-Sprite *ZERO_SPRITE;
-Sprite *ONE_SPRITE;
-Sprite *TWO_SPRITE;
-Sprite *THREE_SPRITE;
-Sprite *FOUR_SPRITE;
-Sprite *FIVE_SPRITE;
-Sprite *SIX_SPRITE;
-Sprite *SEVEN_SPRITE;
-Sprite *EIGHT_SPRITE;
-Sprite *NINE_SPRITE;
-
-Sprite *PANDA_SPRITE;
-Sprite *BAMBU_RIGHT_SPRITE;
-Sprite *BAMBU_LEFT_SPRITE;
-
 TypingTest *test;
 extern char* wordPool[];
 

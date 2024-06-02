@@ -599,7 +599,7 @@ void checkGesture() {
 
 void fill_current_word() {
     Word *currentWord = &test->words[test->currentWordIndex];
-    for (int i = test->currentInputIndex; i < currentWord->length; i++) {
+    for (int i = 0; i < currentWord->length; i++) {
         currentWord->letters[i].status = 1;  // Mark the remaining letters as correct
         test->currentInput[i] = currentWord->letters[i].character; // Fill the remaining letters in the input
     }
